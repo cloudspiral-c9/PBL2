@@ -1,0 +1,54 @@
+<div ng-controller="ProcessesController">
+  <section>
+    <p>Recipe</p>
+    <ol>
+      <li>
+        <div>
+          <input type="button" value="add" ng-click="minusAddShow = 'show'">
+          <div ng-hide="minusAddShow !== 'show'">
+            <form method="get" accept-charset="utf-8">
+              <p>
+                <input type="textarea" ng-model="minusAddContent" required>
+              </p>
+              <input type="submit" value="submit" ng-click="submitMinusAdd();">
+            </form>
+            <input type="button" value="hide" ng-click="minusAddShow = ''; ">
+          </div>
+        </div>
+      </li>
+      <li ng-repeat="process in processes">
+        <div>
+          <div ng-hide="show.edit[$index] === 'show'">
+            <p>{{$index + 1}}</p>
+            <p>{{process.content}}</p>
+            <p>{{process.author}}</p>
+            <p>{{process.date | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+            <input type="button" value="edit" ng-click="showEditForm('edit', $index);">
+            <input type="button" value="delete" ng-click="deleteRecipe($index);">
+          </div>
+          <div ng-hide="show.edit[$index] !== 'show'">
+            <form method="get" accept-charset="utf-8">
+              <p>
+                <input type="textarea" ng-model="formData.edit[$index].value.content" required>
+              </p>
+              <input type="submit" value="submit" ng-click="submitProcess('edit', $index);">
+            </form>
+            <input type="button" value='cancel' ng-click="show.edit[$index] = '';">
+          </div>
+        </div>
+        <div>
+          <input type="button" value="add" ng-click="showEditForm('add', $index);">
+          <div ng-hide="show.add[$index] !== 'show'">
+            <form method="get" accept-charset="utf-8">
+              <p>
+                <input type="textarea" ng-model="formData.add[$index].value.content" required>
+              </p>
+              <input type="submit" value="submit" ng-click="submitProcess('add', $index);">
+            </form>
+            <input type="button" value="hide" ng-click="show.add[$index] = '';">
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+</div>

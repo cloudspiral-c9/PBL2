@@ -1,0 +1,14 @@
+<div ng-controller="RecipeListController">
+  <section>
+    <p>RecipeList</p>
+    <input type="text" ng-model="query" placeholder="You can narrow.">
+    <ul>
+      <li ng-repeat="(rid, recipe) in recipelist | hasValue:query">
+        <div ng-click="move('/recipe/' + rid);">
+          <h2>{{recipe.content}}</h2>
+          <p>{{recipe.description}}</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+</div>
