@@ -3,10 +3,10 @@
 var fake = (function () {
   var recipeData, fakeIdSerial, makeFakeId, mockSio, ingredientsKinds, returnChartData, getReturnChartData, getRecipeListData, recipeListData;
 
-  fakeIdSerial = 5;
+  fakeIdSerial = 6;
 
   makeFakeId = function () {
-    return 'id_' + String(fakeIdSerial++);
+    return 'rid' + String(fakeIdSerial++);
   };
 
   recipeData = {
@@ -176,6 +176,13 @@ var fake = (function () {
           if (data.rid === 'rid5') {
             callback_map.receiveChat(data);
           }
+        }, 1000);
+      }
+
+      if (msg_type === 'sendRecipelist' && callback_map.recipelistRecieve) {
+        setTimeout(function () {
+          data.value.rid = makeFakeId();
+          callback_map.recipelistRecieve(data);
         }, 1000);
       }
     };
