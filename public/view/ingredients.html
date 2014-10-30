@@ -4,26 +4,26 @@
     <ul>
       <li ng-repeat="ingredient in ingredients">
         <div>
-          <div ng-hide="show.edit[$index] === 'show'">
+          <div ng-hide="showEdit[$index] === 'show'">
             <p>{{ingredient.content}}</p>
             <p>{{ingredient.amount}} {{kinds[ingredient.content]}}</p>
             <p>{{ingredient.author}}</p>
             <p>{{ingredient.date | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
-            <input type="button" value="edit" ng-click="showEditForm('edit', $index);">
-            <input type="button" value="delete" ng-click="deleteIngredient($index);">
+            <input type="button" value="edit" ng-click="showEditForm($index);">
+            <input type="button" value="delete" ng-click="submitIngredient('delete',$index);">
           </div>
-          <div ng-hide="show.edit[$index] !== 'show'">
-            <form method="get" accept-charset="utf-8">
+          <div ng-hide="showEdit[$index] !== 'show'">
+            <form accept-charset="utf-8">
               <p>
-                <select ng-init="ingredient.content" ng-model="formData.edit[$index].value.content" ng-options="kind as kind for (kind,unit) in kinds | hasKey:narrowKinds">
+                <select ng-init="ingredient.content" ng-model="formEdit[$index].content" ng-options="kind as kind for (kind,unit) in kinds | hasKey:narrowKinds">
                   <option value="">-- choose ingredients --</option>
                 </select>
                 <input type="text" ng-model="narrowKinds" placeholder="You can narrow.">
               </p>
               <p>
-                <input type="number" ng-model="formData.edit[$index].value.amount" required> {{kinds[formData.edit[$index].value.content]}}
+                <input type="number" ng-model="formEdit[$index].amount" required> {{kinds[formEdit[$index].content]}}
               </p>
-              <div ng-hide="!formData.edit[$index].value.amount || !formData.edit[$index].value.content">
+              <div ng-hide="!formEdit[$index].amount || !formEdit[$index].content">
                 <input type="submit" value="submit" ng-click="submitIngredient('edit', $index);">
               </div>
             </form>
@@ -35,18 +35,18 @@
         <div>
           <input type="button" value="add" ng-click="addShow = 'show';">
           <div ng-hide="addShow !== 'show'">
-            <form method="get" accept-charset="utf-8">
+            <form accept-charset="utf-8">
               <p>
-                <select ng-init="ingredient.content" ng-model="formData.add[0].value.content" ng-options="kind as kind for (kind,unit) in kinds | hasKey:narrowKinds">
+                <select ng-init="ingredient.content" ng-model="formAdd.content" ng-options="kind as kind for (kind,unit) in kinds | hasKey:narrowKinds">
                   <option value="">-- choose ingredients --</option>
                 </select>
                 <input type="text" ng-model="narrowKinds" placeholder="You can narrow.">
               </p>
               <p>
-                <input type="number" ng-model="formData.add[0].value.amount" required>{{kinds[formData.add[0].value.content]}}
+                <input type="number" ng-model="formAdd.amount" required>{{kinds[formData.add[0].value.content]}}
               </p>
-              <div ng-hide="!formData.add[0].value.amount || !formData.add[0].value.content">
-                <input type="submit" value="submit" ng-click="submitIngredient('add', ingredients.length -1);addShow = '';">
+              <div ng-hide="!formAdd.amount || !formAdd.content">
+                <input type="submit" value="submit" ng-click="submitIngredient('add');addShow = '';">
               </div>
             </form>
             <input type="button" value="hide" ng-click="addShow = ''; ">

@@ -6,11 +6,16 @@
     return _;
   });
 
+  angular.module('csbind', []).factory('csbc', function () {
+    return csbc;
+  });
+
   var recipeers = angular.module('recipeers', [
     'ngRoute',
     'recipeers.recipe',
     'recipeers.recipelist',
-    'underscore'
+    'underscore',
+    'csbind'
   ]);
 
   recipeers.factory('socket', function ($rootScope) {

@@ -1,0 +1,31 @@
+<div ng-controller="RecipeListController">
+    <section>
+        <p>RecipeList</p>
+        <div>
+            <input type="button" value="add" ng-click="addShow = 'show';">
+            <div ng-hide="addShow !== 'show'">
+                <form accept-charset="utf-8">
+                    <p>
+                        <input type="text" ng-model="formData.content">
+                        <input type="textarea" ng-model="formData.description">
+                    </p>
+                    <div ng-hide=" (formData.content ==='') || (formData.description === '') ">
+                        <input type="submit" value="submit" ng-click="submitRecipelist();addShow = '';">
+                    </div>
+                </form>
+                <input type="button" value="hide" ng-click="addShow = ''; ">
+            </div>
+        </div>
+        <div>
+            <input type="text" ng-model="query" placeholder="You can narrow.">
+            <ul>
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2>{{recipe.content}}</h2>
+                        <p>{{recipe.description}}</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
