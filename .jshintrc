@@ -8,6 +8,11 @@
     "beforeEach": false,
     "afterEach": false,
     "module": false,
-    "inject": false
+    "inject": false,
+    "setTimeout":false,
+    "io": false,
+    "_": false,
+    "csbc": false,
+    "require":false
   }
 }
