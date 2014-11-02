@@ -8,11 +8,11 @@ module.exports = function(grunt) {
       },
       dev: {},
       ci: {
-        browsers: ['Chrome'],
+        browsers: ['Firefox'],
         singleRun: true
       },
       coverage: {
-        browsers: ['Chrome'],
+        browsers: ['Firefox'],
         reporters: ['coverage'],
         preprocessors: {
           'js/app.js': ['coverage'],
