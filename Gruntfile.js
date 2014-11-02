@@ -15,11 +15,21 @@ module.exports = function(grunt) {
         browsers: ['Firefox'],
         reporters: ['coverage'],
         preprocessors: {
-          'js/app.js': ['coverage'],
-          'js/**/*.js': ['coverage']
+          'public/js/modules/module.js': ['coverage'],
+
+          'public/js/mock/socket-mock.js': ['coverage'],
+          'public/js/mock/ng-mock.js': ['coverage'],
+
+          'public/js/lib/ng-underscore.js': ['coverage'],
+          'public/js/lib/ng-socket.js': ['coverage'],
+          'public/js/lib/ng-csbc.js': ['coverage'],
+
+          'public/js/app.js': ['coverage'],
+          'public/js/filters/*.js': ['coverage'],
+          'public/js/controllers/*.js': ['coverage']
         },
         coverageReporter: {
-          type: "json",
+          type: "lcov",
           dir: "coverage/"
         },
         singleRun: true

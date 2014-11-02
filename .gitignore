@@ -10,4 +10,4 @@ tmp
 .idea
 
 npm-debug.log
-results
+coverage/
