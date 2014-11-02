@@ -19,7 +19,7 @@ module.exports = function(grunt) {
           'js/**/*.js': ['coverage']
         },
         coverageReporter: {
-          type: "lcov",
+          type: "json",
           dir: "coverage/"
         },
         singleRun: true
