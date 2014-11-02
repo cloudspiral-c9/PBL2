@@ -8,3 +8,6 @@ js-min
 tmp
 .DS_Store
 .idea
+
+npm-debug.log
+results
