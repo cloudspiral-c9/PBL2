@@ -1,16 +1,15 @@
 
 var passport = require( __dirname + '/../../services/login/passport.js').passport;
-var deferred = require('deferred');
 
 var LoginRouteModule = {
-	
+
 	route: '/auth/google',
+	request: null,
+	response: null,
+	next: null,
 	routeFunc: function(queries) {
-
-		var def = deferred();
-		passport.authenticate('google');
-
-		return def.promise;
+		passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] })(this.request, this.response, this.next);
+		console.log('authenticate');
 	}
 };
 

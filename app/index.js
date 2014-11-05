@@ -6,5 +6,3 @@ var SocketHelper = require( __dirname + '/socket/SocketHelper.js').SocketHelper;
 	var server = ServerHelper.startServer();
 	SocketHelper.activateSocket(server);
 })();
-
-
