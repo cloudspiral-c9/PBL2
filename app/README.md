@@ -2,192 +2,174 @@
 #Recipeers Server
 --------------------------------
 
-##基本的な流れ
-方針として，チャット，栄養素，レシピ，それぞれにおいて独立して動作するように作成しています．　
+ソケットに関してはまだ動作は未確認なので，変更可能です．
+クライアントに合わせて実装してもらって大丈夫ですが，servicesの中のデータはRESTの方でも使っているので，
+メソッドの追加はいいですが，変更はしないでください．
+※ちょいちょい仕様ブレがあるのはご容赦ください．
 
-それぞれソケットの名前空間は， _/chat_ , _/process_ , _/nutrition_ です． 
-
-よって，例えばchat用のソケットに接続する場合は
+##RESTful API
+###ログイン
+Login認証には，GoogleのOAuth2.0の認証機構を利用しています．  
+認証ページのURLは [http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/google](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/google) です．  
+なので，クライアント側では，下のような感じでリンクを張ってもらえばよいです．  
+```
+<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/google">Googleでログイン</a>
+<input type="button" onclick="location.href='http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/google';">Googleでログイン</input>
 
 ```
+認証すると，mongoDBにuserIDとuserNameを格納し，次のURLにリダイレクトするようになっています．  
+http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/  
+このときGETでuser情報に関するオブジェクトが返されます．  
+```
+user={userID: '234223232', userName: 'mizuno seiya'}
+```
+以降の処理で，これらの情報が必要になるので，クライアントでも保持しておいてください.  
+なお，現状セッションの管理等はしていません．  
 
-io.connect('http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/chat');
+###部屋作成
+部屋を作成する際は次のURLにリクエストを送信してください．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom?description=this%20is%20test&title=testroom&userID=115834882653598693998&type=gachi&limit=2)  
 
-``` 
+部屋の作成には，クエリに次のフィールドが必要です．  
 
-となります． 
+* description: レシピの説明
+* title: レシピ名
+* userID: 作成者のuserID
+* type: 部屋の種類 (enjoy, hyperenjoy, gachi)
 
-基本的に部屋単位の情報は，ridで関連付けて保存されています．
-なので，それぞれのソケットの利用の流れとしては，
+これに加えて部屋に入室できる人数の上限を設定できます．
 
-1. 部屋のridを取得する．
-2. 上記のソケット接続を行う．
-3. ソケットにridを添えてenterRoomイベントをエミットする．
-4. ソケットごとに必要な情報の送受信をする．
+* limit: (デフォルトは200名)
 
-となります．
-
-
-##REST APIの利用方法
-
-###部屋の作成
-部屋の作成にはまずridを取得する必要があります．
-ridは次のREST APIで取得できます． 
+部屋の作成に成功した場合は，部屋情報を表すオブジェクトが返されます．
+```
+{'rid': 08809809708, 'description': 'this is a test recipe', 'title': 'test recipe', 'limit': 200, timestamp: '2014/11/06 16:09:11', type: 'gachi'}
 
 ```
-http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/rid
-
-```
-
-これをGETリクエストで送信すると，ridが数値で返されます．ただし，処理に失敗した場合はfalseが返されます． 
-
-これを基に部屋を作成する際はさらに次のGETリクエストをサーバに送信します．
-
-```
-http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom?クエリ
-
-```
-クエリに利用できるフィールドは次の4つです．
-
-* rid: 作成する部屋のrid 
-* name: 部屋の名前 
-* isGachi: ガチ部屋かどうかのフラグ　(true or false)
-* limit (opetional): 入室可能な人数の上限 (デフォルトは200人) 
-
-作成に成功するとtrueが，失敗するとfalseが返されます．
-
+失敗した場合は，falseが返されます．  
+なお，部屋作成者は自動的に部屋のメンバに加えられます．  
 
 ###入室
-部屋に設定されているridを使って入室し処理を行います．　
-入室時は次のURLにGETリクエストを送信します．
+部屋に入室する際は次のURLにリクエストを送信してください．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember?rid=2&userID=115834882653598693998)  
 
-```
+入室のクエリには次のフィールドが必要です．  
 
-http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember?rid=ridの値
+* rid: 部屋のID
+* userID
 
-```
-このAPIでは部屋の人数制限に違反していないかなどをチェックしたのち，入室可能かの判定をtrueまたはfalseで返します．
+入室処理が成功した場合はtrue，失敗した場合はfalseが返されます．
 
 ###退室
-退室時も同様です．URLは以下です．
+部屋から退室する際は次のURLにリクエストを送信してください．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/reducemember](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/reducemember?rid=2&userID=115834882653598693998)  
+
+退室のクエリには次のフィールドが必要です．  
+
+* rid: 部屋のID
+* userID
+
+退室処理が成功した場合はtrue，失敗した場合はfalseが返されます．  
+
+###ログアウト
+ログアウトする際は次のURLにリクエストを送信してください．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout?userID=115834882653598693998)
+
+ログアウトのクエリには，次のフィールドが必要です．  
+
+* userID  
+
+ログアウトに成功した場合はtrueを，失敗した場合はfalseが返されます．
+
+###チャットログの取得
+以降の部屋のログ取得はログインしているユーザであれば誰でも取得できます．  
+ログのチャットログの取得には次のURLへリクエストを送信してください．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getchatlog](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getchatlog?userID=115834882653598693998&rid=1)  
+
+チャットログ取得のクエリには次のフィールドが必要です．
+
+* rid  
+* userID
+
+また全件取得せずに部分的に取得したい場合は，次のフィールドも指定可能です．  
+
+* pos: 最新から何番目からのログを取得するか
+* limit: いくつ分取得するか
+
+取得されたオブジェクトの形式は次のような感じです．  
+```
+[{"_id":"545bf0b83188bb1f7ca7c155","message":"test1","timestamp":"2014/11/07 07:05:44","userName": "水野聖也"}, {"_id": "3242...."}]
+```
+* _id: mongo内でのID(後にメッセージの編集や削除をすることを考慮して付与しておいた)
+* message: チャットのメッセージ
+* timestamp: 日時を表す文字列
+* userName: 投稿した人のGoogleアカウントの名前 (IDとは別)
+
+ログがない場合でも，空の配列が返されます．  
+falseやundefinedが返されている場合には，おそらくクエリに不正があります．
+
+###材料データのログの取得
+Ingredientのログの取得には，次のURLへアクセスします．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getingredient](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getingredient?userID=115834882653598693998&rid=1)
+
+Ingredientのログの取得には，次のフィールドが必須です．  
+* rid
+* userID
+
+取得されたオブジェクトの形式は次のような感じです．
 
 ```
-
-http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/reducemember?rid=ridの値
-
+[{"_id":"545c4200d37e33d70d800693","ingredient":"フランスパン","amount":100,"userName":"水野聖也"}, {"_id": "4343554..."}]
 ```
 
-##各ソケットの利用方法
---------------------
-###chatソケット
---------------------
+* \_id: mongo内でのID
+* ingredient: 材料名
+* amount: 量 (たぶん大体のものはグラム)
+* userName: 投稿した人
 
-チャットソケットはチャットのメッセージをDBに保存し，かつ同室のメンバーにメッセージをブロードキャストします． 
+ログがない場合でも空の配列が返されます．  
+falseやundefinedが返されている場合には，おそらくクエリに不正があります．
 
-クライアントからエミットするイベントは次の4つです．
-* enterRoom
-* leaveRoom
-* addMessage
-* loadMessage
+###栄養データのログの取得
+nutritionのログの取得には，次のURLにアクセスします．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getnutrition](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getnutrition?userID=115834882653598693998&rid=1)
 
-####enterRoom
-入室後にはridをデータとして渡し，このイベントをエミットしてください． 
-このイベントをエミットすることで，指定されたridの部屋にソケットチャネルを切り替えます．
-結果として，部屋にたまっているチャットログのうち最新50件が取得されます．
+必要なフィールドは次の2つです．  
+* rid
+* userID
 
-例としては次のような感じです.
+取得されるオブジェクトの形式は次のような感じです．  
 
 ```
-var chat = io.connect('http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/chat');
-chat.emit('enterRoom', {'rid': rid}, function(chatLog) {
-	//ここでchatLogは最新50件のチャットオブジェクトを格納している配列
-	//[{'rid': rid, 'sender': sender, 'message': message, 'timestamp': timestamp}, {'rid': rid, 'sender': sender2, 'message': message2, 'timestamp': timestamp2}, ...];
-});
+[{"ingredient":"フランスパン","rates":{"energy":0.32823529411764707,"protein":0.376,"lipid":0.052000000000000005,"carbohydrate":0.575,"calcium":0.07272727272727272,"iron":0.36,"vitaminE":0.03333333333333333,"vitaminB1":0.2285714285714286,"vitaminB2":0.09615384615384616,"vitaminC":0,"cholesterol":0,"solt":0.5333333333333333}}, {"ingredient": ....}]
+```
+* ingredient: 材料名
+* rates: 各種栄養価の，1食の理想摂取量に対する割合 (一応ちょい調べた一食分の摂取量に対する栄養価の割合を返しています．なので，単純に各栄養項目の割合を足していってもらえばよいです．)  
+
+ログがない場合でも空の配列が返されます．  
+falseやundefinedが返されている場合には，おそらくクエリに不正があります．  
+
+### 調理手順のログの取得
+調理手順のログを取得するには次のURLにアクセスします．  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getprocess](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getprocess?userID=115834882653598693998&rid=1)  
+
+必要なフィールドは次の2つです．  
+* rid
+* userID
+
+取得されるオブジェクトの形式は次のような感じです．  
 
 ```
-
-####leaveRoom
-ソケットをcloseします． 
-
-####sendMessage
-メッセージを同室のメンバーにブロードキャストし，ログをDBに格納します． 
-データにはrid, message, senderを格納して送信します．
-
+[{"_id":"545c4365ebb2e1da0e51308f","process":"卵を割る","timestamp":"2014/11/07 12:58:29","index":1,"userName":"水野聖也"},{"_id":"545c4365ebb2e1da0e513090","process":"卵をまぜる","timestamp":"2014/11/07 12:58:29","index":2,"userName":"水野聖也"},...]
 ```
-chat.emit('sendMessage', {'rid': rid, 'message': message, 'sender': sender}, function(result) {
-	//resultはundefined
-});
+* _id: mongo内でのID
+* process: 調理手順の記述
+* timestamp: 投稿された日時
+* (index: 何番目の調理手順かの予定)
+* userName: 投稿者の名前
 
-```
-
-ブロードキャストされたメッセージはbroadcastSendMessageイベントとして送信されてきます． 
-そのため，受け取るには，ソケットに次のイベントハンドラを登録します． 
-
-```
-chat.on('broadcastSendMessage', function(data, resFunc) {
-	//dataにはブロードキャストされたメッセージ
-	//{'message': message, 'sender': sender, 'timestamp': timestamp}が格納されている．
-});
-
-```
-
-####loadChatLog
-
-rid, pos, numを指定してチャット履歴を読み出します． 
-
-* pos: 何番目からのログを読み出すか
-* num: いくつ分のログを読み出すか
-
-返されるデータの形式はenterRoomのものと同様です． 
-
---------------------------
-###processソケット
---------------------------
-
-レシピの調理手順に関するデータを扱うソケットです． 
-手順をDBに格納し，同室のメンバーにブロードキャストします．
-
-####enterRoom
-chatのものと同様ridを指定して，チャネルを切り替えます．　
-結果として，今までのprocessのログが全件返されます．　
-processオブジェクトの形式は以下です． 
-
-```
-
-{'process': process, 'sender': sender, 'timestamp': timestamp, 'processSequence': processSequence};
-
-```
-
-####leaveRoom
-ソケットを閉じます．
-
-####sendProcess
-rid, process, senderを指定して，調理手順を投稿します． 
-投稿されたprocessはbroadcastSendProcessイベントとしてブロードキャストされます．
-
-```
-
-var process = io.connect('http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/process');
-
-process.on('broadcastSendProcess', function(data) {
-	//dataはブロードキャストされたプロセス
-});
-
-process.emit('sendProcess', {'rid': 1, 'process': '卵をまぜる', 'sender': 'Saint'}, function(result) {
-	//resultは送信成功フラグtrueかfalse
-});
+ログがない場合でも空の配列が返されます．  
+falseやundefinedが返されている場合には，おそらくクエリに不正があります．  
 
 
-```
-
-
-----------
-###nutritionソケット
-----------
-
-栄養素データを扱うソケットです． 
-食材データを受け取りDBに保存し，栄養素と食材のデータをブロードキャストします．
-
-※後日追記します．
-
-
+##各ソケットの利用方法 (更新してない)

@@ -27,11 +27,11 @@ function(accessToken, refreshToken, profile, done) {
 
 	console.log(profile);
 
-	LoginMongoHelper.insertLoginUserId(profile.id)
+	LoginMongoHelper.insertLoginUserId(profile.id, profile.displayName)
 	.done(function(result) {
 
 		if (result) {
-			done(null, {'userID': profile.id});
+			done(null, {'userID': profile.id, 'userName': profile.displayName});
 		} else {
 			done(null, false);
 		}

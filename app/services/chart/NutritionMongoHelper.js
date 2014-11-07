@@ -16,7 +16,6 @@ var NutritionMongoHelper = (function() {
 				db.close();
 
 				if (err) {
-
 					console.log(err);
 					deferred.resolve(false);
 					return;

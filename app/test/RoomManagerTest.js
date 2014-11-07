@@ -8,11 +8,12 @@ var TimestampHelper = require( __dirname + '/../services/util/TimestampHelper.js
 var description = 'This is Test Room1';
 var title = 'testRoom1';
 var limit = 2;
-var userId1 = 'mizuno';
-var userId2 = 'saint';
 var type = 'gachi';
 
-var members = [userId1];
+var user1 = {'userID': '117100601559522934217', 'userName': '水野聖也'};
+var user2 = {'userID': '115834882653598693998', 'userName': 'Seiya Mizuno'};
+
+var members = [user1.userID];
 var expected = {'rid': 1, 'description': description, 'title': title, 'limit': limit, 'type': type};
 
 MongoTestHelper.clearCollection('RoomNumber')
@@ -21,7 +22,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 	MongoTestHelper.clearCollection('Room')
 	.done(function(res2) {
 
-		RoomManager.createNewRoom(description, title, limit, userId1, type)
+		RoomManager.createNewRoom(description, title, limit, user1.userID, type)
 		.done(function(room) {
 			console.log('room1');
 			console.log(room);
@@ -51,7 +52,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 				
 				}, function(err) {})
 
-				RoomManager.addMember(1, userId2)
+				RoomManager.addMember(1, user2.userID)
 				.done(function(result3) {
 
 
@@ -60,11 +61,11 @@ MongoTestHelper.clearCollection('RoomNumber')
 
 						console.log('room3');
 						console.log(room3);
-						expected.members = [userId1, userId2];
+						expected.members = [user1.userID, user2.userID];
 						delete room3.timestamp;
 						assert.deepEqual(room3, expected);
 
-						RoomManager.isMemberOf(1, userId1)
+						RoomManager.isMemberOf(1, user1.userID)
 						.done(function(isMember) {
 							
 							assert.strictEqual(isMember, true);
@@ -72,7 +73,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 							.done(function(result8) {
 								assert.strictEqual(result8, false);
 
-								RoomManager.removeMember(1, userId2)
+								RoomManager.removeMember(1, user2.userID)
 								.done(function(result5) {
 
 									RoomManager.getRoom(1)
@@ -81,7 +82,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 										console.log('room4');
 										console.log(room4);
 										delete room4.timestamp;
-										expected.members = [userId1];
+										expected.members = [user1.userID];
 										assert.deepEqual(room4, expected);
 
 										RoomManager.removeRoom(1)

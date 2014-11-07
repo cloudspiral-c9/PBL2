@@ -5,7 +5,7 @@ var MongoTestHelper = require( __dirname + '/MongoTestHelper.js').MongoTestHelpe
 var assert = require('assert');
 
 var idealNutrition = { "energy" : 850, "protein" : 25, "lipid" : 25, "carbohydrate" : 100, "calcium" : 220, "iron" : 2.5, "vitaminE" : 3, "vitaminB1" : 0.35, "vitaminB2" : 0.52, "vitaminC" : 33, "cholesterol" : 200, "solt" : 3 };
-
+var user = {'userID': '117100601559522934217', 'userName': '水野聖也'};
 var getIdealNutritionTest = function() {
 
 	NutritionMongoHelper.getIdealNutrition()
@@ -33,7 +33,7 @@ var getNutritionTest = function() {
 };
 getNutritionTest();
 
-var ingredientData2 = {'ingredient': 'ごはん', 'amount': 1, 'sender': 'mizuno'};
+var ingredientData2 = {'ingredient': 'ごはん', 'amount': 1, 'sender': user.userID};
 var expected2 = { "name" : "ごはん", "energy" : 1.68, "protein" : 0.025, "lipid" : 0.003, "carbohydrate" : 0.371, "calcium" : 0.03, "iron" : 0.001, "vitaminE" : 0, "vitaminB1" : 0.0002, "vitaminB2" : 0.0001, "vitaminC" : 0, "cholesterol" : 0, "solt" : 0 };
 var ingredientDatas = [ingredientData, ingredientData2];
 var expectedDatas = [expected1, expected2];

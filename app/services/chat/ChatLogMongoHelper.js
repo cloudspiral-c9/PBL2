@@ -1,20 +1,22 @@
 
 var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
+var LoginMongoHelper = require( __dirname + '/../login/LoginMongoHelper.js').LoginMongoHelper;
 var deferred = require('deferred');
+var async = require('async');
 
 
 var ChatLogMongoHelper = (function() {
 
-	var insertMessage = function(rid, message, sender, now) {
+	var insertMessage = function(rid, message, userID, now) {
 		
 		var executeFunc = function(db, deferred) {
 			
-			if (!(rid && message && sender && now)) {
+			if (!(rid && message && userID && now)) {
 				db.close();
 				deferred.resolve(false);
 			}
 
-			var query = {'rid': rid, 'sender': sender, 'message': message, 'timestamp': now};
+			var query = {'rid': rid, 'userID': userID, 'message': message, 'timestamp': now};
 			db.collection('ChatLog').insert(query, function(err, doc) {
 				
 				db.close();
@@ -40,7 +42,7 @@ var ChatLogMongoHelper = (function() {
 
 			if (!rid) {
 				db.close();
-				deferred.resolve(false);
+				defferd.resolve(false);
 			}
 
 			var query = {'rid': rid};
@@ -54,25 +56,40 @@ var ChatLogMongoHelper = (function() {
 				cursor.limit(limit);
 			}
 
-			var result = new Array();
-			cursor.each(function(err, doc) {
+			cursor.toArray(function(err, chatlog) {
+				
+				db.close();
 
 				if (err) {
 					console.log(err);
-					db.close();
 					deferred.resolve(false);
 					return;
 				}
 
-				if (!doc) {
-					db.close();
+				var result = new Array();
+				async.each(chatlog, function(chat, callback) {
+
+					LoginMongoHelper.getUserNameById(chat.userID)
+					.done(function(userName) {
+						delete chat.rid;
+						delete chat.userID;
+						chat.userName = userName;
+						result.push(chat);
+						callback(null);
+					}, function(err) {
+						console.log(err);
+						callback(err);
+					});
+
+				}, function(err) {
+
+					if (err) {
+						console.log(err);
+						deferred.resolve(false);
+						return;
+					}
 					deferred.resolve(result);
-					return;
-				} else {
-					delete doc._id;
-					delete doc.rid;
-					result.push(doc);
-				}
+				});
 
 			});
 		};
@@ -81,7 +98,34 @@ var ChatLogMongoHelper = (function() {
 		return promise;
 	};
 
-	return {'insertMessage': insertMessage, 'getChatLog': getChatLog};
+	var removeMessageBy_id = function(_id) {
+		
+		var executeFunc = function(db, deferred) {
+
+			if (!_id) {
+				return;
+			}
+
+			var query  = {'_id': _id};
+			db.collection('ChatLog').remove(query, function(err, result) {
+				
+				db.close();
+				
+				if (err) {
+					console.log(err);
+					deferred.resolve(false);
+					return;
+				}
+
+				deferred.resolve(result);
+			});
+		};
+
+		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+		return promise;
+	};
+
+	return {'insertMessage': insertMessage, 'getChatLog': getChatLog, 'removeMessageBy_id': removeMessageBy_id};
 
 })();
 

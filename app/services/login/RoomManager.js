@@ -23,8 +23,10 @@ var RoomManager = (function() {
 
 				var members = [userId];
 				var now = TimestampHelper.getTimestamp();
-				var query = {'rid': rid, 'description': description, 'title': title, 'limit': limit, 'members': members, 'timestamp': now, 'type': type};
-				db.collection('Room').insert(query, function(err, docs) {
+				var query = {'rid': rid};
+				var update = {'rid': rid, 'description': description, 'title': title, 'limit': limit, 'members': members, 'timestamp': now, 'type': type};
+
+				db.collection('Room').findAndModify( query , [['userID', 1]], update, {'new': true, 'upsert': true}, function(err, result) {
 
 					if (err) {
 						db.close();
@@ -43,9 +45,9 @@ var RoomManager = (function() {
 							return;
 						} 
 
-						delete query.members;
-						delete query._id;
-						deferred.resolve( query );
+						delete update.members;
+						delete update._id;
+						deferred.resolve( update );
 
 					}, function(err) {
 						console.log(err);

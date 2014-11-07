@@ -16,7 +16,7 @@ var LoggedInRouteModule = {
 		};
 
 		var that = this;
-		passport.authenticate('google', redirects, function(err, userIdObj) {
+		passport.authenticate('google', redirects, function(err, userObj) {
 
 			if (err) {
 				console.log(err);
@@ -24,7 +24,7 @@ var LoggedInRouteModule = {
 				return;
 			}
 
-			var location =  'http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/?userID=' + JSON.stringify(userIdObj) + '\n;'
+			var location =  'http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/?user=' + JSON.stringify(userObj) + '\n;'
 			var headers = {
 				'Content-Type': 'application/json charset=UTF-8\n',
 				'Location': location

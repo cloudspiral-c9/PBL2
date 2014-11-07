@@ -1,6 +1,6 @@
 
 var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
-var deferred = require('deferred');
+var MongoSyncServer = require('mongo-sync').Server;
 
 var LoginMongoHelper = (function() {
 
@@ -35,7 +35,7 @@ var LoginMongoHelper = (function() {
 	};
 
 
-	var insertLoginUserId = function(userID) {
+	var insertLoginUserId = function(userID, userName) {
 
 		var executeFunc = function(db, deferred) {
 
@@ -44,8 +44,8 @@ var LoginMongoHelper = (function() {
 				return;
 			}
 
-			var query = {'userID': userID};
-			var update = {'$setOnInsert': {'userID': userID}};
+			var query = {'userID': userID, 'userName': userName};
+			var update = {'$setOnInsert': {'userID': userID, 'userName': userName}};
 			db.collection('login').findAndModify( query , [['userID', 1]], update, {'new': true, 'upsert': true}, function(err, result) {
 
 				db.close();
@@ -82,6 +82,7 @@ var LoginMongoHelper = (function() {
 				if (err) {
 					console.log(err);
 					deferred.resolve(false);
+					return;
 				}
 
 				deferred.resolve(true);
@@ -94,9 +95,45 @@ var LoginMongoHelper = (function() {
 	};
 
 
+	var getUserNameById = function(userID) {
+
+		var executeFunc = function(db, deferred) {
+
+			if (!userID) {
+				db.close();
+				deferred.resolve(false);
+				return;
+			}
+
+			var query = {'userID': userID};
+			db.collection('login').findOne(query, function(err, userObj) {
+
+				db.close();
+
+				if (err) {
+					console.log(err);
+					deferred.resolve(false);
+					return;
+				}
+
+				if (!userObj) {
+					deferred.resolve(null);
+					return;
+				}
+
+				deferred.resolve(userObj.userName);
+			});
+		};
+
+		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+		return promise;
+	};
+
+	
 
 
-	return {'insertLoginUserId': insertLoginUserId, 'removeLoginUserId': removeLoginUserId, 'isLoggedIn': isLoggedIn};
+
+	return {'insertLoginUserId': insertLoginUserId, 'removeLoginUserId': removeLoginUserId, 'isLoggedIn': isLoggedIn, 'getUserNameById': getUserNameById};
 
 })();
 
