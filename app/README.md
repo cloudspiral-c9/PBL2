@@ -28,18 +28,20 @@ user={userID: '234223232', userName: 'mizuno seiya'}
 
 ###部屋作成
 部屋を作成する際は次のURLにリクエストを送信してください．  
-[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom?description=this%20is%20test&title=testroom&userID=115834882653598693998&type=gachi&limit=2)  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/newroom?description=this%20is%20test&title=testroom&userID=115834882653598693998&type=gachi&limit=2&userName=Seiya%20Mizuno)  
 
 部屋の作成には，クエリに次のフィールドが必要です．  
 
 * description: レシピの説明
 * title: レシピ名
 * userID: 作成者のuserID
+* userName: 作成者のuserName
 * type: 部屋の種類 (enjoy, hyperenjoy, gachi)
 
 これに加えて部屋に入室できる人数の上限を設定できます．
 
 * limit: (デフォルトは200名)
+
 
 部屋の作成に成功した場合は，部屋情報を表すオブジェクトが返されます．
 ```
@@ -51,7 +53,7 @@ user={userID: '234223232', userName: 'mizuno seiya'}
 
 ###入室
 部屋に入室する際は次のURLにリクエストを送信してください．  
-[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember?rid=2&userID=115834882653598693998)  
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/addmember?rid=2&userID=115834882653598693998&userName=Seiya%20Mizuno)  
 
 入室のクエリには次のフィールドが必要です．  
 
@@ -70,6 +72,21 @@ user={userID: '234223232', userName: 'mizuno seiya'}
 * userID
 
 退室処理が成功した場合はtrue，失敗した場合はfalseが返されます．  
+
+
+###部屋リストの取得
+部屋の種類別に部屋情報の一覧を取得するには，次のURLにリクエストを送信してください．
+[http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getroomlist](http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/getroomlist?type=gachi&userID=115834882653598693998)  
+
+取得には次のフィールドが必要です．  
+
+* userID
+* type: 部屋の種類(gachi, enjoy, hyperenjoy)
+
+取得できるオブジェクトは次のような感じです．
+```
+[{"rid":2,"description":"this is test","title":"testroom","limit":"2","members":['userID': '115834882653598693998', "userName": "Seiya Mizuno"}, ... ],"timestamp":"2014/11/08 07:03:12","type":"gachi"}]
+```
 
 ###ログアウト
 ログアウトする際は次のURLにリクエストを送信してください．  

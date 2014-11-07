@@ -13,7 +13,7 @@ var type = 'gachi';
 var user1 = {'userID': '117100601559522934217', 'userName': '水野聖也'};
 var user2 = {'userID': '115834882653598693998', 'userName': 'Seiya Mizuno'};
 
-var members = [user1.userID];
+var members = [user1];
 var expected = {'rid': 1, 'description': description, 'title': title, 'limit': limit, 'type': type};
 
 MongoTestHelper.clearCollection('RoomNumber')
@@ -22,7 +22,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 	MongoTestHelper.clearCollection('Room')
 	.done(function(res2) {
 
-		RoomManager.createNewRoom(description, title, limit, user1.userID, type)
+		RoomManager.createNewRoom(description, title, limit, user1.userID, user1.userName, type)
 		.done(function(room) {
 			console.log('room1');
 			console.log(room);
@@ -52,7 +52,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 				
 				}, function(err) {})
 
-				RoomManager.addMember(1, user2.userID)
+				RoomManager.addMember(1, user2.userID, user2.userName)
 				.done(function(result3) {
 
 
@@ -61,7 +61,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 
 						console.log('room3');
 						console.log(room3);
-						expected.members = [user1.userID, user2.userID];
+						expected.members = [user1, user2];
 						delete room3.timestamp;
 						assert.deepEqual(room3, expected);
 
@@ -69,7 +69,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 						.done(function(isMember) {
 							
 							assert.strictEqual(isMember, true);
-							RoomManager.addMember(1, 'hogehoge2')
+							RoomManager.addMember(1, 'hogehoge2', 'hogename')
 							.done(function(result8) {
 								assert.strictEqual(result8, false);
 
@@ -82,7 +82,7 @@ MongoTestHelper.clearCollection('RoomNumber')
 										console.log('room4');
 										console.log(room4);
 										delete room4.timestamp;
-										expected.members = [user1.userID];
+										expected.members = [user1];
 										assert.deepEqual(room4, expected);
 
 										RoomManager.removeRoom(1)

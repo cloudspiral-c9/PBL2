@@ -22,13 +22,14 @@ var CreateRoomRouteModule = {
 		var userId = queries['userID'];
 		var type = queries['type'];
 		var limit = (!queries['limit']) ? 200 : queries['limit'];
+		var userName = !queries['userName'] ? '': queries['userName'];
 		
 		LoginMongoHelper.isLoggedIn(userId).done(function(isLoggedIn) {
 
 
 			if (isLoggedIn) {
 
-				RoomManager.createNewRoom(description, title, limit, userId, type)
+				RoomManager.createNewRoom(description, title, limit, userId, userName, type)
 
 				.done(function(result) {
 					def.resolve(result);

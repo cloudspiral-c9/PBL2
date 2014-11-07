@@ -17,8 +17,9 @@ var AddMemberRouteModule = {
 
 		var rid = +queries['rid'];
 		var userId = queries['userID'];
+		var userName = !queries['userName'] ? '' : queries['userName'];
 		
-		RoomManager.addMember(rid, userId)
+		RoomManager.addMember(rid, userId, userName)
 		.done(function(result) {
 			def.resolve(result);
 		}, 

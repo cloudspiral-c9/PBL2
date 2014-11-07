@@ -10,7 +10,7 @@ var RoomManager = (function() {
 
 	//指定した部屋を作成する
 	//作成に成功した場合はmembers以外のRoomオブジェクトを返す
-	var createNewRoom = function(description, title, limit, userId, type) {
+	var createNewRoom = function(description, title, limit, userId, userName, type) {
 
 		var executeFunc = function(db, deferred) {
 
@@ -21,7 +21,11 @@ var RoomManager = (function() {
 					return;
 				}
 
-				var members = [userId];
+				if (!userName) {
+					userName = '';
+				}
+
+				var members = [{'userID': userId, 'userName': userName}];
 				var now = TimestampHelper.getTimestamp();
 				var query = {'rid': rid};
 				var update = {'rid': rid, 'description': description, 'title': title, 'limit': limit, 'members': members, 'timestamp': now, 'type': type};
@@ -148,8 +152,22 @@ var RoomManager = (function() {
 		return promise;
 	};
 
+	var _getUserIndexInMembers = function(userID, members) {
+
+		var index= -1;
+		for (var i = 0; i < members.length; i++) {
+			
+			if (members[i].userID ===  userID) {
+				index = i;
+				break;
+			}
+		}
+
+		return index;
+	};
+
 	//指定したridの部屋にuserIDのユーザを追加する
-	var addMember = function(rid, userID) {
+	var addMember = function(rid, userID, userName) {
 
 		var executeFunc = function(db, deferred) {
 
@@ -159,6 +177,12 @@ var RoomManager = (function() {
 				return;
 			}
 			
+			if (!userName) {
+				userName = '';
+			}
+			
+			var user = {'userID': userID, 'userName': userName};
+
 			//ログイン済みのユーザかチェック
 			LoginMongoHelper.isLoggedIn(userID).done(function(result) {
 
@@ -180,7 +204,7 @@ var RoomManager = (function() {
 					
 					//既にその部屋のメンバの場合はtrueを返して終了
 					var members = room.members;
-					if (members.indexOf(userID) !== -1) {
+					if (_getUserIndexInMembers(userID, members) !== -1) {
 						db.close();
 						deferred.resolve(true);
 						console.log('already room member');
@@ -188,7 +212,7 @@ var RoomManager = (function() {
 					}
 
 					//人数がlimitを超える場合は不可
-					members.push(userID);
+					members.push(user);
 					var limit = room.limit;
 					if (limit < members.length) {
 						db.close();
@@ -236,14 +260,15 @@ var RoomManager = (function() {
 				
 				//指定した部屋のメンバに入っていなければ終了
 				var members = room.members;
-				if (members.indexOf(userID) === -1) {
+				var index = _getUserIndexInMembers(userID, members);
+				if (index === -1) {
 					db.close();
 					deferred.resolve(true);
 					return;	
 				}
 
 				//membersを減らす
-				members.splice(members.indexOf(userID), 1);
+				members.splice(index, 1);
 				var updateQuery = {'$set': {'members': members}};
 				db.collection('Room').update({'rid': rid}, updateQuery, function(err, count, status) {
 
@@ -285,7 +310,7 @@ var RoomManager = (function() {
 			}
 
 			var members = room.members;
-			var isMember = members.indexOf(userID) !== -1;
+			var isMember = _getUserIndexInMembers(userID, members) !== -1;
 
 			def.resolve(isMember);
 
@@ -297,8 +322,42 @@ var RoomManager = (function() {
 		return def.promise;
 	};
 
+	var getRoomListByType = function(type) {
 
-	return {'createNewRoom': createNewRoom, 'getRoom': getRoom, 'isExist': isExist, 'removeRoom': removeRoom, 'addMember': addMember, 'removeMember': removeMember, 'isMemberOf': isMemberOf};
+		var executeFunc = function(db, deferred) {
+
+			if (type !== 'gachi'  && type !== 'enjoy' && type!=='hyperEnjoy') {
+				db.close();
+				deferred.resolve(false);
+				return;
+			}
+
+			var query = {'type': type};
+			var cursor = db.collection('Room').find(query);
+
+			var result = new Array;
+			cursor.each (function(err, doc) {
+				
+				if (err) {
+					console.log(err);
+					return;
+				}
+
+				if (!doc) {
+					deferred.resolve(result);
+				} else {
+					delete doc._id;
+					result.push(doc);
+				}
+			});
+		};
+
+		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+		return promise;
+	};
+
+
+	return {'createNewRoom': createNewRoom, 'getRoom': getRoom, 'isExist': isExist, 'removeRoom': removeRoom, 'addMember': addMember, 'removeMember': removeMember, 'isMemberOf': isMemberOf, 'getRoomListByType': getRoomListByType};
 
 })();
 
