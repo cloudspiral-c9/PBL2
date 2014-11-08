@@ -1,0 +1,27 @@
+<div ng-controller="ChatsController">
+  <div ng-model='chatsState'>
+  <section>
+    <p>Chat</p>
+    <ol>
+      <li ng-repeat="chat in chatasState.chats | orderBy: chat.timestamp | reverse">
+        <div>
+          <p>{{chat.sender}}</p>
+          <p>{{chat.message}}</p>
+          <p>{{chat.timestamp | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+        </div>
+      </li>
+    </ol>
+    <div>
+        <form accept-charset="utf-8">
+          <p>
+            <input type="text" ng-model="chatsState.formData.message" placeholder="message...">
+          </p>
+          <div ng-hide="!chatsState.formData.message">
+            <input type="submit" value="submit" ng-click="chatsState = submitChat(chatsState);">
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  </div>
+</div>
