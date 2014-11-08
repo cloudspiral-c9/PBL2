@@ -7,38 +7,28 @@
 
     var processesObs;
 
-    $scope.show = {
-      insert: [],
-      edit: []
-    };
-    $scope.formData = {
-      insert: [],
-      edit: [],
-      add: {}
-    };
+    //ロジック部分(pure)
+    $scope.showForm = function(processesState, mode, index) {
 
-    $scope.showForm = function(mode, index) {
-      $scope.show[mode][index] = 'show';
-      if (!$scope.formData[mode][index]) {
-        $scope.formData[mode][index] = {
+      var rProcessesState = csbc.deepClone(processesState);
+
+      rProcessesState.show[mode][index] = 'show';
+      if (!rProcessesState.formData[mode][index]) {
+        rProcessesState.formData[mode][index] = {
           process: '',
         };
       }
+
+      return rProcessesState;
     };
 
-    $scope.submitProcess = function(mode, index) {
+    function submit(processesState, mode, index) {
+
+      var rProcessesState = csbc.deepClone(processesState);
+
       if (mode === 'insert') {
-        processesObs.set({
-          mode: mode,
-          index: index,
-          values: [{
-            process: $scope.formData[mode][index].process,
-            sender: '',
-            timestamp: ''
-          }]
-        });
-        $scope.show[mode][index] = '';
-        $scope.formData[mode][index] = {
+        rProcessesState.show[mode][index] = '';
+        rProcessesState.formData[mode][index] = {
           process: '',
         };
       } else if (mode === 'edit') {
@@ -51,11 +41,66 @@
             timestamp: ''
           }]
         });
+      }
+
+      return rProcessesState;
+
+    }
+
+    function updateForm(processesState) {
+      return function(newValues, data) {
+        if (data.mode === 'remove') {
+          processesState.formData.edit.splice(data.index, 1);
+          processesState.formData.insert.splice(data.index, 1);
+        } else if (data.mode === 'insert') {
+          processesState.formData.edit.splice(data.index, 0, {
+            process: data.values[0].process,
+            sender: data.values[0].sender,
+            timestamp: data.values[0].timestamp,
+          });
+          processesState.formData.insert.splice(data.index, 0, {
+            process: data.values[0].process,
+            sender: data.values[0].sender,
+            timestamp: data.values[0].timestamp,
+          });
+        } else if (data.mode === 'add') {
+          processesState.formData.edit.push({
+            process: '',
+          });
+          processesState.formData.insert.push({
+            process: '',
+          });
+        }
+      };
+    }
+
+    //サーバーとの通信部分
+    $scope.submitProcess = function(processesState, mode, index) {
+      if (mode === 'insert') {
+        processesObs.set({
+          mode: mode,
+          index: index,
+          values: [{
+            process: processesState.formData[mode][index].process,
+            sender: '',
+            timestamp: ''
+          }]
+        });
+      } else if (mode === 'edit') {
+        processesObs.set({
+          mode: mode,
+          index: index,
+          values: [{
+            process: processesState.formData[mode][index].process,
+            sender: '',
+            timestamp: ''
+          }]
+        });
       } else if (mode === 'add') {
         processesObs.set({
           mode: mode,
           values: [{
-            process: $scope.formData[mode].process,
+            process: processesState.formData[mode].process,
             sender: '',
             timestamp: ''
           }]
@@ -66,32 +111,21 @@
           index: index
         });
       }
+
+      return submit(processesState, mode, index);
     };
 
-    function updateForm(newValues, data) {
-      if (data.mode === 'remove') {
-        $scope.formData.edit.splice(data.index, 1);
-        $scope.formData.insert.splice(data.index, 1);
-      } else if (data.mode === 'insert') {
-        $scope.formData.edit.splice(data.index, 0, {
-          process: data.values[0].process,
-          sender: data.values[0].sender,
-          timestamp: data.values[0].timestamp,
-        });
-        $scope.formData.insert.splice(data.index, 0, {
-          process: data.values[0].process,
-          sender: data.values[0].sender,
-          timestamp: data.values[0].timestamp,
-        });
-      } else if (data.mode === 'add') {
-        $scope.formData.edit.push({
-          process: '',
-        });
-        $scope.formData.insert.push({
-          process: '',
-        });
-      }
-    }
+    //初期化
+    $scope.processesState = {};
+    $scope.processesState.show = {
+      insert: [],
+      edit: []
+    };
+    $scope.processesState.formData = {
+      insert: [],
+      edit: [],
+      add: {}
+    };
 
     $http({
       method: 'get',
@@ -100,9 +134,9 @@
     }).
     success(function(receiveData, status) {
 
-      $scope.processes = receiveData;
+      $scope.processesState.processes = receiveData;
 
-      $scope.formData.edit = receiveData;
+      $scope.processesState.formData.edit = receiveData;
 
       processesObs = csbc.observable('processes', {
         send: function(event, data) {
@@ -114,8 +148,8 @@
           });
         }
       }, ['process', 'sender', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.processes = newValues;
-      }, updateForm]);
+        $scope.processesState.processes = newValues;
+      }, updateForm($scope.processesState)]);
     });
 
   }]);

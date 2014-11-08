@@ -7,15 +7,25 @@
 
     var recipelistObs;
 
-    $scope.formData = {
-      rid: '',
-      title: '',
-      description: "",
-      sender: '',
-      timestamp: null
-    };
+    //ロジック部分(pure)
+    function submit(recipeListState) {
 
-    $scope.submitRecipelist = function() {
+      var rRecipeListState = csbc.deepClone(recipeListState);
+
+      rRecipeListState.formData = {
+        rid: '',
+        title: '',
+        description: "",
+        sender: '',
+        timestamp: null
+      };
+
+      return rRecipeListState;
+
+    }
+
+    //サーバーとの通信部分
+    $scope.submitRecipelist = function(recipeListState) {
       recipelistObs.set({
         mode: 'add',
         values: [{
@@ -26,13 +36,18 @@
           timestamp: ''
         }]
       });
-      $scope.formData = {
-        rid: '',
-        title: '',
-        description: "",
-        sender: '',
-        timestamp: null
-      };
+
+      return submit(recipeListState);
+    };
+
+    //初期化
+    $scope.recipeListState = {};
+    $scope.recipeListState.formData = {
+      rid: '',
+      title: '',
+      description: "",
+      sender: '',
+      timestamp: null
     };
 
     $http({
@@ -42,7 +57,7 @@
     }).
     success(function(receiveData, status) {
 
-      $scope.recipelist = receiveData;
+      $scope.recipeListState.recipelist = receiveData;
 
       recipelistObs = csbc.observable('recipelist', {
         send: function(event, data) {
@@ -54,7 +69,7 @@
           });
         }
       }, ['title', 'sender', 'description', 'rid', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.recipelist = newValues;
+        $scope.recipeListState.recipelist = newValues;
       }]);
     });
 

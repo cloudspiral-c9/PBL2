@@ -1,54 +1,56 @@
 <div ng-controller="ProcessesController">
-  <section>
-    <p>Recipe</p>
-    <ol>
-      <li ng-repeat="process in processes">
-        <div>
-          <input type="button" value="insert" ng-click="showForm('insert', $index);" ng-hide="show.insert[$index] === 'show'">
-          <div ng-hide="show.insert[$index] !== 'show'">
-            <form accept-charset="utf-8">
-              <p>
-                <input type="textarea" ng-model="formData.insert[$index].process" required>
-              </p>
-              <input type="submit" value="submit" ng-click="submitProcess('insert', $index);">
-            </form>
-            <input type="button" value="hide" ng-click="show.insert[$index] = '';">
+  <div ng-model='processesState'>
+    <section>
+      <p>Recipe</p>
+      <ol>
+        <li ng-repeat="process in processesState.processes">
+          <div>
+            <input type="button" value="insert" ng-click="processesState = showForm(processesState, 'insert', $index);" ng-hide="processesState.show.insert[$index] === 'show'">
+            <div ng-hide="processesState.show.insert[$index] !== 'show'">
+              <form accept-charset="utf-8">
+                <p>
+                  <input type="textarea" ng-model="processesState.formData.insert[$index].process" required>
+                </p>
+                <input type="submit" value="submit" ng-click="processesState = submitProcess(processesState, 'insert', $index);">
+              </form>
+              <input type="button" value="hide" ng-click="processesState.show.insert[$index] = '';">
+            </div>
           </div>
-        </div>
-        <div>
-          <div ng-hide="show.edit[$index] === 'show'">
-            <p>{{$index + 1}}</p>
-            <p>{{process.process}}</p>
-            <p>{{process.sender}}</p>
-            <p>{{process.timestamp | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
-            <input type="button" value="edit" ng-click="showForm('edit', $index);">
-            <input type="button" value="remove" ng-click="submitProcess('remove',$index);">
+          <div>
+            <div ng-hide="processesState.show.edit[$index] === 'show'">
+              <p>{{$index + 1}}</p>
+              <p>{{process.process}}</p>
+              <p>{{process.sender}}</p>
+              <p>{{process.timestamp | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+              <input type="button" value="edit" ng-click="processesState = showForm(processesState, 'edit', $index);">
+              <input type="button" value="remove" ng-click="processesState = submitProcess(processesState, 'remove',$index);">
+            </div>
+            <div ng-hide="processesState.show.edit[$index] !== 'show'">
+              <form accept-charset="utf-8">
+                <p>
+                  <input type="textarea" ng-init="process.pricess" ng-model="processesState.formData.edit[$index].process" required>
+                </p>
+                <input type="submit" value="submit" ng-click="processesState = submitProcess(processesState, 'edit', $index);processesState.show.edit[$index] = '';">
+              </form>
+              <input type="button" value='cancel' ng-click="processesState.show.edit[$index] = '';">
+            </div>
           </div>
-          <div ng-hide="show.edit[$index] !== 'show'">
-            <form accept-charset="utf-8">
-              <p>
-                <input type="textarea" ng-init="process.pricess" ng-model="formData.edit[$index].process" required>
-              </p>
-              <input type="submit" value="submit" ng-click="submitProcess('edit', $index);show.edit[$index] = '';">
-            </form>
-            <input type="button" value='cancel' ng-click="show.edit[$index] = '';">
+        </li>
+        <li>
+          <div>
+            <input type="button" value="add" ng-click="showAdd = 'show';" ng-hide="showAdd === 'show'">
+            <div ng-hide="showAdd !== 'show'">
+              <form accept-charset="utf-8">
+                <p>
+                  <input type="textarea" ng-model="processesState.formData.add.process" required>
+                </p>
+                <input type="submit" value="submit" ng-click="processesState = submitProcess(processesState, 'add');showAdd = '';">
+              </form>
+              <input type="button" value="hide" ng-click="processesState.showAdd = '';">
+            </div>
           </div>
-        </div>
-      </li>
-      <li>
-        <div>
-          <input type="button" value="add" ng-click="showAdd = 'show';" ng-hide="showAdd === 'show'">
-          <div ng-hide="showAdd !== 'show'">
-            <form accept-charset="utf-8">
-              <p>
-                <input type="textarea" ng-model="formData.add.process" required>
-              </p>
-              <input type="submit" value="submit" ng-click="submitProcess('add');showAdd = '';">
-            </form>
-            <input type="button" value="hide" ng-click="showAdd = '';">
-          </div>
-        </div>
-      </li>
-    </ol>
-  </section>
+        </li>
+      </ol>
+    </section>
+  </div>
 </div>

@@ -7,28 +7,7 @@
 
     var chartObs;
 
-    $http({
-      method: 'get',
-      url: '/chart',
-      withCredentials: true
-    }).
-    success(function(receiveData, status) {
-      $scope.chartData = makeChartData(receiveData);
-
-      chartObs = csbc.observable('chart', {
-        send: function(event, data) {
-          socket.emit(event, data);
-        },
-        receive: function(event, setReceived) {
-          socket.on(event, function(data) {
-            setReceived(data);
-          });
-        }
-      }, ['ingredient', 'rate', 'rateDetail']).addUpdates([function(newValues){
-         $scope.chartData =  makeChartData(newValues);
-        }]).start(receiveData);
-    });
-
+    //ロジック部分(pure)
     function makeChartData(chart) {
 
       var chartData, rates, titles, allOne, firstRate;
@@ -56,6 +35,29 @@
 
       return chartData;
     }
+
+    //初期化
+    $http({
+      method: 'get',
+      url: '/chart',
+      withCredentials: true
+    }).
+    success(function(receiveData, status) {
+      $scope.chartData = makeChartData(receiveData);
+
+      chartObs = csbc.observable('chart', {
+        send: function(event, data) {
+          socket.emit(event, data);
+        },
+        receive: function(event, setReceived) {
+          socket.on(event, function(data) {
+            setReceived(data);
+          });
+        }
+      }, ['ingredient', 'rate', 'rateDetail']).addUpdates([function(newValues){
+         $scope.chartData =  makeChartData(newValues);
+        }]).start(receiveData);
+    });
 
   }]);
 })();

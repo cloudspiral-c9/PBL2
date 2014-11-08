@@ -7,26 +7,44 @@
 
     var chatsObs;
 
-    $scope.formData = {
-      message: '',
-      sender: ''
-    };
 
-    $scope.submitChat = function() {
-      if (_.truthy(chatsObs)) {
-        chatsObs.set({
+    //ロジック部分(pure)
+    function submit(chatsState){
+
+      var rChatsState = csbc.deepClone(chatsState);
+
+      rChatsState.formData = {
+        message: '',
+        sender: ''
+      };
+
+      return rChatsState;
+
+    }
+
+    //サーバーとの通信部分
+    $scope.submitChat = function(chatsState) {
+      if (_.truthy(chatsState.chatsObs)) {
+        chatsState.chatsObs.set({
           values: [{
-            message: $scope.formData.message,
-            sender: $scope.formData.sender,
+            message: chatsState.formData.message,
+            sender: chatsState.formData.sender,
             timestamp: ''
           }],
           mode: 'add'
         });
       }
-      $scope.formData = {
-        message: '',
-        sender: ''
-      };
+
+      return submit(chatsState);
+    };
+
+
+    //初期化
+    $scope.chatasState = {};
+
+    $scope.chatasState.formData = {
+      message: '',
+      sender: ''
     };
 
     $http({
@@ -36,7 +54,7 @@
     }).
     success(function(receiveData, status) {
 
-      $scope.chats = receiveData;
+      $scope.chatasState.chats = receiveData;
 
       chatsObs = csbc.observable('chats', {
         send: function(event, data) {
@@ -48,7 +66,7 @@
           });
         }
       }, ['message', 'sender', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.chats = newValues;
+        $scope.chatasState.chats = newValues;
       }]);
     });
 

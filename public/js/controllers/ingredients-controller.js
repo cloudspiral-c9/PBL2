@@ -7,49 +7,68 @@
 
     var ingredientsObs;
 
-    $scope.showEdit = [];
-    $scope.formEdit = [];
-    $scope.formAdd = {
-      ingredient: '',
-      amount: 0,
-      sender: ''
-    };
+    //ロジック部分(pure)
+    $scope.showEditForm = function(ingredientsState, index) {
 
-    $scope.showEditForm = function(index) {
-      $scope.showEdit[index] = 'show';
-      if (!$scope.formEdit[index]) {
-        $scope.formEdit[index] = {
-          ingredient: $scope.ingredients[index].ingredient,
-          amount: $scope.ingredients[index].amount,
+      var rIngredientsState = csbc.deepClone(ingredientsState);
+
+      rIngredientsState.showEdit[index] = 'show';
+      if (!rIngredientsState.formEdit[index]) {
+        rIngredientsState.formEdit[index] = {
+          ingredient: rIngredientsState.ingredients[index].ingredient,
+          amount: rIngredientsState.ingredients[index].amount,
           sender: '',
           timestamp: ''
         };
       }
+
+      return rIngredientsState;
     };
 
-    $scope.submitIngredient = function(mode, index) {
+    function updateForm(ingredientsState) {
+      return function(newValues, data) {
+        if (data.mode === 'add') {
+          ingredientsState.formEdit.push(data.values[0]);
+        } else if (data.mode === 'remove') {
+          ingredientsState.formEdit.splice(data.index, 1);
+        }
+      };
+    }
+
+    function submit(ingredientsState, mode, index) {
+
+      var rIngredientsState = csbc.deepClone(ingredientsState);
+
+      if (mode === 'add') {
+        $scope.formAdd = {
+          ingredient: '',
+          amount: 0,
+          sender: ''
+        };
+      }
+
+      return rIngredientsState;
+    }
+
+    //サーバーとの通信部分
+    $scope.submitIngredient = function(ingredientsState, mode, index) {
       if (_.truthy(ingredientsObs)) {
         if (mode === 'add') {
           ingredientsObs.set({
             values: [{
-              ingredient: $scope.formAdd.ingredient,
-              amount: $scope.formAdd.amount,
-              sender: $scope.formAdd.sender,
+              ingredient: ingredientsState.formAdd.ingredient,
+              amount: ingredientsState.formAdd.amount,
+              sender: ingredientsState.formAdd.sender,
               timestamp: ''
             }],
             mode: 'add'
           });
-          $scope.formAdd = {
-            ingredient: '',
-            amount: 0,
-            sender: ''
-          };
         } else if (mode === 'edit') {
           ingredientsObs.set({
             values: [{
-              ingredient: $scope.formEdit[index].ingredient,
-              amount: $scope.formEdit[index].amount,
-              sender: $scope.formEdit[index].sender,
+              ingredient: ingredientsState.formEdit[index].ingredient,
+              amount: ingredientsState.formEdit[index].amount,
+              sender: ingredientsState.formEdit[index].sender,
               timestamp: ''
             }],
             mode: 'edit',
@@ -62,15 +81,27 @@
           });
         }
       }
+
+      return submit(ingredientsState, mode, index);
     };
 
-    function updateForm(newValues, data) {
-      if (data.mode === 'add') {
-        $scope.formEdit.push(data.values[0]);
-      } else if (data.mode === 'remove') {
-        $scope.formEdit.splice(data.index, 1);
-      }
-    }
+    //初期化
+    $scope.ingredientsState.showEdit = [];
+    $scope.ingredientsState.formEdit = [];
+    $scope.ingredientsState.formAdd = {
+      ingredient: '',
+      amount: 0,
+      sender: ''
+    };
+
+    $http({
+      method: 'get',
+      url: '/kinds',
+      withCredentials: true
+    }).
+    success(function(receiveData, status) {
+      $scope.kinds = receiveData;
+    });
 
     $http({
       method: 'get',
@@ -79,7 +110,7 @@
     }).
     success(function(receiveData, status) {
 
-      $scope.ingredients = receiveData;
+      $scope.ingredientsState.ingredients = receiveData;
 
       ingredientsObs = csbc.observable('ingredients', {
         send: function(event, data) {
@@ -91,17 +122,8 @@
           });
         }
       }, ['ingredient', 'sender', 'amount', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.ingredients = newValues;
-      }, updateForm]);
-    });
-
-    $http({
-      method: 'get',
-      url: '/kinds',
-      withCredentials: true
-    }).
-    success(function(receiveData, status) {
-      $scope.kinds = receiveData;
+        $scope.ingredientsState.ingredients = newValues;
+      }, updateForm($scope.ingredientsState)]);
     });
 
   }]);
