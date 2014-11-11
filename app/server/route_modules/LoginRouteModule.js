@@ -8,6 +8,7 @@ var LoginRouteModule = {
 	response: null,
 	next: null,
 	routeFunc: function(queries) {
+
 		passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile'] })(this.request, this.response, this.next);
 		console.log('authenticate');
 	}

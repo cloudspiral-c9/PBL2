@@ -2,11 +2,53 @@
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
-var app = require('express')();
-var passport = require( __dirname + '/../services/login/passport.js' ).passport;
+var deferred = require('deferred');
+var uuid = require('node-uuid');
+
+var express = require('express');
+var session = require('express-session');
+var methodoverride = require('method-override');
+var MongoStore = require('connect-mongo')(session);
+var app = express();
+var passport = require( __dirname + '/../services/login/passport.js' ).passport; 
+var cookieParser = require('cookie-parser');
+
+var viewRouter = require(__dirname + '/view_route_modules/index.js')
+
+
+//SessionのためのMongoConnectの設定
+var sessionStore = new MongoStore( {
+	db: 'recipeers',
+	collection: 'sessions',
+	host: '127.0.0.1',
+	port: 27017,
+	username: 'mizuno',
+	password: 'saintseiya'
+}, function() {
+	console.log('session store established');
+});
+
+app.use(session( {
+	resave: false,
+	saveUninitialized: true,
+	secret: uuid.v4(),
+	store: sessionStore,
+	cookie: {
+		httpOnly: false,
+		maxAge: new Date(Date.now() + 30 * 60 * 1000)
+	}
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(cookieParser());
+app.use(viewRouter);
+app.use(express.static('public'));
+app.set('views', '/home/ec2-user/recipeers/public/');
+app.set('view engine', 'ejs');
+app.engine('.html', require('ejs').renderFile);
+
+
 
 var ServerHelper = (function() {
 
@@ -19,7 +61,7 @@ var ServerHelper = (function() {
 
 		var headers = {
 			'Content-Type': 'application/json charset=UTF-8\n'
-		}
+		};
 		response.writeHead(statusCode, headers);
 
 		//レスポンスボディを記述
@@ -56,7 +98,7 @@ var ServerHelper = (function() {
 				}, function(err) {
 					console.log(err);
 					_respondResult(response,err);
-				})
+				});
 			}
 		});
 	};
@@ -85,7 +127,7 @@ var ServerHelper = (function() {
 		_server.listen(port, function() {
 			console.log("Server Listen");
 		});
-	}
+	};
 
 	var startServer = function() {
 		_loadRouteModules();

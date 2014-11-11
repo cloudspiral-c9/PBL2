@@ -13,8 +13,19 @@ var executeMongoUseFunc = function(executeFunc) {
 		if (err) {
 			throw err;
 		}
-
-		executeFunc(db, def)
+		db.authenticate('mizuno', 'saintseiya', function(err, result) {
+			
+			if (err) {
+				console.log(err);
+				db.close();
+				throw err;
+			} else {
+				if (result) {
+					executeFunc(db, def)
+				}
+			}
+		});
+		
 	});
 
 	return def.promise;

@@ -6,11 +6,12 @@ var deferred = require('deferred');
 var GetRoomListRouteModule  = {
 
 	route: '/getroomlist',
+	request: null,
 	routeFunc: function(queries) {
 
 		var def = deferred();
 
-		if (!(queries['userID'] && queries['type'])) {
+		if (!(queries['userID'] && queries['type'] && this.request.user )) {
 			def.resolve(false);
 			return def.promise;
 		}

@@ -7,12 +7,13 @@ var deferred = require('deferred');
 var CreateRoomRouteModule = {
 
 	route: '/newroom',
+	request: null,
 	routeFunc: function(queries) {
 		
 		var def = deferred();
 
 		//クエリが不完全な場合は失敗フラグで終了
-		if (!(queries['description'] && queries['title'] && queries['userID'] && queries['type'] ) ){
+		if (!(queries['description'] && queries['title'] && queries['userID'] && queries['type'] && this.request.user) ){
 			def.resolve(false);
 			return def.promise;
 		}

@@ -6,11 +6,12 @@ var IngredientMongoHelper = require( __dirname + '/../../services/ingredient/Ing
 var GetIngredientRouteModule = {
 	
 	route: '/getingredient',
+	request: null,
 	routeFunc: function(queries) {
 
 		var def = deferred();
 
-		if ( !(queries['rid'] && queries['userID']) ) {
+		if ( !(queries['rid'] && queries['userID'] && this.request.user) ) {
 			def.resolve(false);
 			return def.promise;
 		}

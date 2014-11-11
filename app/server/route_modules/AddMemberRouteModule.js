@@ -5,12 +5,13 @@ var deferred = require('deferred');
 var AddMemberRouteModule = {
 
 	route: '/addmember',
+	request: null,
 	routeFunc: function(queries) {
 		
 		var def = deferred();
 
 		//クエリが不完全な場合は失敗フラグで終了
-		if (!(queries['rid'] && queries['userID']) ) {
+		if (!(queries['rid'] && queries['userID'] && this.request.user) ) {
 			def.resolve(false);
 			return def.promise;
 		}
