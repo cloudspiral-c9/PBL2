@@ -3,9 +3,7 @@
 (function() {
   var recipelist = angular.module('recipeers.recipelist');
 
-  recipelist.controller('RecipeListController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', function($scope, $routeParams, $http, socket, _, csbc) {
-
-    var recipelistObs;
+  recipelist.controller('RecipeListController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', 'RecipeListService', function($scope, $routeParams, $http, socket, _, csbc, RecipeListService) {
 
     //ロジック部分(pure)
     function submit(recipeListState) {
@@ -26,7 +24,7 @@
 
     //サーバーとの通信部分
     $scope.submitRecipelist = function(recipeListState) {
-      recipelistObs.set({
+      RecipeListService.obs.set({
         mode: 'add',
         values: [{
           title: $scope.formData.title,
@@ -40,6 +38,10 @@
       return submit(recipeListState);
     };
 
+    function update(newValues, data) {
+      $scope.recipeListState.recipelist = newValues;
+    }
+
     //初期化
     $scope.recipeListState = {};
     $scope.recipeListState.formData = {
@@ -50,28 +52,12 @@
       timestamp: null
     };
 
-    $http({
-      method: 'get',
-      url: '/recipelist',
-      withCredentials: true
-    }).
-    success(function(receiveData, status) {
+    if (_.truthy(RecipeListService.obs)) {
+      RecipeListService.obs.addUpdates([update]);
+    } else {
+      RecipeListService.updates.push(update);
+    }
 
-      $scope.recipeListState.recipelist = receiveData;
-
-      recipelistObs = csbc.observable('recipelist', {
-        send: function(event, data) {
-          socket.emit(event, data);
-        },
-        receive: function(event, setReceived) {
-          socket.on(event, function(data) {
-            setReceived(data);
-          });
-        }
-      }, ['title', 'sender', 'description', 'rid', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.recipeListState.recipelist = newValues;
-      }]);
-    });
 
   }]);
 
