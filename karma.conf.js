@@ -17,6 +17,7 @@ module.exports = function(config) {
       'public/bower_components/underscore-contrib/underscore.util.existential.js',
       'public/bower_components/underscore-contrib/underscore.object.selectors.js',
       'public/bower_components/csbind-client/csbind-client.js',
+      'public/bower_components/jQuery/dist/jquery.js',
 
       'public/js/modules/module.js',
 
