@@ -80,7 +80,7 @@
         <ul id="recipe-list">
 
           <!--classを追記 -->
-          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" ng-class="'card' 'card' + $index%5">
+          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" >
             <a ng-href="#/recipe/{{rid}}">
               <h2 class="r-title">{{recipe.title}}</h2>
               <p class="r-description">{{recipe.description}}</p>
