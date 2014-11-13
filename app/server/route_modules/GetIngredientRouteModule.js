@@ -1,50 +1,51 @@
 'use strict';
 
 var deferred = require('deferred');
-var LoginMongoHelper = require( __dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
-var IngredientMongoHelper = require( __dirname + '/../../services/ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
+var LoginMongoHelper = require(__dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
+var IngredientMongoHelper = require(__dirname + '/../../services/ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 
 var GetIngredientRouteModule = {
-	
-	route: '/getingredient',
-	routeFunc: function(queries) {
 
-		var def = deferred();
+  route: '/getingredient',
+  request: null,
+  routeFunc: function(queries) {
 
-		if ( !(queries.rid && queries.userID) ) {
-			def.resolve(false);
-			return def.promise;
-		}
+    var def = deferred();
 
-		var rid = +queries.rid;
-		var userId = queries.userID;
+    if (!(queries.rid && queries.userID && this.request.user)) {
+      def.resolve(false);
+      return def.promise;
+    }
 
-		LoginMongoHelper.isLoggedIn(userId)
-		.done(function(isLoggedIn) {
+    var rid = +queries.rid;
+    var userId = queries.userID;
 
-			if (isLoggedIn) {
+    LoginMongoHelper.isLoggedIn(userId)
+      .done(function(isLoggedIn) {
 
-				IngredientMongoHelper.getIngredients(rid)
-				.done(function(result) {
-					def.resolve(result);
-				}, function(err) {
-					console.log(err);
-					def.resolve(false);
-				});
+        if (isLoggedIn) {
 
-			} else {
-				def.resolve(false);
-			}
-			
+          IngredientMongoHelper.getIngredients(rid)
+            .done(function(result) {
+              def.resolve(result);
+            }, function(err) {
+              console.log(err);
+              def.resolve(false);
+            });
 
-		}, function(err) {
-			console.log(err);
-			def.resolve(false);
-		});
+        } else {
+          def.resolve(false);
+        }
 
-		
-		return def.promise;
-	}	
+
+      }, function(err) {
+        console.log(err);
+        def.resolve(false);
+      });
+
+
+    return def.promise;
+  }
 };
 
 exports.GetIngredientRouteModule = GetIngredientRouteModule;

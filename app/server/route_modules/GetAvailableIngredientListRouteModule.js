@@ -1,25 +1,26 @@
+'use strict';
+
 var IngredientMongoHelper = require(__dirname + '/../../services/ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 var deferred = require('deferred');
 
 var GetAvailableIngredientListRouteModule = {
 
-	route: '/getingredientlist',
-	routeFunc: function(queries) {
+  route: '/getingredientlist',
+  routeFunc: function(queries) {
 
-		var def = deferred();
+    var def = deferred();
 
-		IngredientMongoHelper.GetAvailableIngredientList()
-		.done(function(foodList) {
-			def.resolve(foodList);
-		}, function(err) {
-			console.log(err);
-			def.promise(false);
-		});
+    IngredientMongoHelper.GetAvailableIngredientList()
+      .done(function(foodList) {
+        def.resolve(foodList);
+      }, function(err) {
+        console.log(err);
+        def.promise(false);
+      });
 
-		return def.promise;
-	}
+    return def.promise;
+  }
 
 };
 
 exports.GetAvailableIngredientListRouteModule = GetAvailableIngredientListRouteModule;
-

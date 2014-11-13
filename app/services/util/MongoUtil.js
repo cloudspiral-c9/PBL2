@@ -6,19 +6,30 @@ var deferred = require('deferred');
 //データベースrecipeerを使用する処理を実行するユーティリティ
 var executeMongoUseFunc = function(executeFunc) {
 
-	var def = deferred();
+  var def = deferred();
 
-	MongoClient.connect('mongodb://localhost/recipeers', function(err, db) {
+  MongoClient.connect('mongodb://localhost/recipeers', function(err, db) {
 
-		//MongoDBに接続できない場合は例外を発生
-		if (err) {
-			throw err;
-		}
+    //MongoDBに接続できない場合は例外を発生
+    if (err) {
+      throw err;
+    }
+    db.authenticate('mizuno', 'saintseiya', function(err, result) {
 
-		executeFunc(db, def);
-	});
+      if (err) {
+        console.log(err);
+        db.close();
+        throw err;
+      } else {
+        if (result) {
+          executeFunc(db, def);
+        }
+      }
+    });
 
-	return def.promise;
+  });
+
+  return def.promise;
 };
 
 exports.executeMongoUseFunc = executeMongoUseFunc;

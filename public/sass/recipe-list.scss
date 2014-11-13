@@ -1,0 +1,313 @@
+@charset "utf-8";
+
+$background-url: '../images/roomlist/background/wood-texture.jpg';
+//$modal-background-url: '../images/roomlist/icons/red-pin.png';
+
+$right-red: #FF2A1F;
+$yellow: #FDFF1F;
+$right-green: #2CFF1F;
+$right-blue: #1FFFDE;
+$blue: #1F7FFF;
+
+$color0: #FE4E41;
+$color1: #FF9525;
+$color2: #FFF725;
+$color3: #02D6FF;
+$color4: #6958FF;
+
+$button-color: #0D99FF;
+
+
+@mixin transition-push($duration) {
+	-webkit-transition: -webkit-transform $duration linear;
+	-moz-transition: -moz-transform $duration linear;
+	-o-transition: -o-transform $duration linear;
+	-ms-transition: -ms-transform $duration linear;
+	transition: transform $duration linear;
+}
+
+@mixin transition-shadow($duration) {
+	-webkit-transition: box-shadow $duration linear;
+	-moz-transition: box-shadow $duration linear;
+	-o-transition: box-shadow $duration linear;
+	-ms-transition: -box-shadow $duration linear;
+	transition: box-shadow $duration linear;
+}
+
+@mixin scale-change($scale) {
+	-webkit-transform: scale($scale);
+	-moz-transform: scale($scale);
+	-o-transform: scale($scale);
+	-ms-transform: scale($scale);
+	transform: scale($scale);
+}
+
+
+
+body {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+}
+
+#overlay {
+	width: 100%;
+	height: 120%;
+	position: fixed;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 3;
+}
+
+div#main {
+	
+	width: 100%;
+	height: 100%;
+	min-width: 1500px; 
+	background-image: url($background-url);
+	background-repeat: repeat-y;
+	background-size: cover;
+	
+	#container {
+	
+		width: 70%;
+		min-width: 800px;
+		margin: 0px auto;
+
+		#room-type {
+			position: absolute;
+			float: left;
+			width: 140px;
+			height: 60px;
+			margin: 10px 15px;
+			text-align: center;
+			font-size: 3em;
+		}
+
+		#enjoy-e {
+			color:$right-red;
+		}
+
+		#enjoy-n {
+			color: $yellow;
+		}
+
+		#enjoy-j {
+			color:$right-green;
+		}
+
+		#enjoy-o {
+			color: $right-blue;
+		}
+
+		#enjoy-y {
+			color: $blue;
+		}
+			
+		#button-container{
+			width: 150px;
+			margin: 0px auto;
+			text-align: center;
+			
+			input#room-create {
+				width: 140px;
+				height: 50px;
+				margin: 15px 0px;
+				background: $button-color;
+				border: none;
+				font-size: 1.3em;
+				color: Snow;
+				box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+				font-weight: bold;
+				@include transition-push(0.1s);
+				@include transition-shadow(0.08s);
+
+				&:active {
+					@include scale-change(0.95);
+					box-shadow: 0px 1px 1px rgba(0,0,0,0.4);
+				}
+			}
+
+		}
+			
+		#modal-container {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+
+			#modal-window {
+				display: none;
+				top: 0px;
+				left: 0px;
+				bottom: 0px;
+				right: 0px;
+				position: fixed;
+				width: 600px;
+				height: 400px;
+				margin: auto;
+				z-index: 2;
+				background:Snow;
+				text-align:center;
+
+
+				#modal-title {
+					position: relative;
+					top: 20px;
+					font-size: 1.8em;
+				}
+				
+				hr {
+					position: relative;
+					width: 80%;
+					margin: 25px auto;
+					margin-bottom: 45px;
+				}
+
+				.label {
+					font-size: 1.3em;
+				}
+
+				#modal-title-box {
+					position: relative;
+					width: 70%;
+					margin-top: 5px;
+					margin-bottom: 20px;
+				}
+
+				#modal-description-area {
+					position: relative;
+					margin-top: 5px;
+					width: 70%
+				}
+				
+
+				.modal-button {
+					width: 120px;
+					height: 35px;
+					float: left;
+					background: Snow;
+					box-shadow: 0px 2px 2px rgba(0,0,0,0.4);
+					font-size: 1.1em;
+					margin: 45px 20px;
+
+					@include transition-push(0.1s);
+					@include transition-shadow(0.08s);
+
+					&:active {
+						@include scale-change(0.98);
+					}
+				}
+				#modal-send{
+					color: $button-color;
+					border: 2px $button-color solid;
+					margin-left: 160px;
+					
+					&:hover {
+						background: LightBlue;
+					}
+					
+				}
+
+				#modal-cancel {
+					background-color: Snow;
+					margin-left: 20px;
+					border: 2px $color0 solid;
+					color: $color0;
+
+					&:hover {
+						background: LightSalmon;
+					}
+				}
+
+			}
+		}
+		
+		
+		
+		#search-message {
+			width: 295px;
+			height: 35px;
+			float: right;
+			margin-top: -85px;
+			font-size: 1.3em;
+
+
+			#room-search-box {
+				position: relative;
+				float: right;
+				width: 200px;
+				height: 20px;
+				padding: 2px;
+				margin-top: -3px;
+				line-height: 25px;
+				font-size: 1.05rem;
+			}
+
+		}
+
+		#recipe-list {
+			clear: both;
+			position: relative;
+			width: 100%;
+			margin: 30px auto;
+
+			
+			.card {
+				width: 100%;
+				height: 130px;
+				margin: 20px 0px;
+				box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
+				@include transition-push(0.1s);
+				@include transition-shadow(0.08s);
+
+				&:active {
+					@include scale-change(0.99);
+					box-shadow: 0px 1px 1px rgba(0,0,0,0.4);
+				}
+
+
+				.r-title {
+					position: relative;
+					left: 30px;
+					top: 20px;
+					font-size: 1.5em;
+				}
+
+				.r-description {
+					position: relative;
+					top: 30px;
+					left: 40px;
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+			}
+
+			.card0 {
+				background: $color0;
+			}
+
+			.card1 {
+				background: $color1;
+			}
+
+			.card2 {
+				background: $color2;
+			}
+
+			.card3 {
+				background: $color3;
+			}
+
+			.card4 {
+				background: $color4;
+			}
+
+		}
+		
+		
+
+	}
+
+	
+
+}
