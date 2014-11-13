@@ -74,7 +74,85 @@ var RoomManager = (function() {
 
             delete update.members;
             delete update._id;
-            console.log('create',update);
+            console.log('create', update);
+            deferred.resolve(update);
+
+          }, function(err) {
+            console.log(err);
+            deferred.resolve(false);
+          });
+        });
+
+      }, function(err) {
+        console.log(err);
+        deferred.resolve(false);
+      });
+
+    };
+
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+  };
+
+  var add = function(description, title, limit, userId, userName, type) {
+
+    console.log();
+    var executeFunc = function(db, deferred) {
+
+
+      RoomNumberMongoHelper.getCurrentRid().done(function(rid) {
+
+        if (!(description && title && limit && userId)) {
+          console.log('roomget false');
+          deferred.resolve(false);
+          return;
+        }
+
+        rid = rid || 0;
+        type = type || 'hyperEnjoy';
+
+        if (!userName) {
+          userName = '';
+        }
+
+        var members = [{
+          'userID': userId,
+          'userName': userName
+        }];
+        var now = TimestampHelper.getTimestamp();
+        var update = {
+          'userID': userId,
+          'userName': userName,
+          'description': description,
+          'title': title,
+          'limit': limit,
+          'members': members,
+          'timestamp': now,
+          'type': type
+        };
+
+        db.collection('Room').insert(update, function(err, result) {
+
+          if (err) {
+            db.close();
+            console.log(err);
+            deferred.resolve(false);
+            return;
+          }
+
+          //DBのridカウントを更新し，成功すればRoomオブジェクトを返す．
+          RoomNumberMongoHelper.upsertCurrentRid(rid + 1).done(function(result) {
+
+            db.close();
+
+            if (!result) {
+              deferred.resolve(false);
+              return;
+            }
+
+            delete update.members;
+            delete update._id;
+            console.log('create', update);
             deferred.resolve(update);
 
           }, function(err) {
@@ -369,16 +447,16 @@ var RoomManager = (function() {
 
     var executeFunc = function(db, deferred) {
 
-      if (type !== 'gachi' && type !== 'enjoy' && type !== 'hyperEnjoy' && type !== 'all' ) {
+      if (type !== 'gachi' && type !== 'enjoy' && type !== 'hyperEnjoy' && type !== 'all') {
         db.close();
         deferred.resolve(false);
         return;
       }
 
 
-      var query = ((type==='all') ?  {
+      var query = ((type === 'all') ? {
         'type': type
-      } : null );
+      } : null);
       var cursor = db.collection('Room').find(query);
 
       var result = [];
@@ -440,7 +518,7 @@ var RoomManager = (function() {
     'isMemberOf': isMemberOf,
     'getRoomListByType': getRoomListByType,
     get: get,
-    add: createNewRoom
+    add: add
   };
 
 })();
