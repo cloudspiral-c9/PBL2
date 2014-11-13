@@ -10,18 +10,18 @@ var csbsIngredient = {};
 
 (function() {
 
-  function _obs(socket, io) {
+  function _obs(sockets, id) {
 
     var d= def();
 
     csbs.observable('ingredients', {
         receive: function(event, setReceived) {
-          socket.on(event, function(data) {
+          sockets()[id].socket.on(event, function(data) {
             setReceived(data);
           });
         },
         send: function(event, data) {
-          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(data) {
           return IngredientMongoHelper.edit(
@@ -34,7 +34,7 @@ var csbsIngredient = {};
         },
         insert: function(data) {
           return IngredientMongoHelper.insert(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.values[0].ingredient,
             data.values[0].amount,
             data.values[0].sender,
@@ -48,14 +48,14 @@ var csbsIngredient = {};
         },
         add: function(data) {
           return IngredientMongoHelper.add(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.values[0].ingredient,
             data.values[0].amount,
             data.values[0].sender
           );
         }
       }, ['ingredient', 'sender', 'amount', 'timestamp'], 'deferred').start(function() {
-        return IngredientMongoHelper.get(io.sockets.manager.roomClients[socket.id]);
+        return IngredientMongoHelper.get(sockets()[id].rid);
       })
       .then(function(rObs) {
         d.resolve(rObs);

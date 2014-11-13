@@ -10,22 +10,22 @@ var csbsRecipeProcess = {};
 
 (function() {
 
-  function _obs(socket, io) {
+  function _obs(sockets, id) {
 
     var d = def();
 
     csbs.observable('processes', {
         receive: function(event, setReceived) {
-          socket.on(event, function(data) {
+          sockets()[id].socket.on(event, function(data) {
             setReceived(data);
           });
         },
         send: function(event, data) {
-          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(data) {
           return RecipeProcessMongoHelper.edit(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.values[0].process,
             data.values[0].sender,
             data.index,
@@ -34,7 +34,7 @@ var csbsRecipeProcess = {};
         },
         insert: function(data) {
           return RecipeProcessMongoHelper.insert(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.values[0].process,
             data.values[0].sender,
             data.index,
@@ -43,20 +43,20 @@ var csbsRecipeProcess = {};
         },
         remove: function(data) {
           return RecipeProcessMongoHelper.remove(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.index
           );
         },
         add: function(data) {
           return RecipeProcessMongoHelper.add(
-            io.sockets.manager.roomClients[socket.id],
+            sockets()[id].rid,
             data.values[0].process,
             data.values[0].sender,
             TimestampHelper.getTimestamp()
           );
         }
       }, ['process', 'sender', 'timestamp'], 'deferred').start(function() {
-        return RecipeProcessMongoHelper.get(io.sockets.manager.roomClients[socket.id]);
+        return RecipeProcessMongoHelper.get(sockets()[id].rid);
       })
       .then(function(rObs) {
         d.resolve(rObs);

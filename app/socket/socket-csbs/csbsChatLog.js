@@ -10,32 +10,32 @@ var csbsChat = {};
 
 (function() {
 
-  function _obs(socket, io) {
+  function _obs(sockets, id) {
 
     var d = def();
 
     csbs.observable('chats', {
         receive: function(event, setReceived) {
-          socket.on(event, function(data) {
+          sockets()[id].socket.on(event, function(data) {
             setReceived(data);
           });
         },
         send: function(event, data) {
-          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function() {},
         insert: function() {},
         remove: function() {},
         add: function(data) {
           return ChatLogMongoHelper.add(
-            io.sockets.manager.roomClients[socket.id], 
+            sockets()[id].rid, 
             data.values[0].message,
             data.values[0].sender,
             TimestampHelper.getTimestamp()
           );
         }
       }, ['message', 'sender', 'timestamp'], 'deferred').start(function(){
-        return ChatLogMongoHelper.get(io.sockets.manager.roomClients[socket.id]);
+        return ChatLogMongoHelper.get(sockets()[id].rid);
       })
       .then(function(rObs) {
         d.resolve(rObs);

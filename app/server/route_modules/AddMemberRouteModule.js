@@ -25,7 +25,8 @@ var AddMemberRouteModule = {
 
     RoomManager.addMember(rid, userId, userName)
       .done(function(result) {
-          socket.sockets()[queries.socketID].join(rid);
+          socket.sockets()[queries.socketID].socket.join(rid);
+          socket.sockets()[queries.socketID].rid = rid;
           def.resolve(result);
         },
 

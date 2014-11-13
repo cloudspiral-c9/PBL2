@@ -10,18 +10,18 @@ var csbsRecipeList = {};
 
 (function() {
 
-  function _obs(socket) {
+  function _obs(sockets, id) {
 
     var d = def();
 
     csbs.observable('recipelist', {
         receive: function(event, setReceived) {
-          socket.on(event, function(data) {
+          sockets()[id].socket.on(event, function(data) {
             setReceived(data);
           });
         },
         send: function(event, data) {
-          socket.broadcast.emit(event, data);
+          sockets()[id].socket.broadcast.emit(event, data);
         },
         edit: function() {},
         insert: function() {},

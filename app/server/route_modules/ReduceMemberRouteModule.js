@@ -23,7 +23,8 @@ var ReduceMemberRouteModule = {
     RoomManager.removeMember(rid, userId)
 
     .done(function(result) {
-        socket.sockets()[queries.socketID].leave(rid);
+        socket.sockets()[queries.socketID].socket.leave(rid);
+        socket.sockets()[queries.socketID].rid = null;
         def.resolve(result);
       },
 

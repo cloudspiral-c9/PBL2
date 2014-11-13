@@ -11,18 +11,18 @@ var csbsChart = {};
 
 (function() {
 
-  function _obs(socket, io) {
+  function _obs(sockets, id) {
 
     var d = def();
 
     csbs.observable('chart', {
         receive: function(event, setReceived) {
-          socket.on(event, function(data) {
+          sockets()[id].socket.on(event, function(data) {
             setReceived(data);
           });
         },
         send: function(event, data) {
-          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(){
           var d = def();
@@ -33,7 +33,7 @@ var csbsChart = {};
         remove: function() {},
         add: function() {}
       }, ['ingredient', 'rate', 'rateDetail'], 'deferred').start(function(){
-        return NutritionMongoHelper.getNutritionsByRid(io.sockets.manager.roomClients[socket.id]);
+        return NutritionMongoHelper.getNutritionsByRid(sockets()[id].rid);
       })
       .then(function(rObs) {
         d.resolove(rObs);
