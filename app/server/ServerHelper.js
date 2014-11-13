@@ -35,7 +35,7 @@ app.use(session( {
 	store: sessionStore,
 	cookie: {
 		httpOnly: false,
-		maxAge: new Date(Date.now() + 30 * 60 * 1000)
+		maxAge: new Date(Date.now() + 60 * 60 * 1000)
 	}
 }));
 
