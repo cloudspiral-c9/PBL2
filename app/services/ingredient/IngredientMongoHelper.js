@@ -98,7 +98,7 @@ var IngredientMongoHelper = (function(){
 		var executeFunc = function(db, deferred) {
 
 			var result = new Array();
-			db.collection.('nutrition').find().each(function(err, doc) {
+			db.collection('nutrition').find().each(function(err, doc) {
 
 				if (err) {
 					console.log(err);
