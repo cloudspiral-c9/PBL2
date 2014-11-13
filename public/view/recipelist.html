@@ -63,7 +63,7 @@
             <ul id="recipe-list">
 
                  <!--classを追記 -->
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" ng-class="card card{{rid%5}}">
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" ng-class="'card' 'card' + $index%5">
                     <a ng-href="#/recipe/{{rid}}">
                         <h2 class="r-title">{{recipe.title}}</h2>
                         <p class="r-description">{{recipe.description}}</p>
