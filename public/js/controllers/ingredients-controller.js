@@ -1,13 +1,17 @@
 'use strict';
 
 (function() {
-  var ingredients = angular.module('recipeers.recipe.ingredients', []);
+  var ingredients = angular.module('recipeers.recipe.ingredients');
 
-  ingredients.controller('IngredientsController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', function($scope, $routeParams, $http, socket, _, csbc) {
+  ingredients.controller('IngredientsController', ['$scope', '$http', 'socket', '_', 'csbc', 'AuthService', 'RecipeService', function($scope, $http, socket, _, csbc, AuthService, RecipeService) {
 
     var ingredientsObs;
 
     //ロジック部分(pure)
+    $scope.toD = function(ts){
+      return new Date(ts);
+    };
+    
     $scope.showEditForm = function(ingredientsState, index) {
 
       var rIngredientsState = csbc.deepClone(ingredientsState);
@@ -86,6 +90,7 @@
     };
 
     //初期化
+    $scope.ingredientsState = {};
     $scope.ingredientsState.showEdit = [];
     $scope.ingredientsState.formEdit = [];
     $scope.ingredientsState.formAdd = {
@@ -96,17 +101,16 @@
 
     $http({
       method: 'get',
-      url: '/kinds',
+      url: '/getingredientlist',
       withCredentials: true
     }).
     success(function(receiveData, status) {
       $scope.kinds = receiveData;
     });
 
-    $http({
-      method: 'get',
-      url: '/ingredients',
-      withCredentials: true
+    $http.post('/getingredient', {
+      rid: RecipeService.rid(),
+      userID: AuthService.get().userID
     }).
     success(function(receiveData, status) {
 

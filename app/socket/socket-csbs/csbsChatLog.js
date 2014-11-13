@@ -12,7 +12,7 @@ var csbsChat;
 
   function _obs(socket, io) {
 
-    var obs;
+    var d = def();
 
     csbs.observable('chats', {
         receive: function(event, setReceived) {
@@ -21,30 +21,27 @@ var csbsChat;
           });
         },
         send: function(event, data) {
-          io.sockets.in(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
         },
         edit: function() {},
         insert: function() {},
         remove: function() {},
         add: function(data) {
-          var d = def();
-          ChatLogMongoHelper.insertMessage(
-            io.sockets.manager.roomClients[socket.id], data.values[0].message,
+          return ChatLogMongoHelper.add(
+            io.sockets.manager.roomClients[socket.id], 
+            data.values[0].message,
             data.values[0].sender,
             TimestampHelper.getTimestamp()
-          ).done(function() {
-            d.resolve();
-          });
-          return d.promise;
+          );
         }
       }, ['message', 'sender', 'timestamp'], 'deferred').start(function(){
-        return ChatLogMongoHelper.getChatLog(io.sockets.manager.roomClients[socket.id]);
+        return ChatLogMongoHelper.get(io.sockets.manager.roomClients[socket.id]);
       })
       .then(function(rObs) {
-        obs = rObs;
+        d.resolve(rObs);
       });
 
-    return obs;
+    return d.promise;
   }
 
   csbsChat.obs = _obs;

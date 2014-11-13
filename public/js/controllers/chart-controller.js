@@ -3,7 +3,7 @@
 (function() {
   var chart = angular.module('recipeers.recipe.chart');
 
-  chart.controller('ChartController', [ 'socket', '$scope', 'csbc', '_', '$http',function(socket, $scope, csbc, _, $http) {
+  chart.controller('ChartController', ['socket', '$scope', 'csbc', '_', '$http', 'AuthService', 'RecipeService', function(socket, $scope, csbc, _, $http, AuthService, RecipeService) {
 
     var chartObs;
 
@@ -37,10 +37,9 @@
     }
 
     //初期化
-    $http({
-      method: 'get',
-      url: '/chart',
-      withCredentials: true
+    $http.post('/getnutrition', {
+      userID: AuthService.get().userID,
+      rid: RecipeService.rid()
     }).
     success(function(receiveData, status) {
       $scope.chartData = makeChartData(receiveData);
@@ -54,9 +53,9 @@
             setReceived(data);
           });
         }
-      }, ['ingredient', 'rate', 'rateDetail']).addUpdates([function(newValues){
-         $scope.chartData =  makeChartData(newValues);
-        }]).start(receiveData);
+      }, ['ingredient', 'rate', 'rateDetail']).addUpdates([function(newValues) {
+        $scope.chartData = makeChartData(newValues);
+      }]).start(receiveData);
     });
 
   }]);

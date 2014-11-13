@@ -1,7 +1,6 @@
 'use strict';
 
 var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
-var MongoSyncServer = require('mongo-sync').Server;
 
 var LoginMongoHelper = (function() {
 

@@ -6,52 +6,61 @@
   angular.module('socket', []);
   angular.module('csbind', []);
 
-  angular.modele('auth','underscore');
+  angular.module('auth', ['underscore']);
 
   angular.module('recipeers', [
     'ngRoute',
     'auth',
-    'ngMockE2E'
+    'ngCookies',
+    'ngMockE2E',
+    'recipeers.recipelist',
+    'recipeers.recipe',
+    'recipeers.recipe.ingredients',
+    'recipeers.recipe.processes',
+    'recipeers.recipe.chats',
+    'recipeers.recipe.chart'
   ]);
 
   angular.module('recipeers.recipelist', [
     'socket',
     'underscore',
     'auth',
-    'csbind'
+    'csbind',
+    'recipeers.recipe',
+    'recipeers'
   ]);
 
   angular.module('recipeers.recipe', [
     'auth',
     'underscore',
-    'recipeers.recipelist'
+    'recipeers',
+    'recipeers.recipelist',
   ]);
 
   angular.module('recipeers.recipe.ingredients', [
     'socket',
     'underscore',
-    'auth',
+    'recipeers.recipe',
     'csbind'
   ]);
 
   angular.module('recipeers.recipe.processes', [
     'socket',
     'underscore',
-    'auth',
     'csbind'
   ]);
 
   angular.module('recipeers.recipe.chats', [
     'socket',
     'underscore',
-    'auth',
+    'recipeers.recipe',
     'csbind'
   ]);
 
   angular.module('recipeers.recipe.chart', [
     'socket',
     'underscore',
-    'auth',
+    'recipeers.recipe',
     'csbind'
   ]);
 

@@ -9,6 +9,7 @@ module.exports = function(config) {
       'public/bower_components/angular/angular.js',
       'public/bower_components/angular-route/angular-route.js',
       'public/bower_components/angular-mocks/angular-mocks.js',
+      'public/bower_components/angular-cookies/angular-cookies.js',
       'public/bower_components/underscore/underscore.js',
       'public/bower_components/underscore-contrib/underscore.array.builders.js',
       'public/bower_components/underscore-contrib/underscore.object.builders.js',
@@ -56,7 +57,7 @@ module.exports = function(config) {
       suite: 'unit'
     },
 
-    reporters: ['spec', 'growl'],
+    //reporters: ['spec', 'growl'],
 
   });
 };

@@ -3,7 +3,7 @@
 (function() {
   var recipelist = angular.module('recipeers.recipelist');
 
-  recipelist.controller('RecipeListController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', 'RecipeListService', function($scope, $routeParams, $http, socket, _, csbc, RecipeListService) {
+  recipelist.controller('RecipeListController', ['$scope','$http', 'socket', '_', 'csbc', 'RecipeListService', 'AuthService', function($scope, $http, socket, _, csbc, RecipeListService, AuthService) {
 
     //ロジック部分(pure)
     function submit(recipeListState) {
@@ -19,7 +19,6 @@
       };
 
       return rRecipeListState;
-
     }
 
     //サーバーとの通信部分
@@ -27,11 +26,14 @@
       RecipeListService.obs.set({
         mode: 'add',
         values: [{
-          title: $scope.formData.title,
-          description: $scope.formData.description,
-          sender: '',
+          title: recipeListState.formData.title,
+          description: recipeListState.formData.description,
+          userID: AuthService.get().userID,
+          userName: AuthService.get().userName,
           rid: '',
-          timestamp: ''
+          timestamp: '',
+          members: '',
+          limit: recipeListState.formData.limit
         }]
       });
 
@@ -48,16 +50,15 @@
       rid: '',
       title: '',
       description: "",
-      sender: '',
       timestamp: null
     };
 
-    if (_.truthy(RecipeListService.obs)) {
-      RecipeListService.obs.addUpdates([update]);
+    if (_.truthy(RecipeListService.obs())) {
+      RecipeListService.obs().addUpdates([update]);
+      update(RecipeListService.obs().get());
     } else {
-      RecipeListService.updates.push(update);
+      RecipeListService.addUpdates(update);
     }
-
 
   }]);
 

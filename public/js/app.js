@@ -19,51 +19,40 @@
     });
   }]);
 
-  recipeers.run(['$rootScope', '$rootParams', '$http','$location','AuthService', 'RecipeListService', function($rootScope, $rootParams, $http, $location,AuthService, RecipeListService) {
+  recipeers.run(['$rootScope', '$routeParams', '$http', '$location', '$cookieStore', 'AuthService', 'RecipeListService', 'RecipeService', function($rootScope, $routeParams, $http, $location, $cookieStore, AuthService, RecipeListService, RecipeService) {
+
+    AuthService.set($cookieStore.get('user'));
+
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
-      if (next.requireLogin && !AuthService.islogged()) {
+      if (next.requireLogin && !AuthService.isLogged()) {
         event.preventDefault();
         alert('Please login.');
       }
 
-      if (next.requireLogin && RecipeListService && $rootParams.rid) {
-        if (_.some(RecipeListService.obs.get(), function(value, i, list) {
+      if (next.requireLogin && RecipeListService && RecipeListService.obs() && next.params.recipeId) {
+        if (_.some(RecipeListService.obs().get(), function(value, i, list) {
 
-            return value.rid === $rootParams.rid && _.some(value, function(val, i) {
-              return _.isArray(val.members) && (val.members.length >= parseInt(val.limit));
-            });
-
+            return value.rid === next.params.recipeId && _.isArray(value.members) && (value.members.length >= parseInt(value.limit));
           })) {
           event.preventDefault();
           alert('Limit over.');
         }
       }
 
-      if (next.rereuieLogin) {
-        $http.post({
-          url: '/addmember',
-          data: {
-            rid:$rootParams.rid,
-            userID : AuthService.get().userID
-          },
-          withCredentials: true
-        }).
-        success(function(receiveData, status) {
-          if(!receiveData){
-            $location.path('/');
-            alert('Limit over.');
-          }
+      if (next.requireLogin && next.params.recipeId) {
+
+        RecipeService.setRid(next.params.recipeId);
+
+        $http.post('/addmember', {
+          rid: next.params.recipeId,
+          userID: AuthService.get().userID
         });
       }
 
-      if (!next.rereuieLogin && $rootParams.rid) {
-        $http.post({
-          url: '/reducemember',
-          data: {
-            rid:$rootParams.rid,
-            userID : AuthService.get().userID
-          },
-          withCredentials: true
+      if (!next.rerqurieLogin && $routeParams.recipeId) {
+        $http.post('/reducemember', {
+          rid: $routeParams.rid,
+          userID: AuthService.get().userID
         });
       }
 

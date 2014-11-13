@@ -3,16 +3,15 @@
 (function() {
   var recipelist = angular.module('recipeers.recipelist');
 
-  recipelist.service('RecipeListService', ['$scope', '$http', 'socket', '_', 'csbc', function($scope, $http, socket, _, csbc) {
+  recipelist.service('RecipeListService', ['$http', 'socket', '_', 'csbc', 'AuthService', function($http, socket, _, csbc, AuthService) {
 
     var recipelistObs, recipelist, updates;
 
     updates = [];
 
-    $http({
-      method: 'get',
-      url: '/recipelist',
-      withCredentials: true
+    $http.post('/getroomlist', {
+      type: 'all',
+      userID: AuthService.get().userID
     }).
     success(function(receiveData, status) {
 
@@ -25,12 +24,22 @@
             setReceived(data);
           });
         }
-      }, ['title', 'sender', 'description', 'rid', 'timestamp']).start(receiveData).addUpdates(updates);
+      }, ['title', 'userID', 'userName', 'description', 'rid', 'timestamp', 'members', 'limit']).start(receiveData).addUpdates(updates);
+
+      if (!_.isEqual([], updates)) {
+        _.each(updates, function(val) {
+          val(receiveData);
+        });
+      }
     });
 
     return {
-      obs: recipelistObs,
-      updates: updates
+      obs: function() {
+        return recipelistObs;
+      },
+      addUpdates: function(update) {
+        updates.push(update);
+      }
     };
 
   }]);

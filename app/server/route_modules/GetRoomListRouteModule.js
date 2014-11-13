@@ -17,7 +17,7 @@ var GetRoomListRouteModule  = {
 		}
 
 		var userID = queries.userID;
-		var type = queries.type;
+		var type = (queries.type || 'all');
 
 		LoginMongoHelper.isLoggedIn(userID)
 		.done(function(isLoggedIn) {

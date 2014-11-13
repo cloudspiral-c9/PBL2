@@ -9,8 +9,9 @@
             <p>
               <input type="text" ng-model="recipeListState.formData.title">
               <input type="textarea" ng-model="recipeListState.formData.description">
+              <input type="number" ng-model="recipeListState.formData.limit">
             </p>
-            <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') ">
+            <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
               <input type="submit" value="submit" ng-click="recipeListState = submitRecipelist(recipeListState);addShow = '';">
             </div>
           </form>
@@ -20,10 +21,12 @@
       <div>
         <input type="text" ng-model="query" placeholder="You can narrow.">
         <ul>
-          <li ng-repeat="(rid, recipe) in recipeListState.recipelist | hasValue:query">
-            <a ng-href="#/recipe/{{rid}}">
+          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query">
+            <a ng-href="#/recipe/{{recipe.rid}}">
               <h2>{{recipe.title}}</h2>
               <p>{{recipe.description}}</p>
+              <p>{{recipe.userName}}</p>
+              <p>{{recipe.limit}}</p>
             </a>
           </li>
         </ul>
