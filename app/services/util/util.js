@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('underscore-contrib');
+
 var MongoUtil = require(__dirname + '/../util/MongoUtil.js');
 
 var utils = {};
