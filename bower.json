@@ -16,6 +16,7 @@
     "underscore":"1.7.x",
     "csbind-client": "0.0.0beta0",
     "jQuery": "2.1.x",
+	"jquery-cookie": "1.4.x",
 	"socket.io": "1.2.x"
   },
   "devDependencies": {
