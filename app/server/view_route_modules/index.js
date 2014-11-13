@@ -53,4 +53,30 @@ router.get('/main/login', checkLoggedInToRoot, function(req, res) {
 });
 
 
+
+router.get('/view/recipelist.html', checkLoggedInToRoot, function(req, res) {
+  res.render('view/recipelist.html');
+});
+
+router.get('/view/recipe.html', checkLoggedInToRoot, function(req, res) {
+  res.render('view/recipe.html');
+});
+
+router.get('/view/process.html', checkLoggedInToRoot, function(req, res) {
+  res.render('view/process.html');
+});
+
+router.get('/view/chart.html', checkLoggedInToRoot, function(req, res) {
+  res.render('view/chart.html');
+});
+
+router.get('/view/chats.html', checkLoggedInToRoot, function(req, res) {
+  res.render('views/chats.html');
+});
+
+router.get('/view/ingredients.html', checkLoggedInToRoot, function(req, res) {
+  res.render('views/ingredients.html');
+});
+
+
 module.exports = router;

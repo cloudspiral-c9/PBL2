@@ -7,11 +7,11 @@
   recipeers.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/list', {
-      templateUrl: '../../recipeers/public/view/recipelist.html',
+      templateUrl: '/view/recipelist.html',
       controller: 'RecipeListController'
     }).
     when('/recipe/:recipeId', {
-      templateUrl: '../../recipeers/public/view/recipe.html',
+      templateUrl: '/view/recipe.html',
       requireLogin: true
     }).
     otherwise({
