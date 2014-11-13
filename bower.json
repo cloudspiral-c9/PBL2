@@ -15,8 +15,7 @@
     "gulp": "^3.8.8",
     "underscore":"1.7.x",
     "csbind-client": "0.0.0beta0",
-    "jQuery": "2.1.x",
-    "socket.io": "1.2.x"
+    "jQuery": "2.1.x"
   },
   "devDependencies": {
     "jasmine": "2.0.x"
