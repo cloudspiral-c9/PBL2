@@ -1,24 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta charset="utf-8" />
-        <title>Recipeers</title>
-       
-
-
-        <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/reset.css" rel ="stylesheet"/>
-    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/header-loggedin.css" rel="stylesheet" />
-    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/room-select.css" rel="stylesheet" />
-    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/footer.css" rel="stylesheet"/>
-
-    <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jQuery/dist/jquery.min.js"></script>
-    <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jquery.cookie/jquery.cookie.js"></script>
-
-        
-</head>
-
-<body>
 
 <div id="header">
         
@@ -74,10 +53,7 @@
             </div>
             </div>
 
-        </div>
-
-
-       
+        </div
         <div>
 
             <!-- 追記 -->
@@ -86,55 +62,8 @@
             </div>
             <ul id="recipe-list">
 
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card0">
-                    <a ng-href="#/recipe/{{rid}}">
-                        <h2 class="r-title">今日のミッション</h2>
-                        <p class="r-description">健康食</p>
-                        <!-- <div class="recipe-master></div>"-->
-                        <!-- <div class="recipe-number-person"></div>-->
-                    </a>
-                </li>
-
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card1">
-                    <a ng-href="#/recipe/{{rid}}">
-                        <h2 class="r-title">すき焼き作りたい</h2>
-                        <p class="r-description">お正月用にすきやきレシピ</p>
-                        <!-- <div class="recipe-master></div>"-->
-                        <!-- <div class="recipe-number-person"></div>-->
-                    </a>
-                </li>
-
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card2">
-                    <a ng-href="#/recipe/{{rid}}">
-                        <h2 class="r-title">はちみつください</h2>
-                        <p class="r-description">ぷーさんです</p>
-                        <!-- <div class="recipe-master></div>"-->
-                        <!-- <div class="recipe-number-person"></div>-->
-                    </a>
-                </li>
-
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card3">
-                    <a ng-href="#/recipe/{{rid}}">
-                        <h2 class="r-title">ハッピーセット</h2>
-                        <p class="r-description">ドナルドです</p>
-                        <!-- <div class="recipe-master></div>"-->
-                        <!-- <div class="recipe-number-person"></div>-->
-                    </a>
-                </li>
-
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card4">
-                    <a ng-href="#/recipe/{{rid}}">
-                        <h2 class="r-title">RAMEN</h2>
-                        <p class="r-description">TSUKEMEN</p>
-                        <!-- <div class="recipe-master></div>"-->
-                        <!-- <div class="recipe-number-person"></div>-->
-                    </a>
-                </li>
-
-
-
                  <!--classを追記 -->
-                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card{{rid%5}}">
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" ng-class="card card{{rid%5}}">
                     <a ng-href="#/recipe/{{rid}}">
                         <h2 class="r-title">{{recipe.title}}</h2>
                         <p class="r-description">{{recipe.description}}</p>
@@ -143,9 +72,6 @@
                     </a>
                 </li>
 
-
-
-
             </ul>
         </div>
 
@@ -153,7 +79,3 @@
     </div>    
     </section>
 </div>
-
-
-
-</body>
