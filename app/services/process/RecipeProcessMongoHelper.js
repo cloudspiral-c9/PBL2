@@ -1,163 +1,124 @@
 'use strict';
 
-var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
-var deferred = require('deferred');
-var async = require('async');
-var LoginMongoHelper = require(__dirname + '/../login/LoginMongoHelper.js').LoginMongoHelper;
+var MongoUtil = require(__dirname + '/../util/MongoUtil.js');
+var utils = require(__dirname + '/../util/util.js');
 
 var RecipeProcessMongoHelper = (function() {
 
-	var insertRecipeProcess = function(rid, process, userID, index, now) {
+  var insert = function(rid, process, sender, index, now) {
+    return utils.gen(utils.insert)('Process', rid, {
+      process: process,
+      sender: sender,
+      timestamp: now
+    }, index);
+  };
 
-		var executeFunc = function(db, deferred) {
+  var add = function(rid, process, sender, now) {
+    return utils.gen(utils.add)('Process', rid, {
+      process: process,
+      sender: sender,
+      timestamp: now
+    });
+  };
 
-			if (!(rid && process && userID)) {
-				db.close();
-				deferred.resolve(false);
-				return;
-			}
+  var get = function(rid) {
+    return utils.gen(utils.get)('Process', rid, null);
+  };
 
-			var query = {'rid': rid, 'process': process, 'userID': userID, 'timestamp': now};
-			if (index) {
-				query.index = index;
-			}
-			db.collection('Process').insert(query, function(err, doc) {
+  var removeRecipeProcessBy_id = function(_id) {
 
-				db.close();
+    var executeFunc = function(db, deferred) {
 
-				if (err) {
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
+      if (!_id) {
+        return;
+      }
 
-				deferred.resolve(doc[0]._id);
-			});
-		};
+      var query = {
+        '_id': _id
+      };
+      db.collection('Process').remove(query, function(err, result) {
 
+        db.close();
 
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
 
+        deferred.resolve(result);
+      });
+    };
 
-	var getRecipeProcesses = function(rid) {
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+  };
 
-		var executeFunc = function(db, deferred) {
+  var remove = function(rid, index) {
+    return utils.gen(utils.remove)('Process', rid, null, index);
+  };
 
-			if (!rid) {
-				db.close();
-				deferred.resolve(false);
-				return;
-			}
+  var updateRecipeProcessBy_id = function(_id, process, userID, index, now) {
 
-			var query = {'rid': rid};
-			var cursor = db.collection('Process').find(query, {'sort': [['timestamp', 'desc']]});
-			
-			cursor.toArray(function(err, processes) {
+    var executeFunc = function(db, deferred) {
 
-				db.close();
+      if (!_id) {
+        deferred.resolve(false);
+        return;
+      }
 
-				if (err) {	
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
+      var query = {
+        '_id': _id
+      };
+      var setQuery = {
+        'process': process,
+        'userID': userID,
+        'timestamp': now
+      };
+      if (index) {
+        setQuery.index = index;
+      }
+      var updateQuery = {
+        '$set': setQuery
+      };
+      db.collection('Process').update(query, updateQuery, function(err, count, status) {
 
-				var result = [];
-				async.each(processes, function(process, callback) {
+        db.close();
 
-					LoginMongoHelper.getUserNameById(process.userID)
-					.done(function(userName) {
-						delete process.rid;
-						delete process.userID;
-						process.userName = userName;
-						result.push(process);
-						callback(null);
-					}, function(err) {
-						console.log(err);
-						callback(err);
-					});
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
 
-				}, function(err) {
+        deferred.resolve(true);
 
-					if (err) {
-						console.log(err);
-						deferred.resolve(false);
-						return;
-					}
-					deferred.resolve(result);
-				});
-				
-			});
-		};
+      });
+    };
 
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+  };
 
-	var removeRecipeProcessBy_id = function(_id) {
+  var edit = function(rid, process, sender, index, now) {
+    return utils.gen(utils.edit)('Process', rid, {
+      process: process,
+      sender: sender,
+      timestamp: now
+    }, index);
+  };
 
-		var executeFunc = function(db, deferred) {
-
-			if (!_id) {
-				return;
-			}
-
-			var query = {'_id': _id};
-			db.collection('Process').remove(query, function(err, result) {
-
-				db.close();
-
-				if (err) {
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
-
-				deferred.resolve(result);
-			});
-		};
-
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
-
-	var updateRecipeProcessBy_id = function(_id, process, userID, index, now) {
-
-		var executeFunc = function(db, deferred) {
-
-			if (!_id) {
-				deferred.resolve(false);
-				return;
-			}
-
-			var query  = {'_id': _id};
-			var setQuery = {'process': process, 'userID': userID, 'timestamp': now};
-			if (index) {
-				setQuery.index = index;
-			}
-			var updateQuery = {'$set': setQuery};
-			db.collection('Process').update(query, updateQuery, function(err, count, status) {
-
-				db.close();
-
-				if (err) {
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
-
-				deferred.resolve(true);
-
-			});
-		};
-
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
-
-	return {'insertRecipeProcess': insertRecipeProcess, 'getRecipeProcesses': getRecipeProcesses,  'removeRecipeProcessBy_id': removeRecipeProcessBy_id, 'updateRecipeProcessBy_id': updateRecipeProcessBy_id};
+  return {
+    'insertRecipeProcess': insert,
+    'getRecipeProcesses': get,
+    'removeRecipeProcessBy_id': removeRecipeProcessBy_id,
+    'updateRecipeProcessBy_id': updateRecipeProcessBy_id,
+    insert: insert,
+    add: add,
+    edit: edit,
+    remove: remove,
+    get: get
+  };
 
 })();
 

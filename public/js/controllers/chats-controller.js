@@ -1,15 +1,15 @@
 'use strict';
 
 (function() {
-  var charts = angular.module('recipeers.recipe.chats', []);
+  var charts = angular.module('recipeers.recipe.chats');
 
-  charts.controller('ChatsController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', function($scope, $routeParams, $http, socket, _, csbc) {
+  charts.controller('ChatsController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', 'AuthService', 'RecipeService', function($scope, $routeParams, $http, socket, _, csbc, AuthService, RecipeService) {
 
     var chatsObs;
 
 
     //ロジック部分(pure)
-    function submit(chatsState){
+    function submit(chatsState) {
 
       var rChatsState = csbc.deepClone(chatsState);
 
@@ -22,10 +22,14 @@
 
     }
 
+    $scope.toD = function(ts){
+      return new Date(ts);
+    };
+
     //サーバーとの通信部分
     $scope.submitChat = function(chatsState) {
-      if (_.truthy(chatsState.chatsObs)) {
-        chatsState.chatsObs.set({
+      if (_.truthy(chatsObs)) {
+        chatsObs.set({
           values: [{
             message: chatsState.formData.message,
             sender: chatsState.formData.sender,
@@ -40,21 +44,20 @@
 
 
     //初期化
-    $scope.chatasState = {};
+    $scope.chatsState = {};
 
-    $scope.chatasState.formData = {
+    $scope.chatsState.formData = {
       message: '',
       sender: ''
     };
 
-    $http({
-      method: 'get',
-      url: '/chats',
-      withCredentials: true
+    $http.post('/getchatlog', {
+      rid: RecipeService.rid(),
+      userID: AuthService.get().userID
     }).
     success(function(receiveData, status) {
 
-      $scope.chatasState.chats = receiveData;
+      $scope.chatsState.chats = receiveData;
 
       chatsObs = csbc.observable('chats', {
         send: function(event, data) {
@@ -66,7 +69,7 @@
           });
         }
       }, ['message', 'sender', 'timestamp']).start(receiveData).addUpdates([function(newValues, data) {
-        $scope.chatasState.chats = newValues;
+        $scope.chatsState.chats = newValues;
       }]);
     });
 

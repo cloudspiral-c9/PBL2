@@ -4,12 +4,12 @@
 
   var recipe = angular.module('recipeers.recipe');
 
-  recipe.filter('hasKey', [ '_', function(_) {
+  recipe.filter('hasKey', ['_', function(_) {
     return function(input, query) {
       var out;
       if (_.isObject(input) && !_.isFunction(input)) {
 
-        if(_.isArray(input)){
+        if (_.isArray(input)) {
           out = [];
         } else {
           out = {};
@@ -26,15 +26,17 @@
     };
   }]);
 
-  recipe.filter('reverse', ['_', function(_) {
-    return function(input, query) {
+  recipe.filter('orderByTs', ['_', function(_) {
+    return function(input) {
 
       var out;
 
       if (_.isArray(input)) {
-        out =  input.slice().reverse();
-      } else{
-        out =  input;
+        out = input.sort(function(a, b) {
+          return (new Date(a.timestamp) < new Date(b.timestamp) ? -1 : 1);
+        });
+      } else {
+        out = input;
       }
 
       return out;

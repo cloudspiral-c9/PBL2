@@ -1,6 +1,7 @@
 'use strict';
 
-var NutritionHelperHelper = require(__dirname + '/../../services/chart/NutritionHelper.js').NutritionHelper;
+var NutritionHelper = require(__dirname + '/../../services/chart/NutritionHelper.js').NutritionHelper;
+var NutritionMongoHelper = require(__dirname + '/../../services/chart/NutritionMongoHelper.js').NutritionMongoHelper;
 var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.js');
 
 var def = require('deferred');
@@ -12,7 +13,7 @@ var csbsChart;
 
   function _obs(socket, io) {
 
-    var obs;
+    var d = def();
 
     csbs.observable('chart', {
         receive: function(event, setReceived) {
@@ -21,19 +22,24 @@ var csbsChart;
           });
         },
         send: function(event, data) {
-          io.sockets.in(io.sockets.manager.roomClients[socket.id]).emit(event, data);
+          socket.to(io.sockets.manager.roomClients[socket.id]).emit(event, data);
         },
-        edit: function() {},
+        edit: function(){
+          var d = def();
+          d.resolve();
+          return d.promise;
+        },
         insert: function() {},
         remove: function() {},
         add: function() {}
       }, ['ingredient', 'rate', 'rateDetail'], 'deferred').start(function(){
+        return NutritionMongoHelper.getNutritionsByRid(io.sockets.manager.roomClients[socket.id]);
       })
       .then(function(rObs) {
-        obs = rObs;
+        d.resolove(rObs);
       });
 
-    return obs;
+    return d.promise;
   }
 
   csbsChart.obs = _obs;

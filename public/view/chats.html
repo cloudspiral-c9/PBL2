@@ -3,11 +3,11 @@
   <section>
     <p>Chat</p>
     <ol>
-      <li ng-repeat="chat in chatasState.chats | orderBy: chat.timestamp | reverse">
+      <li ng-repeat="chat in chatsState.chats | orderByTs: chat.timestamp">
         <div>
           <p>{{chat.sender}}</p>
           <p>{{chat.message}}</p>
-          <p>{{chat.timestamp | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+          <p>{{toD(chat.timestamp) | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
         </div>
       </li>
     </ol>

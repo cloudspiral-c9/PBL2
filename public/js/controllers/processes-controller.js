@@ -1,13 +1,17 @@
 'use strict';
 
 (function() {
-  var processes = angular.module('recipeers.recipe.processes', []);
+  var processes = angular.module('recipeers.recipe.processes');
 
-  processes.controller('ProcessesController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', function($scope, $routeParams, $http, socket, _, csbc) {
+  processes.controller('ProcessesController', ['$scope', '$routeParams', '$http', 'socket', '_', 'csbc', 'AuthService', 'RecipeService', function($scope, $routeParams, $http, socket, _, csbc, AuthService, RecipeService) {
 
     var processesObs;
 
     //ロジック部分(pure)
+    $scope.toD = function(ts){
+      return new Date(ts);
+    };
+
     $scope.showForm = function(processesState, mode, index) {
 
       var rProcessesState = csbc.deepClone(processesState);
@@ -127,10 +131,9 @@
       add: {}
     };
 
-    $http({
-      method: 'get',
-      url: '/processes',
-      withCredentials: true
+    $http.post('/getprocess', {
+      rid: RecipeService.rid(),
+      userID: AuthService.get().userID
     }).
     success(function(receiveData, status) {
 

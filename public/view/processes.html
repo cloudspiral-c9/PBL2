@@ -21,7 +21,7 @@
               <p>{{$index + 1}}</p>
               <p>{{process.process}}</p>
               <p>{{process.sender}}</p>
-              <p>{{process.timestamp | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+              <p>{{toD(process.timestamp) | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
               <input type="button" value="edit" ng-click="processesState = showForm(processesState, 'edit', $index);">
               <input type="button" value="remove" ng-click="processesState = submitProcess(processesState, 'remove',$index);">
             </div>
@@ -44,7 +44,7 @@
                 <p>
                   <input type="textarea" ng-model="processesState.formData.add.process" required>
                 </p>
-                <input type="submit" value="submit" ng-click="processesState = submitProcess(processesState, 'add');showAdd = '';">
+                <input type="submit" value="submit" ng-click="processesState = submitProcess(processesState, 'add');showAdd = '';" ng-hide="!processesState.formData.add.process">
               </form>
               <input type="button" value="hide" ng-click="processesState.showAdd = '';">
             </div>
