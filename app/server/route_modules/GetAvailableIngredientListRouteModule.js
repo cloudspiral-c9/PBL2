@@ -1,7 +1,7 @@
 var IngredientMongoHelper = require(__dirname + '/../../services/ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 var deferred = require('deferred');
 
-var GetAvailableIngredientList = {
+var GetAvailableIngredientListRouteModule = {
 
 	route: '/getingredientlist',
 	routeFunc: function(queries) {
@@ -21,5 +21,5 @@ var GetAvailableIngredientList = {
 
 };
 
-exports.GetAvailableIngredientList = GetAvailableIngredientList;
+exports.GetAvailableIngredientListRouteModule = GetAvailableIngredientListRouteModule;
 
