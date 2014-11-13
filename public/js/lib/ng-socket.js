@@ -3,7 +3,7 @@
 (function() {
 
   angular.module('socket').factory('socket', ['$rootScope', '$q', '$timeout', function($rootScope, $q, $timeout) {
-    var socket = io.connect();
+    var socket = io();
     var id;
     var def = $q.defer();
 
