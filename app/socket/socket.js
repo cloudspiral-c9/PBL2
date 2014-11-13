@@ -11,17 +11,24 @@ var socket;
 
 (function() {
 
-  var io;
+  var io, sockets;
 
   function _start(server) {
 
     io = require('socket.io')(server);
+    sockets = {};
 
     io.sockets.on('connection', function(socket) {
+
+      socket.emit('ready', {
+        id: socket.id
+      });
 
       var chart, chatLog, ingredient, recipelist, recipeProcess, defC;
 
       defC = def();
+
+      sockets[socket.id] = socket;
 
       csbsChart(socket).then(function(rObs) {
           chart = rObs;
@@ -33,7 +40,7 @@ var socket;
               values: [{
                 ingredient: '',
                 rate: '',
-                reteDetail:''
+                reteDetail: ''
               }],
               mode: 'edit',
               index: 1
@@ -63,10 +70,13 @@ var socket;
   }
 
   socket = {
-    io: function(){
+    io: function() {
       return io;
     },
-    start: _start
+    start: _start,
+    sockets: function() {
+      return sockets;
+    }
   };
 
 })();
