@@ -1,6 +1,6 @@
 'use strict';
 
-var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').ChatLogMongoHelper;
+var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').RoomManager;
 var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.js');
 
 var def = require('deferred');
@@ -27,7 +27,7 @@ var csbsRecipeList = {};
         insert: function() {},
         remove: function() {},
         add: function(data) {
-          return RoomManager.get(
+          return RoomManager.add(
             data.values[0].description, 
             data.values[0].title, 
             data.values[0].limit, 
