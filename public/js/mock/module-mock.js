@@ -6,7 +6,7 @@
   angular.module('socket', []);
   angular.module('csbind', []);
 
-  angular.module('auth', ['underscore']);
+  angular.module('auth', ['underscore', 'ngCookies',]);
 
   angular.module('recipeers', [
     'ngRoute',

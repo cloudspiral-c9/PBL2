@@ -4,9 +4,7 @@
 
   var recipeers = angular.module('recipeers');
 
-  recipeers.config(['$routeProvider' ,'$cookieStore', 'AuthService', function($routeProvider, $cookieStore, AuthService) {
-
-    AuthService.set($cookieStore.get('user'));
+  recipeers.config(['$routeProvider', function($routeProvider, $cookieStore, AuthService) {
 
     $routeProvider.
     when('/list', {

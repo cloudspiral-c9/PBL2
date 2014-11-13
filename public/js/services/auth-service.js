@@ -4,7 +4,7 @@
 
   var auth = angular.module('auth');
 
-  auth.service('AuthService', ['_', function(_) {
+  auth.service('AuthService', ['_' , '$cookieStore', function(_, $cookieStore) {
 
     var userID, userName;
 
@@ -36,6 +36,8 @@
       userID = null;
       userName = null;
     }
+
+    _set($cookieStore.get('user'));
 
     return {
       get: _get,
