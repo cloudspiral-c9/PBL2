@@ -2,8 +2,16 @@
 
 (function() {
 
-  angular.module('socket').factory('socket', ['$rootScope', '$timeout', function($rootScope, $timeout) {
-    var socket = io.connect();
+  angular.module('socket').factory('socket', ['$rootScope', '$q', '$timeout', function($rootScope, $q, $timeout) {
+    var socket = io();
+    var id;
+    var def = $q.defer();
+
+    socket.on('ready', function(data){
+      id = data.id;
+      def.resolve();
+    });
+
     return {
       on: function(eventName, callback) {
         socket.on(eventName, function() {
@@ -28,7 +36,11 @@
             });
           }, 0);
         });
-      }
+      }, 
+      id: function(){
+        return id;
+      },
+      promise: def.promise
     };
   }]);
 

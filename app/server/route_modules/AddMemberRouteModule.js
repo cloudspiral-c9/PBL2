@@ -3,6 +3,8 @@
 var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').RoomManager;
 var deferred = require('deferred');
 
+var socket = require(__dirname + '/../../socket/socket.js');
+
 var AddMemberRouteModule = {
 
   route: '/addmember',
@@ -12,7 +14,7 @@ var AddMemberRouteModule = {
     var def = deferred();
 
     //クエリが不完全な場合は失敗フラグで終了
-    if (!(queries.rid && queries.userID && this.request.user)) {
+    if (!(queries.rid && queries.userID && this.request.user && queries.socketID && socket.sockets()[queries.socketID])) {
       def.resolve(false);
       return def.promise;
     }
@@ -23,6 +25,7 @@ var AddMemberRouteModule = {
 
     RoomManager.addMember(rid, userId, userName)
       .done(function(result) {
+          socket.sockets()[queries.socketID].join(rid);
           def.resolve(result);
         },
 

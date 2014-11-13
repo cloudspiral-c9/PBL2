@@ -11,19 +11,26 @@ var socket;
 
 (function() {
 
-  var io;
+  var io, sockets;
 
   function _start(server) {
 
     io = require('socket.io')(server);
+    sockets = {};
 
     io.sockets.on('connection', function(socket) {
+
+      socket.emit('ready', {
+        id: socket.id
+      });
 
       var chart, chatLog, ingredient, recipelist, recipeProcess, defC;
 
       defC = def();
 
-      csbsChart(socket).then(function(rObs) {
+      sockets[socket.id] = socket;
+
+      csbsChart.obs(socket).then(function(rObs) {
           chart = rObs;
           return defC.promise;
         })
@@ -33,7 +40,7 @@ var socket;
               values: [{
                 ingredient: '',
                 rate: '',
-                reteDetail:''
+                reteDetail: ''
               }],
               mode: 'edit',
               index: 1
@@ -41,20 +48,20 @@ var socket;
           });
         });
 
-      csbsChatLog(socket).then(function(rObs) {
+      csbsChatLog.obs(socket).then(function(rObs) {
         chatLog = rObs;
       });
 
-      csbsIngredient(socket).then(function(rObs) {
+      csbsIngredient.obs(socket).then(function(rObs) {
         ingredient = rObs;
         defC.resolve();
       });
 
-      csbsRecipeList(socket).then(function(rObs) {
+      csbsRecipeList.obs(socket).then(function(rObs) {
         recipelist = rObs;
       });
 
-      csbsRecipeProcess(socket).then(function(rObs) {
+      csbsRecipeProcess.obs(socket).then(function(rObs) {
         recipeProcess = rObs;
       });
 
@@ -63,10 +70,13 @@ var socket;
   }
 
   socket = {
-    io: function(){
+    io: function() {
       return io;
     },
-    start: _start
+    start: _start,
+    sockets: function() {
+      return sockets;
+    }
   };
 
 })();

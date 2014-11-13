@@ -1,13 +1,11 @@
 'use strict';
 
-var io = {
-  connect: ''
-};
+var io;
 
 
 (function() {
 
-  io.connect = function() {
+  io = function() {
 
     var
       on_sio, emit_sio,

@@ -7,11 +7,11 @@
   recipeers.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/list', {
-      templateUrl: 'view/recipelist.html',
+      templateUrl: '../../view/recipelist.html',
       controller: 'RecipeListController'
     }).
     when('/recipe/:recipeId', {
-      templateUrl: 'view/recipe.html',
+      templateUrl: '../../view/recipe.html',
       requireLogin: true
     }).
     otherwise({
@@ -19,7 +19,7 @@
     });
   }]);
 
-  recipeers.run(['$rootScope', '$routeParams', '$http', '$location', '$cookieStore', 'AuthService', 'RecipeListService', 'RecipeService', function($rootScope, $routeParams, $http, $location, $cookieStore, AuthService, RecipeListService, RecipeService) {
+  recipeers.run(['$rootScope', '$routeParams', '$http', '$location', '$cookieStore', 'AuthService', 'RecipeListService', 'RecipeService', 'socket', function($rootScope, $routeParams, $http, $location, $cookieStore, AuthService, RecipeListService, RecipeService, socket) {
 
     AuthService.set($cookieStore.get('user'));
 
@@ -43,14 +43,18 @@
 
         RecipeService.setRid(next.params.recipeId);
 
-        $http.post('/addmember', {
-          rid: next.params.recipeId,
-          userID: AuthService.get().userID
+        socket.promise.then(function() {
+          $http.post('/addmember', {
+            socketID: socket.id(),
+            rid: next.params.recipeId,
+            userID: AuthService.get().userID
+          });
         });
       }
 
       if (!next.rerqurieLogin && $routeParams.recipeId) {
         $http.post('/reducemember', {
+          socketID: socket.id(),
           rid: $routeParams.rid,
           userID: AuthService.get().userID
         });
