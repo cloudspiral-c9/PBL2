@@ -4,7 +4,10 @@
 
   var recipeers = angular.module('recipeers');
 
-  recipeers.config(['$routeProvider', function($routeProvider) {
+  recipeers.config(['$routeProvider' ,'$cookieStore', 'AuthService', function($routeProvider, $cookieStore, AuthService) {
+
+    AuthService.set($cookieStore.get('user'));
+
     $routeProvider.
     when('/list', {
       templateUrl: '/view/recipelist.html',
@@ -20,8 +23,6 @@
   }]);
 
   recipeers.run(['$rootScope', '$routeParams', '$http', '$location', '$cookieStore', 'AuthService', 'RecipeListService', 'RecipeService', 'socket', function($rootScope, $routeParams, $http, $location, $cookieStore, AuthService, RecipeListService, RecipeService, socket) {
-
-    AuthService.set($cookieStore.get('user'));
 
     $rootScope.$on('$routeChangeStart', function(event, next, current) {
       if (next.requireLogin && !AuthService.isLogged()) {
