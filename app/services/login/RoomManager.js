@@ -121,6 +121,7 @@ var RoomManager = (function() {
         }];
         var now = TimestampHelper.getTimestamp();
         var update = {
+          'rid': rid,
           'userID': userId,
           'userName': userName,
           'description': description,
@@ -151,7 +152,6 @@ var RoomManager = (function() {
               return;
             }
 
-            delete update.members;
             delete update._id;
             console.log('create', update);
             deferred.resolve(update);
