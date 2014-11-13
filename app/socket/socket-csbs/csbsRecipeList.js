@@ -23,6 +23,7 @@ var csbsRecipeList = {};
         },
         send: function(event, data) {
           sockets()[id].socket.broadcast.emit(event, data);
+          sockets()[id].socket.emit(event, data);
           console.log('send' ,data);
         },
         edit: function() {},

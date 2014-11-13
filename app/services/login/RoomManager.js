@@ -115,10 +115,7 @@ var RoomManager = (function() {
           userName = '';
         }
 
-        var members = [{
-          'userID': userId,
-          'userName': userName
-        }];
+        var members = [];
         var now = TimestampHelper.getTimestamp();
         var update = {
           'rid': rid,
