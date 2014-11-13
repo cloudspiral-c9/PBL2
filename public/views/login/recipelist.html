@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+        <title>Recipeers</title>
+       
+
+<!-- 本番用ヘッダ
+        <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/reset.css" rel ="stylesheet"/>
+    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/header-loggedin.css" rel="stylesheet" />
+    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/room-select.css" rel="stylesheet" />
+    <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/footer.css" rel="stylesheet"/>
+
+    <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/lib/jquery-2.1.1.min.js"></script>
+    <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/lib/jquery.cookie.js"></script>
+-->
+    <link href="../../css/reset.css" rel="stylesheet"/>
+    <link href="../../css/header-loggedin.css" rel="stylesheet"/>
+    <link href="../../css/recipe-list.css" rel="stylesheet"/>
+
+        
+</head>
+
+<body>
+
+<div id="header">
+        
+        <a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public"><div id="logo" ></div></a>
+        
+        <div id="menus">
+            <div class="menu-links"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/introduction/login">WHAT'S RECIPEERS?</a></div> 
+            <div class="menu-links"><a href="">SELECT ROOM</a></div>
+        </div>
+        
+        <div id="login-info">
+            <div id="login-username"></div>
+            <div id="logout"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout">Logout</a></div>
+        </div>
+        
+</div>
+
+<div id="main" ng-controller="RecipeListController">
+    <section>
+    
+    <!-- 追記 -->
+    <div id="container">
+
+        <p id="room-type"><span id="enjoy-e">E</span><span id="enjoy-n">n</span><span id="enjoy-j">j</span><span id="enjoy-o">o</span><span id="enjoy-y">y</span></p>
+        
+        <div>
+
+            <!--追記 -->
+            <div id="button-container">
+                <input id="room-create" type="button" value="部屋作成" ng-click="addShow = 'show';" ng-hide="addShow === 'show'">
+            <!--追記-->
+            </div>
+            
+            <!--  ここをモーダルウィンドウとして表示(divをちょいたした) -->
+            <div id="modal-container">
+            <div id="modal-window" ng-hide="addShow !== 'show'">
+                <form accept-charset="utf-8">
+                    <p>
+                        <!-- 追記 -->
+                        <span id="modal-title">部屋作成</span><hr size="3">
+                        <span class="label">タイトル</span><br><input id="modal-title-box" type="text" ng-model="formData.title"><br>
+                        <span class="label">説明<br></span>
+
+                        <!-- ここは間違ってたので直した htmlではtype=textareaじゃなくてtextareaタグ -->
+                        <!--<input  type="textarea" ng-model="formData.description">-->
+                        <textarea ng-model="formData.description" id="modal-description-area" rows="3"></textarea>
+                    </p>
+                    <div ng-hide=" (formData.title ==='') || (formData.description === '') ">
+                        <input id="modal-send" type="submit" value="送信" ng-click="submitRecipelist();addShow = '';" class="modal-button">
+                    </div>
+                </form>
+                <input id="modal-cancel" type="button" value="キャンセル" ng-click="addShow = ''; " class="modal-button">
+            </div>
+            </div>
+
+        </div>
+
+
+       
+        <div>
+
+            <!-- 追記 -->
+            <div id="search-message">Search:
+                <input id="room-search-box" type="text" ng-model="query" placeholder="You can narrow.">
+            </div>
+            <ul id="recipe-list">
+
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card0">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">今日のミッション</h2>
+                        <p class="r-description">健康食</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card1">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">すき焼き作りたい</h2>
+                        <p class="r-description">お正月用にすきやきレシピ</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card2">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">はちみつください</h2>
+                        <p class="r-description">ぷーさんです</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card3">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">ハッピーセット</h2>
+                        <p class="r-description">ドナルドです</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card4">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">RAMEN</h2>
+                        <p class="r-description">TSUKEMEN</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+
+
+                 <!--classを追記 -->
+                <li ng-repeat="(rid, recipe) in recipelist | hasValue:query" class="card card{{rid%5}}">
+                    <a ng-href="#/recipe/{{rid}}">
+                        <h2 class="r-title">{{recipe.title}}</h2>
+                        <p class="r-description">{{recipe.description}}</p>
+                        <!-- <div class="recipe-master></div>"-->
+                        <!-- <div class="recipe-number-person"></div>-->
+                    </a>
+                </li>
+
+
+
+
+            </ul>
+        </div>
+
+    <!--追記-->
+    </div>    
+    </section>
+</div>
+
+
+
+</body>
