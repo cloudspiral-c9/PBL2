@@ -41,10 +41,16 @@ router.get('/introduction/login', checkLoggedInToIntro, function(req, res) {
   res.render('views/login/what-recipeers-loggedin.html');
 });
 
+//部屋選択へのリダイレクト
 router.get('/roomselect/login', checkLoggedInToRoot, function(req, res) {
   console.log('select-room');
   res.render('views/login/room-select.html');
 });
+
+router.get('/main/login', checkLoggedInToRoot, function(req, res) {
+  console.log('main-room');
+  res.render('views/login/index.html');
+})
 
 
 module.exports = router;
