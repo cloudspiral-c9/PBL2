@@ -1,48 +1,49 @@
 'use strict';
 
-var NutritionHelper = require( __dirname + '/../../services/chart/NutritionHelper.js').NutritionHelper;
-var LoginMongoHelper = require( __dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
+var NutritionHelper = require(__dirname + '/../../services/chart/NutritionHelper.js').NutritionHelper;
+var LoginMongoHelper = require(__dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
 var deferred = require('deferred');
 
 var GetNutritionRouteModule = {
-	
-	route: '/getnutrition',
-	routeFunc: function(queries) {
 
-		var def = deferred();
+  route: '/getnutrition',
+  request: null,
+  routeFunc: function(queries) {
 
-		if ( !(queries.rid && queries.userID) ) {
-			def.resolve(false);
-			return def.promise;
-		}
+    var def = deferred();
 
-		var rid = +queries.rid;
-		var userId = queries.userID;
-		
-		LoginMongoHelper.isLoggedIn(userId)
-		.done(function(isLoggedIn) {
+    if (!(queries.rid && queries.userID && this.request.user)) {
+      def.resolve(false);
+      return def.promise;
+    }
 
-			if (isLoggedIn) {
-				NutritionHelper.getNutritionDatas(rid)
-				.done(function(nutritionDatas) {
+    var rid = +queries.rid;
+    var userId = queries.userID;
 
-					def.resolve(nutritionDatas);
-				
-				}, function(err) {
-					console.log(err);
-					def.resolve(false);
-				});
-			} else {
-				def.resolve(false);
-			}
+    LoginMongoHelper.isLoggedIn(userId)
+      .done(function(isLoggedIn) {
 
-		}, function(err) {
-			console.log(err);
-			def.resolve(false);
-		});
+        if (isLoggedIn) {
+          NutritionHelper.getNutritionDatas(rid)
+            .done(function(nutritionDatas) {
 
-		return def.promise;
-	}	
+              def.resolve(nutritionDatas);
+
+            }, function(err) {
+              console.log(err);
+              def.resolve(false);
+            });
+        } else {
+          def.resolve(false);
+        }
+
+      }, function(err) {
+        console.log(err);
+        def.resolve(false);
+      });
+
+    return def.promise;
+  }
 };
 
 exports.GetNutritionRouteModule = GetNutritionRouteModule;

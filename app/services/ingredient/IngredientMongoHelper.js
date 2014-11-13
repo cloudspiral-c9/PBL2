@@ -25,6 +25,35 @@ var IngredientMongoHelper = (function() {
     return utils.gen(utils.get)('Ingredient', rid, null);
   };
 
+  var getAvailableIngredientNameList = function() {
+
+    var executeFunc = function(db, deferred) {
+
+      var result = [];
+      db.collection('nutrition').find().each(function(err, doc) {
+
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
+
+        if (!doc) {
+          db.close();
+          deferred.resolve(result);
+        } else {
+          if (doc.name) {
+            result.push(doc.name);
+          }
+        }
+      });
+    };
+
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+
+  };
+
   var removeIngredientBy_id = function(_id) {
 
     var executeFunc = function(db, deferred) {
@@ -56,7 +85,7 @@ var IngredientMongoHelper = (function() {
   };
 
   var remove = function(rid, index) {
-    return utils.gen(utils.remove)('Ingredient', rid,null, index);
+    return utils.gen(utils.remove)('Ingredient', rid, null, index);
   };
 
   var updateIngredientBy_id = function(_id, ingredient, amount, userID) {
@@ -109,6 +138,7 @@ var IngredientMongoHelper = (function() {
     'getIngredients': get,
     'removeIngredientBy_id': removeIngredientBy_id,
     'updateIngredientBy_id': updateIngredientBy_id,
+    getAvailableIngredientNameList: getAvailableIngredientNameList,
     insert: insert,
     add: add,
     edit: edit,

@@ -1,49 +1,50 @@
 'use strict';
 
-var RecipeProcessMongoHelper = require( __dirname + '/../../services/process/RecipeProcessMongoHelper.js').RecipeProcessMongoHelper;
-var LoginMongoHelper = require( __dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
+var RecipeProcessMongoHelper = require(__dirname + '/../../services/process/RecipeProcessMongoHelper.js').RecipeProcessMongoHelper;
+var LoginMongoHelper = require(__dirname + '/../../services/login/LoginMongoHelper.js').LoginMongoHelper;
 var deferred = require('deferred');
 
 
 var GetRecipeProcessRouteModule = {
-	
-	route: '/getprocess',
-	routeFunc: function(queries) {
-		
-		var def = deferred();
 
-		if ( !(queries.rid && queries.userID) ) {
-			def.resolve(false);
-			return def;
-		}
+  route: '/getprocess',
+  request: null,
+  routeFunc: function(queries) {
 
-		var rid = +queries.rid;
-		var userId = queries.userID;
+    var def = deferred();
 
-		LoginMongoHelper.isLoggedIn(userId)
-		.done(function(isLoggedIn) {
+    if (!(queries.rid && queries.userID && this.request.user)) {
+      def.resolve(false);
+      return def;
+    }
 
-			if (isLoggedIn) {
+    var rid = +queries.rid;
+    var userId = queries.userID;
 
-				RecipeProcessMongoHelper.getRecipeProcesses(rid)
-				.done(function(result) {
-					def.resolve(result);
-				}, function(err) {
-					console.log(err);
-					def.promise(false);
-				});
+    LoginMongoHelper.isLoggedIn(userId)
+      .done(function(isLoggedIn) {
 
-			} else {
-				def.promise(false);
-			}
+        if (isLoggedIn) {
 
-		}, function(err) {
-			console.log(err);
-			def.resolve(false);
-		});
+          RecipeProcessMongoHelper.getRecipeProcesses(rid)
+            .done(function(result) {
+              def.resolve(result);
+            }, function(err) {
+              console.log(err);
+              def.promise(false);
+            });
 
-		return def.promise;
-	}
+        } else {
+          def.promise(false);
+        }
+
+      }, function(err) {
+        console.log(err);
+        def.resolve(false);
+      });
+
+    return def.promise;
+  }
 };
 
 exports.GetRecipeProcessRouteModule = GetRecipeProcessRouteModule;
