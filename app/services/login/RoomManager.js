@@ -13,11 +13,13 @@ var RoomManager = (function() {
   //作成に成功した場合はmembers以外のRoomオブジェクトを返す
   var createNewRoom = function(description, title, limit, userId, userName, type) {
 
+    console.log();
     var executeFunc = function(db, deferred) {
 
       RoomNumberMongoHelper.getCurrentRid().done(function(rid) {
 
         if (!(rid && description && title && limit && userId && type)) {
+          console.log('roomget false');
           deferred.resolve(false);
           return;
         }
@@ -72,6 +74,7 @@ var RoomManager = (function() {
 
             delete update.members;
             delete update._id;
+            console.log('create',update);
             deferred.resolve(update);
 
           }, function(err) {

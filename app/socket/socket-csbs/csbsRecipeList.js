@@ -17,19 +17,19 @@ var csbsRecipeList = {};
     csbs.observable('recipelist', {
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
-            console.log('receive' + data);
+            console.log('receive' ,data);
             setReceived(data);
           });
         },
         send: function(event, data) {
           sockets()[id].socket.broadcast.emit(event, data);
-          console.log('send' + data);
+          console.log('send' ,data);
         },
         edit: function() {},
         insert: function() {},
         remove: function() {},
         add: function(data) {
-          console.log('add' + data);
+          console.log('add', data);
           return RoomManager.add(
             data.values[0].description, 
             data.values[0].title, 
