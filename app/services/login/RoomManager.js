@@ -146,6 +146,7 @@ var RoomManager = (function() {
             db.close();
 
             if (!result) {
+              console.log('ridnothing');
               deferred.resolve(false);
               return;
             }
