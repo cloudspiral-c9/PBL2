@@ -12,6 +12,7 @@
     'ngRoute',
     'auth',
     'ngCookies',
+    'ngMockE2E',
     'recipeers.recipelist',
     'recipeers.recipe',
     'recipeers.recipe.ingredients',

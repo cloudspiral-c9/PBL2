@@ -50,7 +50,7 @@ router.get('/roomselect/login', checkLoggedInToRoot, function(req, res) {
 router.get('/main/login', checkLoggedInToRoot, function(req, res) {
   console.log('main-room');
   res.render('views/login/index.html');
-})
+});
 
 
 module.exports = router;
