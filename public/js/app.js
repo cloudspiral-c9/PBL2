@@ -7,11 +7,11 @@
   recipeers.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/list', {
-      templateUrl: 'view/recipelist.html',
+      templateUrl: 'http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/view/recipelist.html',
       controller: 'RecipeListController'
     }).
     when('/recipe/:recipeId', {
-      templateUrl: 'view/recipe.html',
+      templateUrl: 'http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/view/recipe.html',
       requireLogin: true
     }).
     otherwise({
