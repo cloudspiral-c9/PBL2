@@ -101,6 +101,31 @@ var ServerHelper = (function() {
         });
       }
     });
+
+    app.post(route, function(request, response, next) {
+
+      var parsedObject = url.parse(request.url, true);
+      var path = parsedObject.pathname;
+      var queries = parsedObject.query;
+
+      module.request = request;
+      module.response = response;
+      module.next = next;
+
+      console.log('request path: ' + path);
+      var promise = module.routeFunc(queries);
+
+      if (!promise) {
+        return;
+      } else {
+        promise.done(function(result) {
+          _respondResult(response, result);
+        }, function(err) {
+          console.log(err);
+          _respondResult(response, err);
+        });
+      }
+    });
   };
 
   var _loadRouteModules = function() {

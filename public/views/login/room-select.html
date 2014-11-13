@@ -1,54 +1,69 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    	<meta charset="utf-8" />
-    	<title>Recipeers</title>
-    	<link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/reset.css" rel ="stylesheet"/>
-	<link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/header-loggedin.css" rel="stylesheet" />
-	<link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/room-select.css" rel="stylesheet" />
-	<link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/footer.css" rel="stylesheet"/>
 
-	<script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jquery-2.1.1.min.js"></script>
-	<script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jquery.cookie.js"></script>
-	<script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/js/util/usernameBinder.js"></script>
-	
-	    
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <title>Recipeers</title>
+  <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/reset.css" rel="stylesheet" />
+  <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/header-loggedin.css" rel="stylesheet" />
+  <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/room-select.css" rel="stylesheet" />
+  <link href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/footer.css" rel="stylesheet" />
+
+  <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jQuery/dist/jquery.min.js"></script>
+  <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/jquery.cookie/jquery.cookie.js"></script>
+  <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/js/util/usernameBinder.js"></script>
+
+
 </head>
 
 <body>
 
-	<div id="header">
-		
-		<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public"><div id="logo" ></div></a>
-		
-		<div id="menus">
-			<div class="menu-links"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/introduction/login">WHAT'S RECIPEERS?</a></div>	
-			<div class="menu-links"><a href="">SELECT ROOM</a></div>
-		</div>
-		
-		<div id="login-info">
-			<div id="login-username"></div>
-			<div id="logout"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout">Logout</a></div>
-		</div>
-		
-	</div>
+  <div id="header">
 
-	<div id="main">
-    		
-    		<div id="contents">
-			<div id="room-gachi" class="room-tile">
-				<div id="title-gachi">Gachi</div>
-			</div>
-			
-			<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/main/login"><div id="room-enjoy" class="room-tile">
-				<div id="title-enjoy"><span id="enjoy-e">HYPER<br>E</span><span id="enjoy-n">n</span><span id="enjoy-j">j</span><span id="enjoy-o">o</span><span id="enjoy-y">y</span></div>
-			</div></a>
-		</div>
-    	</div>
+    <a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public">
+      <div id="logo"></div>
+    </a>
 
-	<div id="footer"></div>
-	
+    <div id="menus">
+      <div class="menu-links"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/introduction/login">WHAT'S RECIPEERS?</a>
+      </div>
+      <div class="menu-links"><a href="">SELECT ROOM</a>
+      </div>
+    </div>
+
+    <div id="login-info">
+      <div id="login-username"></div>
+      <div id="logout"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout">Logout</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="main">
+
+    <div id="contents">
+      <div id="room-gachi" class="room-tile">
+        <div id="title-gachi">Gachi</div>
+      </div>
+
+      <a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/main/login">
+        <div id="room-enjoy" class="room-tile">
+          <div id="title-enjoy">
+            <span id="enjoy-e">HYPER
+              <br>E</span>
+            <span id="enjoy-n">n</span>
+            <span id="enjoy-j">j</span>
+            <span id="enjoy-o">o</span>
+            <span id="enjoy-y">y</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div id="footer"></div>
+
 </body>
 
 </html>
