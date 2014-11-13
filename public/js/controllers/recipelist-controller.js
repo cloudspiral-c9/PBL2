@@ -23,7 +23,7 @@
 
     //サーバーとの通信部分
     $scope.submitRecipelist = function(recipeListState) {
-      RecipeListService.obs.set({
+      RecipeListService.obs().set({
         mode: 'add',
         values: [{
           title: recipeListState.formData.title,
