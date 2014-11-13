@@ -93,6 +93,35 @@ var IngredientMongoHelper = (function(){
 		return promise;
 	};
 
+	var getAvailableIngredientNameList = function() {
+
+		var executeFunc = function(db, deferred) {
+
+			var result = new Array();
+			db.collection.('nutrition').find().each(function(err, doc) {
+
+				if (err) {
+					console.log(err);
+					deferred.resolve(false);
+					return;
+				} 
+
+				if (!doc) {
+					db.close();
+					deferred.resolve(result);
+				} else {
+					if (doc.name) {
+						result.push(doc.name);
+					}
+				}
+			});
+		};
+
+		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+		return promise;
+
+	};
+
 	var removeIngredientBy_id = function(_id) {
 
 		var executeFunc = function(db, deferred) {
@@ -152,7 +181,7 @@ var IngredientMongoHelper = (function(){
 
 
 
-	return {'insertIngredient': insertIngredient, 'getIngredients': getIngredients, 'removeIngredientBy_id': removeIngredientBy_id, 'updateIngredientBy_id': updateIngredientBy_id};
+	return {'insertIngredient': insertIngredient, 'getIngredients': getIngredients, 'getAvailableIngredientNameList': getAvailableIngredientNameList, 'removeIngredientBy_id': removeIngredientBy_id, 'updateIngredientBy_id': updateIngredientBy_id};
 
 })();
 
