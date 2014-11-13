@@ -11,7 +11,7 @@ describe("recipe-filter-test", function() {
       return $filter(name);
     };
   }));
-
+  
   describe("hasKey test", function() {
 
     it('hasKeyにオブジェクト以外を渡すと、そのまま返ってくる。', function() {

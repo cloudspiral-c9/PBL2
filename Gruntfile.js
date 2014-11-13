@@ -24,6 +24,8 @@ module.exports = function(grunt) {
           'public/js/lib/ng-socket.js': ['coverage'],
           'public/js/lib/ng-csbc.js': ['coverage'],
 
+          'public/js/services/*.js': ['coverage'],
+
           'public/js/app.js': ['coverage'],
           'public/js/filters/*.js': ['coverage'],
           'public/js/controllers/*.js': ['coverage']
