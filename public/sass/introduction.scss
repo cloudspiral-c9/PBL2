@@ -1,0 +1,120 @@
+
+@charset "utf-8";
+
+$background-url: "../images/introduction/background/knife.jpg";
+$font-url: "../images/introduction/font/NexaRustSlab-BlackShadow01.otf";
+$pin-url: "../images/introduction/icons/pin-red.png";
+$animationsec: 0.6s;
+$introduction-width: 35%;
+$introduction-height: 700px;
+
+@font-face {
+	font-family: 'NexaRustSlabShadow';
+	src: url($font-url);
+}
+
+
+
+#main {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	overflow: hidden;
+	border: none;
+	margin: 0px;
+
+
+	#contents {
+		
+		position: relative;
+		top: 0px;
+		width: 100%;
+		height: 900px;
+		min-width: 1500px;
+		margin: 0px;
+		border: none;
+		background-image: url($background-url);
+		background-repeat: no-repeat;
+		background-position: 0px 0px;
+		background-size: 100% 100%;
+
+
+		#message-box {
+			position: relative;
+			padding: 10px;
+			width: 550px;
+			height: 250px;
+			top: 430px;
+			left: 125px;
+			font-style: 'NexaRustSlabShadow';
+			font-size: 5.5em;
+		}
+
+		#introduction {
+			position:　relative;
+			float: right;
+			width: $introduction-width;
+			height: 0px;
+			margin-right: 125px;
+			margin-top: -175px;
+			background: rgba(255, 255, 255, 0.6);
+			overflow: hidden;
+			padding: 0px 40px;
+
+			animation: rolldown 1.2s linear 0.2s 1 normal running  forwards;
+			-webkit-animation: rolldown 1.2s linear 0.2s 1 normal running  forwards;
+			-moz-animation: rolldown 1.2s linear 0.2s 1 normal running  forwards;
+			-o-animation: rolldown 1.2s linear 0.2s 1 normal running  forwards;
+			-ms-animation: rolldown 1.2s linear 0.2s 1 normal running  forwards;
+
+
+			hr {
+				position: relative;
+				width: 100%;
+				margin-top: 55px;
+
+			}
+
+			#intro-title{
+				position: relative;
+				width: 100%;
+				height: 80px;
+				top: 10px;
+				font-size: 2em;
+			}
+
+			#intro-body {
+				position: relative;
+				width: 90%;
+				margin: 0px auto;
+				font-size: 1.2em;
+			}
+			
+		}
+	}
+}
+
+@keyframes rolldown {
+	0% {height: 0px}
+	100% {height: $introduction-height}
+}
+
+@-webkit-keyframes rolldown {
+	0% {height: 0px}
+	100% {height: $introduction-height}
+}
+
+@-moz-keyframes rolldown {
+	0% {height: 0px}
+	100% {height: $introduction-height}
+}
+
+@-o-keyframes rolldown {
+	0% {height: 0px}
+	100% {height: $introduction-height}
+}
+
+@-ms-keyframes rolldown {
+	0% {height: 0px}
+	100% {height: $introduction-height}
+}

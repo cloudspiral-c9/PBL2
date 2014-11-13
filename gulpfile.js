@@ -9,10 +9,9 @@ autoprefixer = require('gulp-autoprefixer');
 uglify = require('gulp-uglify');
 minifyHTML = require('gulp-minify-html');
 
-
 gulp.task('connectDev', function () {
   connect.server({
-    root:['./app/'],
+    root:['./public/'],
     port:8000,
     livereload:true
   });

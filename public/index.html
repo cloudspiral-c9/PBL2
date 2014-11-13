@@ -1,40 +1,45 @@
-<!doctype html>
-<html ng-app = "recipeers">
-
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recipeers</title>
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
-  <link rel="stylesheet" href="css/main.css">
-  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    	<meta charset="utf-8" />
+    	<title>Recipeers</title>
+		
+    	<!-- Recipeers_View 参照 -->
+	<link href="./css/reset.css" rel="stylesheet" />
+	<link href="./css/header.css" rel="stylesheet"/>
+	<link href="./css/footer.css" rel="stylesheet"/>
+	<link href="./css/index.css" rel="stylesheet" />
+	    
 </head>
 
+
 <body>
+    
+	<!-- 上部のheader -->
+    	<div id="header">
+		
+		<div id="logo"></div>
+		
+		<div id="menus">
+			<div id="introduction"><a href="./views/what-recipeers.html">WHAT'S RECIPEERS?</a></div>	
+		</div>
+		
 
-<header></header>
+		<div id="login-icons">
+			<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/twitter"><div class="login-icon" id="login-twitter"></div></a>
+			<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/google"><div class="login-icon" id="login-google"></div></a>
+			<a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/auth/facebook"><div class="login-icon" id="login-facebook"></div></a>
+		</div>
+		<span id="login-message">Login<div id="login-triangle"></div></span>
+	</div>
 
-<ng-view></ng-view>
-
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/underscore/underscore.js"></script>
-  <script src="bower_components/underscore-contrib/underscore.array.builders.js"></script>
-   <script src="bower_components/underscore-contrib/underscore.object.builders.js"></script>
-  <script src="bower_components/underscore-contrib/underscore.function.iterators.js"></script>
-  <script src="bower_components/underscore-contrib/underscore.util.existential.js"></script>
-  <script src="bower_components/underscore-contrib/underscore.object.selectors.js"></script>
-  <script src="bower_components/csbind-client/csbind-client.min.js"></script>
-  <script src="js/util/fake.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/controllers/recipelist-controller.js"></script>
-  <script src="js/services/recipe-service.js"></script>
-  <script src="js/controllers/processes-controller.js"></script>
-  <script src="js/controllers/ingredients-controller.js"></script>
-  <script src="js/controllers/chats-controller.js"></script>
-  <script src="js/controllers/chart-controller.js"></script>
+     	<div id="main">
+    		
+    		<div id="contents">
+			<div id="message-box">WELCOME TO <br>THE RECIPEERS</div>
+		</div>
+    	</div>
+    	<div id="footer"></div>
 </body>
-
 </html>
