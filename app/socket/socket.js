@@ -1,11 +1,11 @@
 'use strict';
 
 var def = require('deferred');
-var csbsChart = require('csbsChart');
-var csbsChatLog = require('csbsChatLog');
-var csbsIngredient = require('csbsIngredient');
-var csbsRecipeList = require('csbsRecipeList');
-var csbsRecipeProcess = require('csbsRecipeProcess');
+var csbsChart = require(__dirname + '/socket-csbs/csbsChart.js');
+var csbsChatLog = require(__dirname + '/socket-csbs/csbsChatLog.js');
+var csbsIngredient = require(__dirname + '/socket-csbs/csbsIngredient.js');
+var csbsRecipeList = require(__dirname + '/socket-csbs/csbsRecipeList.js');
+var csbsRecipeProcess = require(__dirname + '/socket-csbs/csbsRecipeProcess.js');
 
 var socket;
 

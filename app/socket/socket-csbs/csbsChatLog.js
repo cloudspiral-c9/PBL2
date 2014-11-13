@@ -6,7 +6,7 @@ var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.
 var def = require('deferred');
 var csbs = require('csbind-server');
 
-var csbsChat;
+var csbsChat = {};
 
 (function() {
 
