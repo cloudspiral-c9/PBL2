@@ -30,7 +30,7 @@ var socket;
 
       sockets[socket.id] = socket;
 
-      csbsChart.obs(socket).then(function(rObs) {
+      csbsChart.obs(socket, io).then(function(rObs) {
           chart = rObs;
           return defC.promise;
         })
@@ -48,20 +48,20 @@ var socket;
           });
         });
 
-      csbsChatLog.obs(socket).then(function(rObs) {
+      csbsChatLog.obs(socket, io).then(function(rObs) {
         chatLog = rObs;
       });
 
-      csbsIngredient.obs(socket).then(function(rObs) {
+      csbsIngredient.obs(socket, io).then(function(rObs) {
         ingredient = rObs;
         defC.resolve();
       });
 
-      csbsRecipeList.obs(socket).then(function(rObs) {
+      csbsRecipeList.obs(socket, io).then(function(rObs) {
         recipelist = rObs;
       });
 
-      csbsRecipeProcess.obs(socket).then(function(rObs) {
+      csbsRecipeProcess.obs(socket, io).then(function(rObs) {
         recipeProcess = rObs;
       });
 
