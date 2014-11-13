@@ -25,7 +25,7 @@ var GetRoomListRouteModule = {
 
         if (isLoggedIn) {
 
-          RoomManager.getRoomListByType(type)
+          RoomManager.get()
             .done(function(roomList) {
 
               def.resolve(roomList);

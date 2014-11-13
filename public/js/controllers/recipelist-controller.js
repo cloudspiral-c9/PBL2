@@ -14,8 +14,8 @@
         rid: '',
         title: '',
         description: "",
-        sender: '',
-        timestamp: null
+        timestamp: null,
+        limit: null
       };
 
       return rRecipeListState;

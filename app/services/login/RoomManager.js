@@ -108,7 +108,7 @@ var RoomManager = (function() {
           return;
         }
 
-        rid = rid || 0;
+        rid = new Date().getTime();
         type = type || 'hyperEnjoy';
 
         if (!userName) {
