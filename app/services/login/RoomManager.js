@@ -99,7 +99,7 @@ var RoomManager = (function() {
     return promise;
   };
 
-  var add = function(description, title, limit, userId, userName, type) {
+  var add = function(description, title, limit, userId, userName, type, now) {
 
     console.log();
     var executeFunc = function(db, deferred) {
@@ -121,7 +121,6 @@ var RoomManager = (function() {
         }
 
         var members = [];
-        var now = TimestampHelper.getTimestamp();
         var update = {
           'rid': rid,
           'userID': userId,

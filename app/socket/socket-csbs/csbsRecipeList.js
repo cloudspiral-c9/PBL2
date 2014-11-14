@@ -18,6 +18,7 @@ var csbsRecipeList = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
+            data.values[0].timestamp = TimestampHelper.getTimestamp();
             setReceived(data);
           });
         },
@@ -37,7 +38,8 @@ var csbsRecipeList = {};
             data.values[0].limit, 
             data.values[0].userID, 
             data.values[0].userName, 
-            data.values[0].type);
+            data.values[0].type,
+            data.values[0].timestamp);
         }
       }, ['title', 'userID','userName', 'description', 'rid', 'timestamp', 'members', 'limit'], 'deferred').start(function(){
         return RoomManager.get();

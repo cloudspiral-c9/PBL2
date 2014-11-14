@@ -25,7 +25,7 @@ var csbsChart = {};
         send: function(event, data) {
           console.log('send chart' ,data);
           console.log('rid' ,sockets()[id].rid);
-          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
+          sockets().io.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(){
           var d = def();

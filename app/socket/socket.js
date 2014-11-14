@@ -21,6 +21,7 @@ var socket;
   function _start(server) {
 
     io = require('socket.io')(server);
+    sockets.io = io;
 
     io.sockets.on('connection', function(socket) {
 

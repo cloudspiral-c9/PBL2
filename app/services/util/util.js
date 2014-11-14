@@ -46,6 +46,7 @@ var utils = {};
         return;
       }
       console.log('resolve doc', doc);
+      console.log('resolve doc.values', doc.values);
       def.resolve(doc.values);
     };
   };

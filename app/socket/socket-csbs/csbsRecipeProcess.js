@@ -18,13 +18,14 @@ var csbsRecipeProcess = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
+            data.values[0].timestamp = TimestampHelper.getTimestamp();
             setReceived(data);
           });
         },
         send: function(event, data) {
           console.log('send' ,data);
           console.log('rid' ,sockets()[id].rid);
-          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
+          sockets().io.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(data) {
           console.log('edit' ,data);
@@ -33,7 +34,7 @@ var csbsRecipeProcess = {};
             data.values[0].process,
             data.values[0].sender,
             data.index,
-            TimestampHelper.getTimestamp()
+            data.values[0].timestamp
           );
         },
         insert: function(data) {
@@ -43,7 +44,7 @@ var csbsRecipeProcess = {};
             data.values[0].process,
             data.values[0].sender,
             data.index,
-            TimestampHelper.getTimestamp()
+            data.values[0].timestamp
           );
         },
         remove: function(data) {
@@ -60,7 +61,7 @@ var csbsRecipeProcess = {};
             sockets()[id].rid,
             data.values[0].process,
             data.values[0].sender,
-            TimestampHelper.getTimestamp()
+            data.values[0].timestamp
           );
         }
       }, ['process', 'sender', 'timestamp'], 'deferred').start(function() {

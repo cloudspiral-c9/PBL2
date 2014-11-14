@@ -18,6 +18,7 @@ var csbsChat = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
+            data.values[0].timestamp = TimestampHelper.getTimestamp();
             setReceived(data);
           });
         },
@@ -25,20 +26,21 @@ var csbsChat = {};
           console.log('send' ,data);
           console.log('rid' ,sockets()[id].rid);
           console.log('sockets' ,sockets());
+          console.log('rooms' ,sockets()[id].socket.rooms);
           console.log('id' , id);
-          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
+          sockets().io.to(sockets()[id].rid).emit(event, data);
         },
         edit: function() {},
         insert: function() {},
         remove: function() {},
         add: function(data) {
           console.log('add', data);
-          console.log('time' ,TimestampHelper.getTimestamp());
+          console.log('time' ,data.values[0].timestamp);
           return ChatLogMongoHelper.add(
             sockets()[id].rid, 
             data.values[0].message,
             data.values[0].sender,
-            TimestampHelper.getTimestamp()
+            data.values[0].timestamp
           );
         }
       }, ['message', 'sender', 'timestamp'], 'deferred').start(function(){

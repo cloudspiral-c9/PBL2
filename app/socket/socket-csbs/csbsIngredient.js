@@ -18,11 +18,12 @@ var csbsIngredient = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
+            data.values[0].timestamp = TimestampHelper.getTimestamp();
             setReceived(data);
           });
         },
         send: function(event, data) {
-          sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
+          sockets().io.to(sockets()[id].rid).emit(event, data);
           console.log('send' ,data);
           console.log('rid' ,sockets()[id].rid);
         },
@@ -33,6 +34,7 @@ var csbsIngredient = {};
             data.values[0].ingredient,
             data.values[0].amount,
             data.values[0].sender,
+            data.values[0].timestamp,
             data.index
           );
         },
@@ -43,6 +45,7 @@ var csbsIngredient = {};
             data.values[0].ingredient,
             data.values[0].amount,
             data.values[0].sender,
+            data.values[0].timestamp,
             data.index
           );
         },
@@ -57,7 +60,8 @@ var csbsIngredient = {};
             sockets()[id].rid,
             data.values[0].ingredient,
             data.values[0].amount,
-            data.values[0].sender
+            data.values[0].sender,
+            data.values[0].timestamp
           );
         }
       }, ['ingredient', 'sender', 'amount', 'timestamp'], 'deferred').start(function() {

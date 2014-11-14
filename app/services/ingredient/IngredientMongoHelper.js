@@ -6,21 +6,21 @@ var utils = require(__dirname + '/../util/util.js');
 
 var IngredientMongoHelper = (function() {
 
-  var insert = function(rid, ingredient, amount, sender, index) {
+  var insert = function(rid, ingredient, amount, sender, now, index) {
     return utils.gen(utils.insert)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
       sender: sender,
-      timestamp: TimestampHelper.getTimestamp()
+      timestamp: now
     }, index);
   };
 
-  var add = function(rid, ingredient, amount, sender) {
+  var add = function(rid, ingredient, amount, sender, now) {
     return utils.gen(utils.add)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
       sender: sender,
-      timestamp: TimestampHelper.getTimestamp()
+      timestamp: now
     });
   };
 
@@ -128,12 +128,12 @@ var IngredientMongoHelper = (function() {
     return promise;
   };
 
-  var edit = function(rid, ingredient, amount, sender, index) {
+  var edit = function(rid, ingredient, amount, sender, now, index) {
     return utils.gen(utils.edit)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
       sender: sender,
-      timestamp: TimestampHelper.getTimestamp()
+      timestamp: now
     }, index);
   };
 
