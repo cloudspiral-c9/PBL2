@@ -1,169 +1,183 @@
 'use strict';
 
-var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
-var IngredientMongoHelper = require( __dirname + '/../ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
+var MongoUtil = require(__dirname + '/../util/MongoUtil.js');
+var IngredientMongoHelper = require(__dirname + '/../ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 var deferred = require('deferred');
-var _  = require('underscore-contrib');
+var _ = require('underscore-contrib');
 
 
 var NutritionMongoHelper = (function() {
 
-	//一食あたりの目安の栄養価を取得する
-	var getIdealNutrition = function() {
+  //一食あたりの目安の栄養価を取得する
+  var getIdealNutrition = function() {
 
-		var executeFunc = function(db, deferred) {
-			
-			db.collection('idealNutrition').findOne({}, function(err, doc) {
-				
-				db.close();
+    var executeFunc = function(db, deferred) {
 
-				if (err) {
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
+      db.collection('idealNutrition').findOne({}, function(err, doc) {
 
-				delete doc._id;
-				deferred.resolve(doc);
-			});
-		};
+        db.close();
 
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
 
-	var _calcNutritionToAmount = function(nutrition, amount) {
+        delete doc._id;
+        deferred.resolve(doc);
+      });
+    };
 
-		Object.keys(nutrition).forEach(function(nutritionName) {
-					
-			if (nutritionName === 'name') {
-				return;
-			}
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+  };
 
-			nutrition[nutritionName] *= amount;
-		});
+  var _calcNutritionToAmount = function(nutrition, amount) {
 
-		return nutrition;
-	};
+    Object.keys(nutrition).forEach(function(nutritionName) {
 
-	//ingredientに対応する栄養価を取得する
-	var getNutrition = function(ingredientData) {
+      if (nutritionName === 'name') {
+        return;
+      }
 
-		var executeFunc = function(db, deferred) {
+      nutrition[nutritionName] *= amount;
+    });
 
-			if (!(ingredientData.ingredient && ingredientData.amount) ) {
-				db.close();
-				deferred.resolve(null);
-				return;
-			}
-			
-			var amount = ingredientData.amount;
-			var query = {'name': ingredientData.ingredient};
-			db.collection('nutrition').findOne(query, function(err, nutrition) {
+    return nutrition;
+  };
 
-				db.close();
+  //ingredientに対応する栄養価を取得する
+  var getNutrition = function(ingredientData) {
 
-				if (err) {
-					console.log(err);
-					deferred.resolve(false);
-					return;
-				}
+    var executeFunc = function(db, deferred) {
 
-				delete nutrition._id;
-				var calcedNutrition = _calcNutritionToAmount(nutrition, amount);
-				deferred.resolve(calcedNutrition);
-			});
-		};
+      if (!(ingredientData.ingredient && ingredientData.amount)) {
+        db.close();
+        deferred.resolve(null);
+        return;
+      }
 
-		var promise = MongoUtil.executeMongoUseFunc(executeFunc);
-		return promise;
-	};
+      var amount = ingredientData.amount;
+      var query = {
+        'name': ingredientData.ingredient
+      };
+      db.collection('nutrition').findOne(query, function(err, nutrition) {
 
+        db.close();
 
-	//ingredientDataの配列からorクエリを作成する
-	var _makeFoodAmountMap = function(ingredientDatas) {
-		
-		var foodAmountMap = {};
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
 
-		_.each(ingredientDatas, function(value, key, list){
-		
-			if (! (value.ingredient && value.amount) ) {
-				return;
-			}
+        delete nutrition._id;
+        var calcedNutrition = _calcNutritionToAmount(nutrition, amount);
+        deferred.resolve(calcedNutrition);
+      });
+    };
 
-			foodAmountMap[value.ingredient] = value.amount;
-		
-		});
-
-		return foodAmountMap;
-	};
-
-	var _makeOrQuery = function(foodAmountMap) {
-
-		var orArray = [];
-		Object.keys(foodAmountMap).forEach(function(ingredient) {
-			orArray.push({'name': ingredient});
-		});
-
-		var query = {'$or': orArray};
-		return query;
-	};
+    var promise = MongoUtil.executeMongoUseFunc(executeFunc);
+    return promise;
+  };
 
 
-	//ridに対応する部屋のnutritionをかえす．
-	var getNutritionsByRid = function(rid) {
+  //ingredientDataの配列からorクエリを作成する
+  var _makeFoodAmountMap = function(ingredientDatas) {
 
-		var executeFunction = function(db, deferred) {
+    var foodAmountMap = {};
 
-			if (!rid) {
-				db.close();
-				deferred.resolve(false);
-				return;
-			}
+    _.each(ingredientDatas, function(value, key, list) {
 
-			IngredientMongoHelper.getIngredients(rid)
-			.done(function(ingredientDatas) {
+      if (!(value.ingredient && value.amount)) {
+        return;
+      }
 
-				var foodAmountMap = _makeFoodAmountMap(ingredientDatas);
-				var query = _makeOrQuery(foodAmountMap);
-				var cursor = db.collection('nutrition').find(query);
+      foodAmountMap[value.ingredient] = value.amount;
 
-				var result = [];
-				cursor.each(function(err, nutrition) {
+    });
 
-					if (err) {
-						console.log(err);
-						deferred.resolve(false);
-						return;
-					}
+    return foodAmountMap;
+  };
 
-					if (!nutrition) {
-						db.close();
-						deferred.resolve(result);
-					} else {
-						
-						var amount = foodAmountMap[nutrition.name];
-						
-						delete nutrition._id;
-						var retDoc = _calcNutritionToAmount(nutrition, amount);						
-						result.push(retDoc);
-					}
-				});
+  var _makeOrQuery = function(foodAmountMap) {
 
-			}, function(err) {
-				console.log(err);
-				deferred.resolve(false);
-			});
-		};
+    var orArray = [];
+    Object.keys(foodAmountMap).forEach(function(ingredient) {
+      orArray.push({
+        'name': ingredient
+      });
+    });
 
-		var promise = MongoUtil.executeMongoUseFunc(executeFunction);
-		return promise;
-
-	};
+    var query = {
+      '$or': orArray
+    };
+    return query;
+  };
 
 
+  //ridに対応する部屋のnutritionをかえす．
+  var getNutritionsByRid = function(rid) {
 
-	return {'getNutrition' : getNutrition, 'getIdealNutrition': getIdealNutrition, 'getNutritionsByRid': getNutritionsByRid};
+    var executeFunction = function(db, deferred) {
+
+      if (!rid) {
+        db.close();
+        deferred.resolve(false);
+        return;
+      }
+
+      IngredientMongoHelper.getIngredients(rid)
+        .done(function(ingredientDatas) {
+
+          var foodAmountMap = _makeFoodAmountMap(ingredientDatas);
+          var query = _makeOrQuery(foodAmountMap);
+          var cursor = db.collection('nutrition').find(query);
+
+          var result = [];
+          cursor.each(function(err, nutrition) {
+
+            if (err) {
+              console.log(err);
+              deferred.resolve(false);
+              return;
+            }
+
+            if (!nutrition) {
+              console.log('no nutirion', result);
+              db.close();
+              deferred.resolve(result);
+            } else {
+
+              var amount = foodAmountMap[nutrition.name];
+
+              delete nutrition._id;
+              var retDoc = _calcNutritionToAmount(nutrition, amount);
+              result.push(retDoc);
+            }
+          });
+
+          db.close();
+          deferred.resolve(result);
+
+        }, function(err) {
+          console.log(err);
+          deferred.resolve(false);
+        });
+    };
+
+    var promise = MongoUtil.executeMongoUseFunc(executeFunction);
+    return promise;
+
+  };
+
+
+
+  return {
+    'getNutrition': getNutrition,
+    'getIdealNutrition': getIdealNutrition,
+    'getNutritionsByRid': getNutritionsByRid
+  };
 
 })();
 

@@ -23,7 +23,7 @@ var csbsChart = {};
           });
         },
         send: function(event, data) {
-          console.log('send' ,data);
+          console.log('send chart' ,data);
           console.log('rid' ,sockets()[id].rid);
           sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
