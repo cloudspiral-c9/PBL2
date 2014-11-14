@@ -33,6 +33,7 @@ var csbsChat = {};
         remove: function() {},
         add: function(data) {
           console.log('add', data);
+          console.log('tme' ,TimestampHelper.getTimestamp());
           return ChatLogMongoHelper.add(
             sockets()[id].rid, 
             data.values[0].message,
