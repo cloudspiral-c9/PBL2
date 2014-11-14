@@ -62,7 +62,7 @@
             values: [{
               ingredient: ingredientsState.formAdd.ingredient,
               amount: ingredientsState.formAdd.amount,
-              sender: ingredientsState.formAdd.sender,
+              sender: AuthService.get().userID,
               timestamp: ''
             }],
             mode: 'add'
@@ -72,7 +72,7 @@
             values: [{
               ingredient: ingredientsState.formEdit[index].ingredient,
               amount: ingredientsState.formEdit[index].amount,
-              sender: ingredientsState.formEdit[index].sender,
+              sender: AuthService.get().userID,
               timestamp: ''
             }],
             mode: 'edit',
