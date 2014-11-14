@@ -71,11 +71,11 @@ router.get('/view/chart.html', checkLoggedInToRoot, function(req, res) {
 });
 
 router.get('/view/chats.html', checkLoggedInToRoot, function(req, res) {
-  res.render('views/chats.html');
+  res.render('view/chats.html');
 });
 
 router.get('/view/ingredients.html', checkLoggedInToRoot, function(req, res) {
-  res.render('views/ingredients.html');
+  res.render('view/ingredients.html');
 });
 
 

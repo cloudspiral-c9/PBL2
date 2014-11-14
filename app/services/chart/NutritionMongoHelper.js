@@ -3,6 +3,7 @@
 var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
 var IngredientMongoHelper = require( __dirname + '/../ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 var deferred = require('deferred');
+var _  = require('undersocre-contrib');
 
 
 var NutritionMongoHelper = (function() {
@@ -83,14 +84,16 @@ var NutritionMongoHelper = (function() {
 	var _makeFoodAmountMap = function(ingredientDatas) {
 		
 		var foodAmountMap = {};
-		for (var i = 0; i < ingredientDatas.length; i++) {
-			
-			if (! (ingredientDatas[i].ingredient && ingredientDatas[i].amount) ) {
-				continue;
+
+		_.each(ingredientDatas, function(value, key, list){
+		
+			if (! (value.ingredient && value.amount) ) {
+				return;
 			}
 
-			foodAmountMap[ingredientDatas[i].ingredient] = ingredientDatas[i].amount;
-		}
+			foodAmountMap[value.ingredient] = value.amount;
+		
+		});
 
 		return foodAmountMap;
 	};
