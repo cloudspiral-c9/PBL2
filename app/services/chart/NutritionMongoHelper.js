@@ -3,7 +3,7 @@
 var MongoUtil = require( __dirname + '/../util/MongoUtil.js');
 var IngredientMongoHelper = require( __dirname + '/../ingredient/IngredientMongoHelper.js').IngredientMongoHelper;
 var deferred = require('deferred');
-var _  = require('undersocre-contrib');
+var _  = require('underscore-contrib');
 
 
 var NutritionMongoHelper = (function() {
