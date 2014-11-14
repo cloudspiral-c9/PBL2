@@ -50,11 +50,17 @@ var utils = {};
     };
   };
 
+  utils.cbGet = function(col, rid, value, index, db, def){
+    return function(e, doc){
+      utils.get(col, rid, value, index, db, def);
+    };
+  };
+
   utils.start = function(col, rid, value, index, db, def) {
     db.collection(col).insert({
       rid: rid,
       values: []
-    },utils.cb(db, def));
+    },utils.cbGet(col, rid, value, index, db, def));
   };
 
   utils.insert = function(col, rid, value, index, db, def) {
@@ -67,7 +73,7 @@ var utils = {};
           $position: index
         }
       }
-    }, utils.cb(db, def));
+    }, utils.cbGet(col, rid, value, index, db, def)));
   };
 
   utils.add = function(col, rid, value, index, db, def) {
@@ -77,7 +83,7 @@ var utils = {};
       $push: {
         values: value
       }
-    }, utils.cb(db, def));
+    }, utils.cbGet(col, rid, value, index, db, def)));
   };
 
   utils.get = function(col, rid, value, index, db, def) {
@@ -130,7 +136,7 @@ var utils = {};
         $set: {
           values: result.values.splice(index, 1)
         }
-      }, utils.cb(db, def));
+      }, utils.cbGet(col, rid, value, index, db, def));
     });
   };
 
@@ -150,7 +156,7 @@ var utils = {};
         $set: {
           values: result.values.splice(index, 1, value)
         }
-      }, utils.cb(db, def));
+      }, utils.cbGet(col, rid, value, index, db, def));
     });
   };
 
