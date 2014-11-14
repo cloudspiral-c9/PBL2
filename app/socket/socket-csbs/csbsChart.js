@@ -18,10 +18,13 @@ var csbsChart = {};
     csbs.observable('chart', {
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
+            console.log('receive' ,data);
             setReceived(data);
           });
         },
         send: function(event, data) {
+          console.log('send' ,data);
+          console.log('rid' ,sockets()[id].rid);
           sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(){

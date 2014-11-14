@@ -17,13 +17,17 @@ var csbsRecipeProcess = {};
     csbs.observable('processes', {
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
+            console.log('receive' ,data);
             setReceived(data);
           });
         },
         send: function(event, data) {
+          console.log('send' ,data);
+          console.log('rid' ,sockets()[id].rid);
           sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function(data) {
+          console.log('edit' ,data);
           return RecipeProcessMongoHelper.edit(
             sockets()[id].rid,
             data.values[0].process,
@@ -33,6 +37,7 @@ var csbsRecipeProcess = {};
           );
         },
         insert: function(data) {
+          console.log('insert' ,data);
           return RecipeProcessMongoHelper.insert(
             sockets()[id].rid,
             data.values[0].process,
@@ -42,12 +47,14 @@ var csbsRecipeProcess = {};
           );
         },
         remove: function(data) {
+          console.log('remove' ,data);
           return RecipeProcessMongoHelper.remove(
             sockets()[id].rid,
             data.index
           );
         },
         add: function(data) {
+          console.log('add' ,data);
           return RecipeProcessMongoHelper.add(
             sockets()[id].rid,
             data.values[0].process,
