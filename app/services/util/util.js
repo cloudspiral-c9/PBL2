@@ -73,7 +73,7 @@ var utils = {};
           $position: index
         }
       }
-    }, utils.cbGet(col, rid, value, index, db, def)));
+    }, utils.cbGet(col, rid, value, index, db, def));
   };
 
   utils.add = function(col, rid, value, index, db, def) {
@@ -83,7 +83,7 @@ var utils = {};
       $push: {
         values: value
       }
-    }, utils.cbGet(col, rid, value, index, db, def)));
+    }, utils.cbGet(col, rid, value, index, db, def));
   };
 
   utils.get = function(col, rid, value, index, db, def) {
