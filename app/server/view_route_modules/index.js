@@ -62,8 +62,8 @@ router.get('/view/recipe.html', checkLoggedInToRoot, function(req, res) {
   res.render('view/recipe.html');
 });
 
-router.get('/view/process.html', checkLoggedInToRoot, function(req, res) {
-  res.render('view/process.html');
+router.get('/view/processes.html', checkLoggedInToRoot, function(req, res) {
+  res.render('view/processes.html');
 });
 
 router.get('/view/chart.html', checkLoggedInToRoot, function(req, res) {

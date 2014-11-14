@@ -10,7 +10,7 @@ var GetAvailableIngredientListRouteModule = {
 
     var def = deferred();
 
-    IngredientMongoHelper.GetAvailableIngredientList()
+    IngredientMongoHelper.getAvailableIngredientNameList()
       .done(function(foodList) {
         def.resolve(foodList);
       }, function(err) {
