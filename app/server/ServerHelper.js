@@ -70,6 +70,7 @@ var ServerHelper = (function() {
 
     //レスポンスボディを記述
     var encode = 'UTF-8';
+    console.log('result', result);
     response.write(JSON.stringify(result), encode);
 
     //レスポンスの終了
