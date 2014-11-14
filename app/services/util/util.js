@@ -45,6 +45,7 @@ var utils = {};
         def.resolve(false);
         return;
       }
+      console.log('resolve doc', doc);
       def.resolve(doc.values);
     };
   };
