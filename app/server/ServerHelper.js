@@ -61,7 +61,8 @@ var ServerHelper = (function() {
   var _respondResult = function(response, result) {
 
     //レスポンスヘッダを記述
-    var statusCode = (!result && result !== null) ? 500 : 200;
+   // var statusCode = (!result && result !== null) ? 500 : 200;
+   var statusCode =  200;
 
     var headers = {
       'Content-Type': 'application/json charset=UTF-8\n'
