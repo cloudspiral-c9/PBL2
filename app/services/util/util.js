@@ -49,6 +49,13 @@ var utils = {};
     };
   };
 
+  utils.start = function(col, rid, value, index, db, def) {
+    db.collection(col).insert({
+      rid: rid,
+      values: []
+    },utils.cb(db, def));
+  };
+
   utils.insert = function(col, rid, value, index, db, def) {
     db.collection(col).update({
       rid: rid

@@ -5,7 +5,7 @@ var TimestampHelper = require(__dirname + '/../util/TimestampHelper.js');
 var RoomNumberMongoHelper = require(__dirname + '/RoomNumberMongoHelper.js').RoomNumberMongoHelper;
 var LoginMongoHelper = require(__dirname + '/LoginMongoHelper.js').LoginMongoHelper;
 var deferred = require('deferred');
-
+var utils = require(__dirname + '/../util/util.js');
 
 var RoomManager = (function() {
 
@@ -75,6 +75,11 @@ var RoomManager = (function() {
             delete update.members;
             delete update._id;
             console.log('create', update);
+
+            utils.gen(utils.start)('Process', rid);
+            utils.gen(utils.start)('ChatLog', rid);
+            utils.gen(utils.start)('Ingredient', rid);
+
             deferred.resolve(update);
 
           }, function(err) {
