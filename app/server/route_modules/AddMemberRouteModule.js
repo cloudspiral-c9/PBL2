@@ -19,12 +19,14 @@ var AddMemberRouteModule = {
       return def.promise;
     }
 
-    var rid = +queries.rid;
+    var rid = queries.rid;
     var userId = queries.userID;
     var userName = !queries.userName ? '' : queries.userName;
 
     RoomManager.addMember(rid, userId, userName)
       .done(function(result) {
+          console.log("join socketID", queries.socketID);
+          console.log("sockets", socket.sockets());
           socket.sockets()[queries.socketID].socket.join(rid);
           socket.sockets()[queries.socketID].rid = rid;
           def.resolve(result);

@@ -24,6 +24,8 @@ var csbsChat = {};
         send: function(event, data) {
           console.log('send' ,data);
           console.log('rid' ,sockets()[id].rid);
+          console.log('sockets' ,sockets());
+          console.log('id' , id);
           sockets()[id].socket.to(sockets()[id].rid).emit(event, data);
         },
         edit: function() {},
