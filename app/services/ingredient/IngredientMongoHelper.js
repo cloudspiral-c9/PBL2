@@ -1,6 +1,7 @@
 'use strict';
 
 var MongoUtil = require(__dirname + '/../util/MongoUtil.js');
+var TimestampHelper = require(__dirname + '/../util/TimestampHelper.js');
 var utils = require(__dirname + '/../util/util.js');
 
 var IngredientMongoHelper = (function() {
@@ -9,7 +10,8 @@ var IngredientMongoHelper = (function() {
     return utils.gen(utils.insert)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
-      sender: sender
+      sender: sender,
+      timestamp: TimestampHelper.getTimestamp()
     }, index);
   };
 
@@ -17,7 +19,8 @@ var IngredientMongoHelper = (function() {
     return utils.gen(utils.add)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
-      sender: sender
+      sender: sender,
+      timestamp: TimestampHelper.getTimestamp()
     });
   };
 
@@ -129,7 +132,8 @@ var IngredientMongoHelper = (function() {
     return utils.gen(utils.edit)('Ingredient', rid, {
       ingredient: ingredient,
       amount: amount,
-      sender: sender
+      sender: sender,
+      timestamp: TimestampHelper.getTimestamp()
     }, index);
   };
 

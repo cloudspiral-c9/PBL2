@@ -1,98 +1,103 @@
 'use strict';
 
-var RecipeProcessMongoHelper = require( __dirname + '/../../services/process/RecipeProcessMongoHelper.js').RecipeProcessMongoHelper;
-var TimestampHelper = require( __dirname + '/../../services/util/TimestampHelper.js');
+var RecipeProcessMongoHelper = require(__dirname + '/../../services/process/RecipeProcessMongoHelper.js').RecipeProcessMongoHelper;
+var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.js');
+var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').RoomManager;
 
 var RecipeProcessEventModule = {
-	
-	ns: '/process',
-	io: null,
-	socket: null,
 
-	eventHandlerMap: {
-		
-		enterRoom: function(data, resFunc) {
+  ns: '/process',
+  io: null,
+  socket: null,
 
-			if ( !(data.rid && data.sender) ) {
-				resFunc(false);
-				return;
-			}	
-			
-			var that = this;
-			var rid = data.rid;
-			var userId = data.sender;
-			RoomManager.isMemberOf(rid, userId)
-			.done(function(isMemeber) {
+  eventHandlerMap: {
 
-				if (isMember) {
-					that.socket.join(rid);
-					resFunc(true);
-				}
+    enterRoom: function(data, resFunc) {
 
-			}, function(err) {
-				console.log(err);
-				resFunc(err);
-			});
-		},
+      if (!(data.rid && data.sender)) {
+        resFunc(false);
+        return;
+      }
 
-		leaveRoom: function(data, resFunc) {
-			this.socket.leave();
-			this.socket.close();
-			resFunc(true);
-		},
+      var that = this;
+      var rid = data.rid;
+      var userId = data.sender;
+      RoomManager.isMemberOf(rid, userId)
+        .done(function(isMember) {
 
-		sendProcess: function(data, resFunc) {
+          if (isMember) {
+            that.socket.join(rid);
+            resFunc(true);
+          }
 
-			if ( !(data.rid && data.process && data.sender) ) {
-				resFunc(false);
-				return;
-			}
+        }, function(err) {
+          console.log(err);
+          resFunc(err);
+        });
+    },
 
-			var rid = data.rid;
-			var process = data.process;
-			var userId = data.sender;
-			var index = !data.index ? null : data.index;
+    leaveRoom: function(data, resFunc) {
+      this.socket.leave();
+      this.socket.close();
+      resFunc(true);
+    },
 
-			RoomManager.isMemberOf(rid, userId)
-			.done(function(isMember) {
+    sendProcess: function(data, resFunc) {
 
-				if (isMember) {
+      if (!(data.rid && data.process && data.sender)) {
+        resFunc(false);
+        return;
+      }
 
-					var now = TimestampHelper.getTimestamp();
-					RecipeProcessMongoHelper.insertRecipeProcess(rid, process, userId, index, now)
-			
-					.done(function(isSucceed) {
-				
-						if (isSucceed) {
-						
-							var resObject = {'process': process, 'sender': userId, 'timestamp': now};
-							if (data.index) {
-								resObject.index = data.index;
-							}
-							this.io.to(data.rid).emit('broadcastSendProcess', resObject, function(data) {});
-							resFunc(true);
-						
-						} else {
-							resFunc(false);
-						}
-					},
+      var rid = data.rid;
+      var process = data.process;
+      var userId = data.sender;
+      var index = !data.index ? null : data.index;
 
-					function(err) {
-						console.log(err)
-						resFunc(err);
-					});
+      RoomManager.isMemberOf(rid, userId)
+        .done(function(isMember) {
 
-				} else {
-					resFunc(false);
-				}
+          if (isMember) {
+
+            var now = TimestampHelper.getTimestamp();
+            RecipeProcessMongoHelper.insertRecipeProcess(rid, process, userId, index, now)
+
+            .done(function(isSucceed) {
+
+                if (isSucceed) {
+
+                  var resObject = {
+                    'process': process,
+                    'sender': userId,
+                    'timestamp': now
+                  };
+                  if (data.index) {
+                    resObject.index = data.index;
+                  }
+                  this.io.to(data.rid).emit('broadcastSendProcess', resObject, function(data) {});
+                  resFunc(true);
+
+                } else {
+                  resFunc(false);
+                }
+              },
+
+              function(err) {
+                console.log(err);
+                resFunc(err);
+              });
+
+          } else {
+            resFunc(false);
+          }
 
 
-			}, function(err) {
-				console.log(err);
-				resFunc(err);
-			});
-		}
-	}
+        }, function(err) {
+          console.log(err);
+          resFunc(err);
+        });
+    }
+  }
 };
 
 exports.RecipeProcessEventModule = RecipeProcessEventModule;

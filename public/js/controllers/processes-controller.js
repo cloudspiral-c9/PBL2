@@ -86,7 +86,7 @@
           index: index,
           values: [{
             process: processesState.formData[mode][index].process,
-            sender: '',
+            sender: AuthService.get().userID,
             timestamp: ''
           }]
         });
@@ -96,7 +96,7 @@
           index: index,
           values: [{
             process: processesState.formData[mode][index].process,
-            sender: '',
+            sender: AuthService.get().userID,
             timestamp: ''
           }]
         });
@@ -105,7 +105,7 @@
           mode: mode,
           values: [{
             process: processesState.formData[mode].process,
-            sender: '',
+            sender: AuthService.get().userID,
             timestamp: ''
           }]
         });
