@@ -101,7 +101,6 @@ var RoomManager = (function() {
 
   var add = function(description, title, limit, userId, userName, type, now) {
 
-    console.log();
     var executeFunc = function(db, deferred) {
 
 
@@ -158,7 +157,7 @@ var RoomManager = (function() {
             utils.gen(utils.start)('Ingredient', rid);
 
             delete update._id;
-            console.log('create', update);
+            console.log('create Room', update);
             deferred.resolve(update);
 
           }, function(err) {
@@ -187,7 +186,7 @@ var RoomManager = (function() {
       var query = {
         'rid': rid
       };
-      db.collection('Room').findOne(query, function(err, result) {
+      db.collection('Room').find(query, function(err, result) {
 
         db.close();
 
