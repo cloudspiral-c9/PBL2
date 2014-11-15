@@ -18,7 +18,9 @@ var csbsRecipeProcess = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
-            data.values[0].timestamp = TimestampHelper.getTimestamp();
+            if (data.values[0] && data.values[0].timestamp) {
+              data.values[0].timestamp = TimestampHelper.getTimestamp();
+            }
             setReceived(data);
           });
         },
