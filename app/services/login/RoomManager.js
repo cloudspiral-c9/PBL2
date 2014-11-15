@@ -184,7 +184,7 @@ var RoomManager = (function() {
     var executeFunc = function(db, deferred) {
 
 
-      db.collection().find.each(function(err, result) {
+      db.collection('Room').find.each(function(err, result) {
         console.log('getRoom rid', rid);
         console.log('getRoom err', err);
         console.log('getRoom result', result);
