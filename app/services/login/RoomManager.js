@@ -183,14 +183,14 @@ var RoomManager = (function() {
 
     var executeFunc = function(db, deferred) {
 
+      db.collection('Room').find().each(function(err, res){
+            console.log('Room' , res);
+         });
+
       var query = {
         'rid': rid
       };
       db.collection('Room').findOne(query, function(err, result) {
-
-         db.collection('Room').find().each(function(err, res){
-            console.log('Room' , res);
-         });
 
         db.close();
 
