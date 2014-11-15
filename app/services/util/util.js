@@ -88,7 +88,7 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find({}).toArray(utils.cb(db, def));
+    db.collection(col).find().toArray(utils.cb(db, def));
     /*db.collection(col).find({
       rid: rid
     }, utils.cb(db, def));*/
