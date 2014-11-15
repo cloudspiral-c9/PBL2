@@ -183,14 +183,36 @@ var RoomManager = (function() {
 
     var executeFunc = function(db, deferred) {
 
+
+      db.collection().find.each(function(err, result) {
+        console.log('getRoom rid', rid);
+        console.log('getRoom err', err);
+        console.log('getRoom result', result);
+
+        if (err) {
+          console.log(err);
+          deferred.resolve(false);
+          return;
+        }
+
+        if (result.rid === rid) {
+          delete result._id;
+          deferred.resolve(result);
+          return;
+        }
+
+        if(!result) return;
+      });
+      /*
       var query = {
         rid: rid
       };
       db.collection('Room').findOne(query, function(err, result) {
 
+        db.close();
+
         if (err) {
           console.log(err);
-          db.close();
           deferred.resolve(false);
           return;
         }
@@ -200,14 +222,12 @@ var RoomManager = (function() {
         console.log('getRoom result', result);
         if (!result) {
           deferred.resolve(false);
-          db.close();
           return;
         }
 
         delete result._id;
         deferred.resolve(result);
-        db.close();
-      });
+      });*/
 
     };
 
