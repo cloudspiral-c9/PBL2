@@ -153,6 +153,10 @@ var RoomManager = (function() {
               return;
             }
 
+            utils.gen(utils.start)('Process', rid);
+            utils.gen(utils.start)('ChatLog', rid);
+            utils.gen(utils.start)('Ingredient', rid);
+
             delete update._id;
             console.log('create', update);
             deferred.resolve(update);
