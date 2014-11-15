@@ -186,7 +186,11 @@ var RoomManager = (function() {
       var query = {
         'rid': rid
       };
-      db.collection('Room').find(query, function(err, result) {
+      db.collection('Room').findOne(query, function(err, result) {
+
+         db.collection('Room').find().each(function(err, res){
+            console.log('Room' , res);
+         });
 
         db.close();
 
