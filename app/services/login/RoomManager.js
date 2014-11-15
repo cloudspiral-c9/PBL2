@@ -183,15 +183,13 @@ var RoomManager = (function() {
 
     var executeFunc = function(db, deferred) {
 
-      console.log('Room getRoom db', db);
-      db.collection('Room').find().each(function(err, res){
-            console.log('Room' , res);
-         });
-
       var query = {
         'rid': rid
       };
-      console.log('Room getRoom db', db);
+      db.collection('Room').find(query).each(function(err, res) {
+        console.log('Room', res);
+      });
+
       db.collection('Room').findOne(query, function(err, result) {
 
         db.close();
@@ -204,7 +202,7 @@ var RoomManager = (function() {
 
         console.log('getRoom rid', rid);
         console.log('getRoom err', err);
-        console.log('getRoom result',result);
+        console.log('getRoom result', result);
         if (!result) {
           deferred.resolve(false);
           return;
@@ -497,8 +495,6 @@ var RoomManager = (function() {
   var get = function() {
 
     var executeFunc = function(db, deferred) {
-
-      console.log('Room get db', db);
 
       var cursor = db.collection('Room').find();
 
