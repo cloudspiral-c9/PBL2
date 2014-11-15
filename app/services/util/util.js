@@ -88,9 +88,10 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find({
+    db.collection(col).find({}, utils.cb(db, def));
+    /*db.collection(col).find({
       rid: rid
-    }, utils.cb(db, def));
+    }, utils.cb(db, def));*/
   };
 
   utils.genGetOpt = function(opt) {

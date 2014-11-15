@@ -2,6 +2,7 @@
 
 var RecipeProcessMongoHelper = require(__dirname + '/../../services/process/RecipeProcessMongoHelper.js').RecipeProcessMongoHelper;
 var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.js');
+var _ = require('underscore-contrib');
 
 var def = require('deferred');
 var csbs = require('csbind-server');
@@ -18,7 +19,7 @@ var csbsRecipeProcess = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
-            if (data.values[0] && data.values[0].timestamp) {
+            if (_.exists(data.values[0]) && _.exists(data.values[0].timestamp)) {
               data.values[0].timestamp = TimestampHelper.getTimestamp();
             }
             setReceived(data);
