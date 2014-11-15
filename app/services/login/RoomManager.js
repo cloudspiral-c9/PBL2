@@ -188,10 +188,9 @@ var RoomManager = (function() {
       };
       db.collection('Room').findOne(query, function(err, result) {
 
-        db.close();
-
         if (err) {
           console.log(err);
+          db.close();
           deferred.resolve(false);
           return;
         }
@@ -201,11 +200,13 @@ var RoomManager = (function() {
         console.log('getRoom result', result);
         if (!result) {
           deferred.resolve(false);
+          db.close();
           return;
         }
 
         delete result._id;
         deferred.resolve(result);
+        db.close();
       });
 
     };
