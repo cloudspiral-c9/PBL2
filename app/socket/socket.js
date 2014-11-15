@@ -1,11 +1,13 @@
 'use strict';
 
 var def = require('deferred');
+var _ = require('underscore-contrib');
 var csbsChart = require(__dirname + '/socket-csbs/csbsChart.js');
 var csbsChatLog = require(__dirname + '/socket-csbs/csbsChatLog.js');
 var csbsIngredient = require(__dirname + '/socket-csbs/csbsIngredient.js');
 var csbsRecipeList = require(__dirname + '/socket-csbs/csbsRecipeList.js');
 var csbsRecipeProcess = require(__dirname + '/socket-csbs/csbsRecipeProcess.js');
+var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').RoomManager;
 
 var socket;
 
@@ -27,11 +29,16 @@ var socket;
 
       sockets[socket.id] = {
         socket: socket,
-        rid: null
+        rid: null,
+        user: null
       };
 
       socket.emit('ready', {
         id: socket.id
+      });
+
+      socket.on('user', function(user) {
+        sockets[socket.id].user = user;
       });
 
       var chart, chatLog, ingredient, recipelist, recipeProcess, defC;
@@ -67,6 +74,16 @@ var socket;
 
       csbsRecipeList.obs(_sockets, socket.id).then(function(rObs) {
         recipelist = rObs;
+        socket.on('disconnect', function() {
+          if (_.exists(sockets[socket.id].rid) && _.exists(sockets[socket.id].user)) {
+            RoomManager.removeMember(sockets[socket.id].rid, sockets[socket.id].user.userID)
+              .done(function() {
+                sockets[socket.id].socket.leave(sockets[socket.id].rid);
+                sockets[socket.id].rid = null;
+              });
+              delete sockets[socket.id];
+          }
+        });
       });
 
       csbsRecipeProcess.obs(_sockets, socket.id).then(function(rObs) {

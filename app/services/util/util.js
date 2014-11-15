@@ -37,7 +37,7 @@ var utils = {};
 
   };
 
-  utils.cb = function(db, def) {
+  utils.cb = function(db, def, col, rid) {
     return function(e, doc) {
       db.close();
       if (e) {
@@ -45,8 +45,8 @@ var utils = {};
         def.resolve(false);
         return;
       }
-      console.log('resolve doc', doc);
-      console.log('resolve doc.values', doc.values);
+      console.log('resolve doc ' + col + rid, doc);
+      console.log('resolve doc.values ' + col + rid, doc.values);
       def.resolve(doc.values);
     };
   };
@@ -88,7 +88,7 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find().toArray(utils.cb(db, def));
+    db.collection(col).find().toArray(utils.cb(db, def, col, rid));
     /*db.collection(col).find({
       rid: rid
     }, utils.cb(db, def));*/

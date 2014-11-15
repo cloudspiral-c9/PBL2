@@ -494,9 +494,9 @@ var RoomManager = (function() {
       }
 
 
-      var query = ((type === 'all') ? {
-        'type': type
-      } : null);
+      var query = {
+        type: type
+      };
       var cursor = db.collection('Room').find(query);
 
       var result = [];

@@ -46,8 +46,10 @@
           $http.post('/addmember', {
             socketID: socket.id(),
             rid: next.params.recipeId,
-            userID: AuthService.get().userID
+            userID: AuthService.get().userID,
+            userName: AuthService.get().userName
           });
+          socket.emit('user', AuthService.get());
         });
       }
 
