@@ -186,6 +186,8 @@ var RoomManager = (function() {
 
       db.collection('Room').find().each(function(err, result) {
         console.log('getRoom rid', rid);
+        console.log('getRoom result.rid', rid);
+        console.log('getRoom rid === reuslt.rid', result.rid === rid);
         console.log('getRoom err', err);
         console.log('getRoom result', result);
 
