@@ -19,6 +19,7 @@ var AddMemberRouteModule = {
       return def.promise;
     }
 
+    console.log('addMember query', queries);
     var rid = queries.rid;
     var userId = queries.userID;
     var userName = !queries.userName ? '' : queries.userName;
