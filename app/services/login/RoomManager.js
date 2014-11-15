@@ -198,6 +198,7 @@ var RoomManager = (function() {
         }
 
         console.log('getRoom rid', rid);
+        console.log('getRoom err', err);
         console.log('getRoom result',result);
         if (!result) {
           deferred.resolve(false);
