@@ -199,7 +199,7 @@ var RoomManager = (function() {
         console.log('getRoom result.rid', result.rid);
         console.log('getRoom rid === reuslt.rid', result.rid === rid);
 
-        if (result.rid === rid) {
+        if ((result.rid === rid) || result.rid.valueOf() === result.rid.valueOf())  {
           console.log('getRoom return');
           delete result._id;
           deferred.resolve(result);
