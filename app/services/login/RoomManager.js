@@ -189,7 +189,7 @@ var RoomManager = (function() {
         console.log('getRoom err', err);
         console.log('getRoom result', result);
 
-        if (err) {
+        if (!result || err) {
           console.log(err);
           deferred.resolve(false);
           return;
@@ -201,7 +201,6 @@ var RoomManager = (function() {
           return;
         }
 
-        if(!result) return;
       });
       /*
       var query = {
