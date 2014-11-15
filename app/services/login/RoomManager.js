@@ -196,6 +196,7 @@ var RoomManager = (function() {
         }
 
         if (result.rid === rid) {
+          console.log('getRoom return');
           delete result._id;
           deferred.resolve(result);
           return;
@@ -358,6 +359,8 @@ var RoomManager = (function() {
             return;
           }
 
+          console.log('Room new members', members);
+
           //DBの更新
           var updateQuery = {
             '$set': {
@@ -376,6 +379,7 @@ var RoomManager = (function() {
               return;
             }
 
+            console.log('Room members update');
             deferred.resolve(true);
           });
 
