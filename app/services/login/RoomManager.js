@@ -5,6 +5,7 @@ var TimestampHelper = require(__dirname + '/../util/TimestampHelper.js');
 var RoomNumberMongoHelper = require(__dirname + '/RoomNumberMongoHelper.js').RoomNumberMongoHelper;
 var LoginMongoHelper = require(__dirname + '/LoginMongoHelper.js').LoginMongoHelper;
 var deferred = require('deferred');
+var _ = require('underscore-contrib');
 var utils = require(__dirname + '/../util/util.js');
 
 var RoomManager = (function() {
@@ -199,11 +200,11 @@ var RoomManager = (function() {
         console.log('getRoom result.rid', result.rid);
         console.log('getRoom rid === reuslt.rid', result.rid === rid);
         console.log('getRoom rid.valueOf() === reuslt.rid.valueOf()', result.rid.valueOf() === rid.valueOf());
-         console.log('getRoom rid.valueOf() == reuslt.rid.valueOf()', result.rid.valueOf() == rid.valueOf());
+        console.log('getRoom rid.valueOf() == reuslt.rid.valueOf()', result.rid.valueOf() == rid.valueOf());
         console.log('getRoom rid.valueOf()', rid.valueOf());
         console.log('getRoom result.rid.valueOf()', result.rid.valueOf());
 
-        if ((result.rid === rid) || (result.rid.valueOf() == rid.valueOf()))  {
+        if ((result.rid === rid) || (result.rid.valueOf() == rid.valueOf())) {
           console.log('getRoom return');
           delete result._id;
           deferred.resolve(result);
@@ -298,12 +299,12 @@ var RoomManager = (function() {
   var _getUserIndexInMembers = function(userID, members) {
 
     var index = -1;
-    for (var i = 0; i < members.length; i++) {
-
-      if (members[i].userID === userID) {
-        index = i;
-        break;
-      }
+    if (_.isArray(members)) {
+      _.each(members, function(value, key, list) {
+        if (value.userID === userID) {
+          index = key;
+        }
+      });
     }
 
     return index;
@@ -413,6 +414,8 @@ var RoomManager = (function() {
 
       getRoom(rid).done(function(room) {
 
+        console.log('removeMember room', room);
+
         //指定した部屋のメンバに入っていなければ終了
         var members = room.members;
         var index = _getUserIndexInMembers(userID, members);
@@ -436,7 +439,7 @@ var RoomManager = (function() {
           db.close();
 
           if (err) {
-            console.log(err);
+            console.log('removeMember error', err);
             deferred.resolve(false);
             return;
           }
@@ -445,7 +448,7 @@ var RoomManager = (function() {
         });
 
       }, function(err) {
-        console.log(err);
+        console.log('removeMember error', err);
         deferred.resolve(false);
       });
     };
