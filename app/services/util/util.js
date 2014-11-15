@@ -51,8 +51,8 @@ var utils = {};
     };
   };
 
-  utils.cbGet = function(col, rid, value, index, db, def){
-    return function(e, doc){
+  utils.cbGet = function(col, rid, value, index, db, def) {
+    return function(e, doc) {
       utils.get(col, rid, value, index, db, def);
     };
   };
@@ -61,7 +61,7 @@ var utils = {};
     db.collection(col).insert({
       rid: rid,
       values: []
-    },utils.cbGet(col, rid, value, index, db, def));
+    }, utils.cbGet(col, rid, value, index, db, def));
   };
 
   utils.insert = function(col, rid, value, index, db, def) {
@@ -88,10 +88,11 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find().toArray(utils.cb(db, def, col, rid));
-    /*db.collection(col).find({
-      rid: rid
-    }, utils.cb(db, def));*/
+    db.collection(col).find().each(function(e, doc) {
+      if ((doc.rid === rid) || (doc.rid.valueOf() == rid.valueOf())) {
+        utils.cb(db, def, col, rid)(e, doc);
+      }
+    });
   };
 
   utils.genGetOpt = function(opt) {
