@@ -7,7 +7,7 @@ var csbsChatLog = require(__dirname + '/socket-csbs/csbsChatLog.js');
 var csbsIngredient = require(__dirname + '/socket-csbs/csbsIngredient.js');
 var csbsRecipeList = require(__dirname + '/socket-csbs/csbsRecipeList.js');
 var csbsRecipeProcess = require(__dirname + '/socket-csbs/csbsRecipeProcess.js');
-var RoomManager = require(__dirname + '/../../services/login/RoomManager.js').RoomManager;
+var RoomManager = require(__dirname + '/../services/login/RoomManager.js').RoomManager;
 
 var socket;
 
