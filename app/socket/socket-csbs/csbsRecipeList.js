@@ -19,7 +19,7 @@ var csbsRecipeList = {};
         receive: function(event, setReceived) {
           sockets()[id].socket.on(event, function(data) {
             console.log('receive' ,data);
-            if (_.exists(data.values[0]) && _.exists(data.values[0].timestamp)) {
+            if (_.exists(data.values) &&_.exists(data.values[0]) && _.exists(data.values[0].timestamp)) {
               data.values[0].timestamp = TimestampHelper.getTimestamp();
             }
             setReceived(data);
