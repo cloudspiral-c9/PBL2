@@ -102,11 +102,11 @@ var utils = {};
   utils.genGetOpt = function(opt) {
     return function(col, rid, value, index, db, def) {
 
-      db.collection(col).find({
+      db.collection(col).findOne({
         rid: rid
       }, function(e, doc) {
         db.close();
-        if (e) {
+        if (e || !_.exists(doc) || !_.isArray(doc.values)) {
           console.log(e);
           def.resolve(false);
           return;
@@ -131,7 +131,6 @@ var utils = {};
     db.collection(col).findOne({
       rid: rid
     }, function(e, doc) {
-      db.close();
       if (e || !_.exists(doc) || !_.isArray(doc.values)) {
         console.log(e);
         def.resolve(false);
