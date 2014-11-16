@@ -9,7 +9,7 @@ var csbsRecipeList = require(__dirname + '/socket-csbs/csbsRecipeList.js');
 var csbsRecipeProcess = require(__dirname + '/socket-csbs/csbsRecipeProcess.js');
 var RoomManager = require(__dirname + '/../services/login/RoomManager.js').RoomManager;
 
-var socket;
+var socket, recipelist;
 
 (function() {
 
@@ -41,7 +41,7 @@ var socket;
         sockets[socket.id].user = user;
       });
 
-      var chart, chatLog, ingredient, recipelist, recipeProcess, defC;
+      var chart, chatLog, ingredient, recipeProcess, defC;
 
       defC = def();
 
@@ -99,7 +99,10 @@ var socket;
       return io;
     },
     start: _start,
-    sockets: _sockets
+    sockets: _sockets,
+    recipelist : function(){
+      return recipelist;
+    }
   };
 
 })();

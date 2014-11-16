@@ -26,6 +26,20 @@ var ReduceMemberRouteModule = {
         socket.sockets()[queries.socketID].socket.leave(rid);
         socket.sockets()[queries.socketID].rid = null;
         def.resolve(result);
+        socket.recipelist().set({
+          values: [{
+            title: null,
+            userID: null,
+            userName: null,
+            description: null,
+            rid: null,
+            timestamp: null,
+            members: null,
+            limit: null
+          }],
+          mode: 'insert',
+          index: 1
+        });
       },
 
       function(err) {
