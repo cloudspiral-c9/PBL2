@@ -20,9 +20,9 @@ var AddMemberRouteModule = {
     }
 
     console.log('addMember query', queries);
-    console.lof('addMember query typeof rid', typeof queries.rid);
-    console.lof('addMember query typeof userID', typeof queries.userID);
-    console.lof('addMember query typeof userName', typeof queries.userName);
+    console.log('addMember query typeof rid', typeof queries.rid);
+    console.log('addMember query typeof userID', typeof queries.userID);
+    console.log('addMember query typeof userName', typeof queries.userName);
     var rid = queries.rid;
     var userId = queries.userID;
     var userName = !queries.userName ? '' : queries.userName;
