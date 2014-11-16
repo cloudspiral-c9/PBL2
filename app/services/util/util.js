@@ -88,7 +88,7 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find().e0000ach(function(e, doc) {
+    db.collection(col).find().each(function(e, doc) {
       if (_.exists(doc) && _.exists(doc.rid) && _.exists(rid)) {
         if ((doc.rid === rid) || (doc.rid.valueOf() == rid.valueOf())) {
           utils.cb(db, def, col, rid)(e, doc);

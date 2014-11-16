@@ -203,6 +203,8 @@ var RoomManager = (function() {
         console.log('getRoom rid.valueOf() == reuslt.rid.valueOf()', result.rid.valueOf() == rid.valueOf());
         console.log('getRoom rid.valueOf()', rid.valueOf());
         console.log('getRoom result.rid.valueOf()', result.rid.valueOf());
+        console.log('getRoom typeof rid', typeof rid);
+        console.log('getRoom typeof result.rid', typeof result.rid);
 
         if ((result.rid === rid) || (result.rid.valueOf() == rid.valueOf())) {
           console.log('getRoom return');
