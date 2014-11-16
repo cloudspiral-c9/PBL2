@@ -56,7 +56,7 @@
       if (!next.rerqurieLogin && $routeParams.recipeId) {
         $http.post('/reducemember', {
           socketID: socket.id(),
-          rid: $routeParams.rid,
+          rid: $routeParams.recipeId,
           userID: AuthService.get().userID
         });
       }

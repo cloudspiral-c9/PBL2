@@ -18,9 +18,9 @@ var GetChatLogRouteModule = {
       return def.promise;
     }
 
-    var rid = +queries.rid;
-    var pos = !queries.pos ? null : +queries.pos;
-    var limit = !queries.limit ? null : +queries.limit;
+    var rid = queries.rid;
+    var pos = !queries.pos ? null : queries.pos;
+    var limit = !queries.limit ? null : queries.limit;
     var userId = queries.userID;
 
     LoginMongoHelper.isLoggedIn(userId)

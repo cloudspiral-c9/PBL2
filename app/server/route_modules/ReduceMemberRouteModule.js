@@ -18,7 +18,7 @@ var ReduceMemberRouteModule = {
       return def.promise;
     }
 
-    var rid = +queries.rid;
+    var rid = queries.rid;
     var userId = queries.userID;
     RoomManager.removeMember(rid, userId)
 
