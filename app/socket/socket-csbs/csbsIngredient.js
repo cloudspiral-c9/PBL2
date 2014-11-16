@@ -33,7 +33,7 @@ var csbsIngredient = {};
         edit: function(data) {
           console.log('edit' ,data);
           return IngredientMongoHelper.edit(
-            data.values[0]._rid,
+            sockets()[id].rid,
             data.values[0].ingredient,
             data.values[0].amount,
             data.values[0].sender,
@@ -55,7 +55,7 @@ var csbsIngredient = {};
         remove: function(data) {
           console.log('remove', data);
           return IngredientMongoHelper.remove(
-            data.values[0]._rid
+            sockets()[id].rid
           );
         },
         add: function(data) {

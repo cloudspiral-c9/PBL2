@@ -45,8 +45,7 @@ var utils = {};
         def.resolve(false);
         return;
       }
-      console.log('resolve doc ' + col + rid, doc);
-      console.log('resolve doc.values ' + col + rid, doc.values);
+      console.log('utils.cb doc ' + col + rid, doc);
       def.resolve(doc.values);
     };
   };
@@ -149,7 +148,6 @@ var utils = {};
     db.collection(col).find({
       rid: rid
     }, function(err, result) {
-      db.close();
       if (err) {
         console.log(err);
         def.resolve(false);
