@@ -155,6 +155,8 @@ var utils = {};
         def.resolve(false);
         return;
       }
+      console.log(col + 'utils.edit find result values', result.values);
+      console.log(col + 'utills.edit find value', value);
       db.collection(col).update({
         rid: rid
       }, {
