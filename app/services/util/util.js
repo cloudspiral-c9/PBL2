@@ -87,12 +87,15 @@ var utils = {};
   };
 
   utils.get = function(col, rid, value, index, db, def) {
-    db.collection(col).find().each(function(e, doc) {
-      if (_.exists(doc) && _.exists(doc.rid) && _.exists(rid)) {
-        if ((doc.rid === rid) || (doc.rid.valueOf() == rid.valueOf())) {
-          utils.cb(db, def, col, rid)(e, doc);
-        }
+    db.collection(col).findOne({
+      rid: rid
+    }, function(e, doc) {
+      if (e || !_.exists(doc) || !_.isArray(doc.values)) {
+        console.log(e);
+        def.resolve(false);
+        return;
       }
+      utils.cb(db, def, col, rid)(e, doc);
     });
   };
 
@@ -125,12 +128,12 @@ var utils = {};
   };
 
   utils.remove = function(col, rid, value, index, db, def) {
-    db.collection(col).find({
+    db.collection(col).findOne({
       rid: rid
-    }, function(err, result) {
+    }, function(e, doc) {
       db.close();
-      if (err) {
-        console.log(err);
+      if (e || !_.exists(doc) || !_.isArray(doc.values)) {
+        console.log(e);
         def.resolve(false);
         return;
       }
@@ -138,28 +141,26 @@ var utils = {};
         rid: rid
       }, {
         $set: {
-          values: result.values.splice(index, 1)
+          values: doc.values.splice(index, 1)
         }
       }, utils.cbGet(col, rid, value, index, db, def));
     });
   };
 
   utils.edit = function(col, rid, value, index, db, def) {
-    db.collection(col).find({
+    db.collection(col).findOne({
       rid: rid
-    }, function(err, result) {
-      if (err) {
-        console.log(err);
+    }, function(e, doc) {
+      if (e || !_.exists(doc) || !_.isArray(doc.values)) {
+        console.log(e);
         def.resolve(false);
         return;
       }
-      console.log(col + 'utils.edit find result values', result.values);
-      console.log(col + 'utills.edit find value', value);
       db.collection(col).update({
         rid: rid
       }, {
         $set: {
-          values: result.values.splice(index, 1, value)
+          values: doc.values.splice(index, 1, value)
         }
       }, utils.cbGet(col, rid, value, index, db, def));
     });
