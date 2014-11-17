@@ -44,22 +44,22 @@ var socket, recipelist;
       var chart, chatLog, ingredient, recipeProcess;
 
 
-      def(function() {
+      def((function() {
         var d = def();
         csbsChart.obs(_sockets, socket.id).then(function(rObs) {
           chart = rObs;
           d.resolve();
         });
         return d.promise;
-      }, function() {
+      })(), (function() {
         var d = def();
         csbsIngredient.obs(_sockets, socket.id).then(function(rObs) {
           ingredient = rObs;
           d.resolve();
         });
         return d.promise;
-      }).then(function() {
-        ingredient.addUpdates(function() {
+      })()).then(function() {
+        ingredient.addUpdates([function() {
           chart.set({
             values: [{
               ingredient: '',
@@ -69,9 +69,9 @@ var socket, recipelist;
             mode: 'edit',
             index: 1
           });
-        });
+        }]);
       });
-      
+
       csbsChatLog.obs(_sockets, socket.id).then(function(rObs) {
         chatLog = rObs;
       });

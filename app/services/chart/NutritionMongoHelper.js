@@ -153,6 +153,7 @@ var NutritionMongoHelper = (function() {
               console.log('no nutirion', result);
               db.close();
               deferred.resolve(result);
+              return;
             } else {
 
               var amount = foodAmountMap[nutrition.name];
