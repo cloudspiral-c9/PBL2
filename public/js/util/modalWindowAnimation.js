@@ -1,16 +1,11 @@
+'use strict';
 
-
-$(funciton() {
-
-	$('#room-create').click(
-	
-		function() {
-			$('body').append('<div id="overlay"></div>');
-			$('#overlay').fadeIn('slow');
-			$('#modal-window').fadeIn('slow');	
-		}
-
-	);
-
-})
-
+$(function() {
+  $('#room-create').click(
+    function() {
+      $('body').append('<div id="overlay"></div>');
+      $('#overlay').fadeIn('slow');
+      $('#modal-window').fadeIn('slow');
+    }
+  );
+});

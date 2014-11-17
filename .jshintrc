@@ -17,6 +17,7 @@
     "__dirname":false,
     "console":false,
     "alert":false,
-    "exports":false
+    "exports":false,
+    "$": false
   }
 }
