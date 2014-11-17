@@ -41,35 +41,39 @@ var socket, recipelist;
         sockets[socket.id].user = user;
       });
 
-      var chart, chatLog, ingredient, recipeProcess, defC;
+      var chart, chatLog, ingredient, recipeProcess;
 
-      defC = def();
 
-      csbsChart.obs(_sockets, socket.id).then(function(rObs) {
+      def(function() {
+        var d = def();
+        csbsChart.obs(_sockets, socket.id).then(function(rObs) {
           chart = rObs;
-          return defC.promise;
-        })
-        .then(function() {
-          ingredient.addUpdates(function() {
-            chart.set({
-              values: [{
-                ingredient: '',
-                rate: '',
-                reteDetail: ''
-              }],
-              mode: 'edit',
-              index: 1
-            });
+          d.resolve();
+        });
+        return d.promise;
+      }, function() {
+        var d = def();
+        csbsIngredient.obs(_sockets, socket.id).then(function(rObs) {
+          ingredient = rObs;
+          d.resolve();
+        });
+        return d.promise;
+      }).then(function() {
+        ingredient.addUpdates(function() {
+          chart.set({
+            values: [{
+              ingredient: '',
+              rate: '',
+              reteDetail: ''
+            }],
+            mode: 'edit',
+            index: 1
           });
         });
-
+      });
+      
       csbsChatLog.obs(_sockets, socket.id).then(function(rObs) {
         chatLog = rObs;
-      });
-
-      csbsIngredient.obs(_sockets, socket.id).then(function(rObs) {
-        ingredient = rObs;
-        defC.resolve();
       });
 
       csbsRecipeList.obs(_sockets, socket.id).then(function(rObs) {
@@ -81,7 +85,7 @@ var socket, recipelist;
                 sockets[socket.id].socket.leave(sockets[socket.id].rid);
                 sockets[socket.id].rid = null;
               });
-              delete sockets[socket.id];
+            delete sockets[socket.id];
           }
         });
       });
@@ -100,7 +104,7 @@ var socket, recipelist;
     },
     start: _start,
     sockets: _sockets,
-    recipelist : function(){
+    recipelist: function() {
       return recipelist;
     }
   };
