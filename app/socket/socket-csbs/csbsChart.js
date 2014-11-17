@@ -39,7 +39,7 @@ var csbsChart = {};
         return NutritionMongoHelper.getNutritionsByRid(sockets()[id].rid);
       })
       .then(function(rObs) {
-        d.resolove(rObs);
+        d.resolve(rObs);
       });
 
     return d.promise;
