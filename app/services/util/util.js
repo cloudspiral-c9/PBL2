@@ -136,11 +136,12 @@ var utils = {};
         def.resolve(false);
         return;
       }
+      doc.values.splice(index, 1);
       db.collection(col).update({
         rid: rid
       }, {
         $set: {
-          values: doc.values.splice(index, 1)
+          values: doc.values
         }
       }, utils.cbGet(col, rid, value, index, db, def));
     });
@@ -155,11 +156,12 @@ var utils = {};
         def.resolve(false);
         return;
       }
+      doc.values.splice(index, 1, value);
       db.collection(col).update({
         rid: rid
       }, {
         $set: {
-          values: doc.values.splice(index, 1, value)
+          values: doc.values
         }
       }, utils.cbGet(col, rid, value, index, db, def));
     });
