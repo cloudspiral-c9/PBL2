@@ -163,10 +163,7 @@ var NutritionMongoHelper = (function() {
               result.push(retDoc);
             }
           });
-
-          db.close();
-          deferred.resolve(result);
-
+          
         }, function(err) {
           console.log(err);
           deferred.resolve(false);
