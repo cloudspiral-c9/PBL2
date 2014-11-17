@@ -36,7 +36,7 @@ var NutritionMongoHelper = (function() {
 
     Object.keys(nutrition).forEach(function(nutritionName) {
 
-      if (nutritionName === 'name') {
+      if (nutritionName === 'name' || !_.isNumber(nutrition[nutritionName]) || !_.isNumber(amount)) {
         return;
       }
 
@@ -130,8 +130,14 @@ var NutritionMongoHelper = (function() {
       IngredientMongoHelper.getIngredients(rid)
         .done(function(ingredientDatas) {
 
+          console.log("getNutritionsByRid ingredientDatas", ingredientDatas);
+
           var foodAmountMap = _makeFoodAmountMap(ingredientDatas);
+          console.log("getNutritionsByRid foodAmountMap", foodAmountMap);
+
           var query = _makeOrQuery(foodAmountMap);
+          console.log("getNutritionsByRid query", query);
+
           var cursor = db.collection('nutrition').find(query);
 
           var result = [];
