@@ -81,11 +81,11 @@ var socket, recipelist;
         socket.on('disconnect', function() {
           if (_.exists(sockets[socket.id].rid) && _.exists(sockets[socket.id].user)) {
             RoomManager.removeMember(sockets[socket.id].rid, sockets[socket.id].user.userID)
-              .done(function() {
+              (function() {
                 sockets[socket.id].socket.leave(sockets[socket.id].rid);
                 sockets[socket.id].rid = null;
+                delete sockets[socket.id];
               });
-            delete sockets[socket.id];
           }
         });
       });
