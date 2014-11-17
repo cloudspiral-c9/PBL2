@@ -121,12 +121,6 @@ var NutritionMongoHelper = (function() {
 
     var executeFunction = function(db, deferred) {
 
-      if (!rid) {
-        db.close();
-        deferred.resolve(false);
-        return;
-      }
-
       IngredientMongoHelper.getIngredients(rid)
         .done(function(ingredientDatas) {
 
@@ -138,7 +132,7 @@ var NutritionMongoHelper = (function() {
           var query = _makeOrQuery(foodAmountMap);
           console.log("getNutritionsByRid query", query);
 
-          if (query.length > 0) {
+          if (!_.isEmpty(query)) {
             var cursor = db.collection('nutrition').find(query);
 
             var result = [];
@@ -165,6 +159,7 @@ var NutritionMongoHelper = (function() {
               }
             });
           } else {
+            db.close();
             deferred.resolve(false);
             return;
           }
