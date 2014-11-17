@@ -109,9 +109,9 @@ var NutritionMongoHelper = (function() {
       });
     });
 
-    var query = {
+    var query = (orArray.length === 0 ? {} : {
       '$or': orArray
-    };
+    });
     return query;
   };
 
@@ -138,32 +138,37 @@ var NutritionMongoHelper = (function() {
           var query = _makeOrQuery(foodAmountMap);
           console.log("getNutritionsByRid query", query);
 
-          var cursor = db.collection('nutrition').find(query);
+          if (query.length > 0) {
+            var cursor = db.collection('nutrition').find(query);
 
-          var result = [];
-          cursor.each(function(err, nutrition) {
+            var result = [];
+            cursor.each(function(err, nutrition) {
 
-            if (err) {
-              console.log(err);
-              deferred.resolve(false);
-              return;
-            }
+              if (err) {
+                console.log(err);
+                deferred.resolve(false);
+                return;
+              }
 
-            if (!nutrition) {
-              console.log('no nutirion', result);
-              db.close();
-              deferred.resolve(result);
-              return;
-            } else {
+              if (!nutrition) {
+                console.log('no nutirion', result);
+                db.close();
+                deferred.resolve(result);
+                return;
+              } else {
 
-              var amount = foodAmountMap[nutrition.name];
+                var amount = foodAmountMap[nutrition.name];
 
-              delete nutrition._id;
-              var retDoc = _calcNutritionToAmount(nutrition, amount);
-              result.push(retDoc);
-            }
-          });
-          
+                delete nutrition._id;
+                var retDoc = _calcNutritionToAmount(nutrition, amount);
+                result.push(retDoc);
+              }
+            });
+          } else {
+            deferred.resolve(false);
+            return;
+          }
+
         }, function(err) {
           console.log(err);
           deferred.resolve(false);
