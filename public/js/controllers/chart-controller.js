@@ -21,7 +21,7 @@
           firstRate = el.rate + ',';
         }
         rates += el.rate + ',';
-        titles += '|' + el.ingredient + '(' + el.rateDetail + ')';
+        titles += '|' + el.nutrition + '(' + el.rateDetail + ')';
         allOne += '1,';
       });
 
@@ -53,7 +53,7 @@
             setReceived(data);
           });
         }
-      }, ['ingredient', 'rate', 'rateDetail']).addUpdates([function(newValues) {
+      }, ['nutrition', 'rate', 'rateDetail']).addUpdates([function(newValues) {
         $scope.chartData = makeChartData(newValues);
       }]).start(receiveData);
     });

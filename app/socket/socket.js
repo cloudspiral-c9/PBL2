@@ -62,7 +62,7 @@ var socket, recipelist;
         ingredient.addUpdates([function() {
           chart.set({
             values: [{
-              ingredient: '',
+              nutrition: '',
               rate: '',
               reteDetail: ''
             }],

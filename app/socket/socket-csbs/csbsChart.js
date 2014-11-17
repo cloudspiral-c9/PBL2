@@ -35,7 +35,7 @@ var csbsChart = {};
         insert: function() {},
         remove: function() {},
         add: function() {}
-      }, ['ingredient', 'rate', 'rateDetail'], 'deferred').start(function(){
+      }, ['nutrition', 'rate', 'rateDetail'], 'deferred').start(function(){
         return NutritionMongoHelper.getNutritionsByRid(sockets()[id].rid);
       })
       .then(function(rObs) {

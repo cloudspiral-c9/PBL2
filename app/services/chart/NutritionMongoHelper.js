@@ -147,7 +147,29 @@ var NutritionMongoHelper = (function() {
               if (!nutrition) {
                 console.log('no nutirion', result);
                 db.close();
-                deferred.resolve(result);
+
+                var re = [];
+                _.each(result, function(val, key, list) {
+                  _.each(val, function(v) {
+                    if (v !== "name") {
+                      re[val] = _.cat(re[val] ? re[val] : [], [v]);
+                    }
+                  });
+                });
+
+                _.each(re, function(val, key, list){
+                  re[key] = _.reduce(val, function(memo, v){
+                    return memo + v;                 
+                  }, 0);
+                });
+
+                deferred.resolve(_.map(re, function(val, key, list){                  
+                  return {
+                    nutirion: key,
+                    rate: 1,
+                    rateDetail: val.toString() + ' / ' + val.toString()
+                  };
+                }));
                 return;
               } else {
 
