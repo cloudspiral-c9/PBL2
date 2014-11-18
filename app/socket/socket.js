@@ -67,7 +67,7 @@ var socket, recipelist;
               rateDetail: ''
             }],
             mode: 'edit',
-            index: 1
+            index: 0
           });
         }]);
       });

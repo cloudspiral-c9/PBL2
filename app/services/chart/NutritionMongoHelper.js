@@ -163,7 +163,7 @@ var NutritionMongoHelper = (function() {
                   }, 0);
                 });
 
-                var rre;
+                var rre = {};
                 _.each(re, function(v, k) {
                   if (v !== 0) rre[k] = v;
                 });
