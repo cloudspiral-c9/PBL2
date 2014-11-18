@@ -2,7 +2,7 @@
 
 var NutritionMongoHelper = require(__dirname + '/NutritionMongoHelper.js').NutritionMongoHelper;
 var deferred = require('deferred');
-
+var _ = require('underscore-contrib');
 
 //要amount系の実装
 var NutritionHelper = (function() {
