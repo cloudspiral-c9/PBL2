@@ -64,7 +64,7 @@ var socket, recipelist;
             values: [{
               nutrition: '',
               rate: '',
-              reteDetail: ''
+              rateDetail: ''
             }],
             mode: 'edit',
             index: 1
