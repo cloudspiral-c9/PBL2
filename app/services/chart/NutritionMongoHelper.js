@@ -167,13 +167,12 @@ var NutritionMongoHelper = (function() {
                 _.each(re, function(v, k) {
                   if (v !== 0) rre[k] = v;
                 });
-                deferred.resolve(rre, function(val, key, list) {
+                deferred.resolve(_.map(rre, function(val, key, list) {
                   return {
                     nutrition: key,
-                    rate: 1,
-                    rateDetail: val.toFixed(4) + ' / ' + val.toFixed(4)
+                    amount: val
                   };
-                });
+                }));
                 return;
               } else {
 

@@ -1,7 +1,6 @@
 'use strict';
 
 var NutritionHelper = require(__dirname + '/../../services/chart/NutritionHelper.js').NutritionHelper;
-var NutritionMongoHelper = require(__dirname + '/../../services/chart/NutritionMongoHelper.js').NutritionMongoHelper;
 var TimestampHelper = require(__dirname + '/../../services/util/TimestampHelper.js');
 
 var def = require('deferred');
@@ -36,7 +35,7 @@ var csbsChart = {};
         remove: function() {},
         add: function() {}
       }, ['nutrition', 'rate', 'rateDetail'], 'deferred').start(function(){
-        return NutritionMongoHelper.getNutritionsByRid(sockets()[id].rid);
+        return NutritionHelper.getNutritionDatas(sockets()[id].rid);
       })
       .then(function(rObs) {
         d.resolve(rObs);
