@@ -157,21 +157,23 @@ var NutritionMongoHelper = (function() {
                   });
                 });
 
-                _.each(re, function(val, key, list){
-                  re[key] = _.reduce(val, function(memo, v){
-                    return memo + v;                 
+                _.each(re, function(val, key, list) {
+                  re[key] = _.reduce(val, function(memo, v) {
+                    return memo + v;
                   }, 0);
                 });
 
-                deferred.resolve(_.map(_.filter(re, function(val, key, list){
-                    return (val !== 0);
-                }), function(val, key, list){                  
+                var rre;
+                _.each(re, function(v, k) {
+                  if (v !== 0) rre[k] = v;
+                });
+                deferred.resolve(rre, function(val, key, list) {
                   return {
                     nutrition: key,
                     rate: 1,
-                    rateDetail: val.toString() + ' / ' + val.toString()
+                    rateDetail: val.toFixed(4) + ' / ' + val.toFixed(4)
                   };
-                }));
+                });
                 return;
               } else {
 
