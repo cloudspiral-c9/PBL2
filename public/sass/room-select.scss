@@ -5,111 +5,141 @@ $room-num: 2;
 $tile-width: 100% / $room-num;
 $background-gachi-url: '../images/roomselect/backgrounds/gachi.jpg';
 $background-enjoy-url: '../images/roomselect/backgrounds/enjoy.jpg';
+$background-url: '../images/roomlist/background/wood-texture.jpg';
 $right-red: #FF2A1F;
 $yellow: #FDFF1F;
 $right-green: #2CFF1F;
 $right-blue: #1FFFDE;
 $blue: #1F7FFF;
+$min-width: 1400px;
+$height:1000px;
+$tile-height: 600px;
 
-body {
-
-}
 
 #main {
+	top: 120px;
+	position: relative;
 	width: 100%;
 	height: 100%;
-	margin: 0px;
+	margin: 0px auto;
 	border: none;
 	padding: 0px;
+	text-align: center;
+	
 
 	#contents {
 		
-		position: relative;
-		top: 0px;
 		width: 100%;
-		height: 900px;
+		height: $height;
 		min-width: 1500px;
-		margin: 0px;
 		border: none;
-
-		.room-tile {
-			width: $tile-width;
-			height: 900px;
-			margin:0px;
-			border: none;
-			float: left;
-			-webkit-transition: -webkit-transform 0.2s linear;
-			-moz-transition: -moz-transform 0.2s linear;
-			-o-transition: -o-transform 0.2s linear;
-			-ms-transition: -ms-transform 0.2s linear;
-			transition: transform 0.2s linear;
-			z-index: 1;
-
-			&:hover {
-				-webkit-transform: scale(1.01);
-				-moz-transform: scale(1.01);
-				-o-transform: scale(1.01);
-				-ms-transform: scale(1.01);
-				transform: scale(1.01);
-				z-index: 2;
-			}
-
-			&:active {
-				-webkit-transform: scale(0.99);
-				-moz-transform: scale(0.99);
-				-o-transform: scale(0.99);
-				-ms-transform: scale(0.99);
-				transform: scale(0.99);
-			}
-		}	
+		background-image: url($background-url);
+		background-size: 100% 100%;
 		
-		#room-gachi {
-			background-image: url($background-gachi-url);
-			background-size: 100% 100%;
-	
-			#title-gachi {
+		#room-select {
+			position: relative;
+			top: 110px;
+			margin: 0px auto;
+			width: 80%;
+			height: 890px;
+
+			.title {
 				position: relative;
-				left: 40px;
-				top: 40px;
+				left: 20px;
+				top: 20px;
+				width: 320px;
 				color: Snow;
 				font-size: 6em;
 			}
 
-		}
-
-		#room-enjoy {
-			position: relative;
-			background-image: url($background-enjoy-url);
-			background-size: 100% 100%;
-
-			#title-enjoy {
+			.room-tile-box {
 				position: relative;
-				left: 40px;
-				top: 40px;
-				color: aqua;
-				font-size: 6em;
+				float: left;
+				width: $tile-width;
+				height: 100%;
+				margin: 0px auto;
+				border:none;
+
+				.room-tile {
+					position: absolute;
+					top: 0px;
+					left: 0px;
+					right: 0px;
+					bottom: 0px;
+					width: 80%;
+					height: $tile-height;
+					margin: 0px auto;
+					border: none;
+					float: left;
+					-webkit-transition: -webkit-transform 0.2s linear;
+					-moz-transition: -moz-transform 0.2s linear;
+					-o-transition: -o-transform 0.2s linear;
+					-ms-transition: -ms-transform 0.2s linear;
+					transition: transform 0.2s linear;
+					z-index: 1;
+
+					&:hover {
+						-webkit-transform: scale(1.03);
+						-moz-transform: scale(1.03);
+						-o-transform: scale(1.03);
+						-ms-transform: scale(1.03);
+						transform: scale(1.03);
+						z-index: 2;
+					}
+
+					&:active {
+						-webkit-transform: scale(0.99);
+						-moz-transform: scale(0.99);
+						-o-transform: scale(0.99);
+						-ms-transform: scale(0.99);
+						transform: scale(0.99);
+					}
+				}
+
+
+				#room-gachi {
+					background-image: url($background-gachi-url);
+					background-size: 100% 100%;
+				}
+
+				#room-enjoy {
+					background-image: url($background-enjoy-url);
+					background-size: 100% 100%;
+
+					#title-enjoy {
+						position: absolute;
+						bottom: 20px;
+						right: 20px;
+					}
+					
+					.font-red {
+						color:$right-red;
+					}
+
+					.font-yellow {
+						color: $yellow;
+					}
+
+					.font-green {
+						color:$right-green;
+					}
+
+					.font-rightblue {
+						color: $right-blue;
+					}
+
+					.font-blue {
+						color: $blue;
+					}
+				}
 			}
 
-			#enjoy-e {
-				color:$right-red;
-			}
-
-			#enjoy-n {
-				color: $yellow;
-			}
-
-			#enjoy-j {
-				color:$right-green;
-			}
-
-			#enjoy-o {
-				color: $right-blue;
-			}
-
-			#enjoy-y {
-				color: $blue;
-			}
 		}
+		
+
+
+			
+		
 	}
 }
 
