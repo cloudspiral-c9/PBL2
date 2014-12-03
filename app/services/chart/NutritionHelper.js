@@ -22,9 +22,9 @@ var NutritionHelper = (function() {
 
     if (nutrition.nutrition && idealNutrition[nutrition.nutrition]) {
       retDoc.rate = nutrition.amount / idealNutrition[nutrition.nutrition];
-      retDoc.rateDetail = nutrition.amount + " / " + idealNutrition[nutrition.nutrition];
+      retDoc.rateDetail = nutrition.amount.toFixed(3) + " / " + idealNutrition[nutrition.nutrition];
     }else if(nutrition.amount){
-    	retDoc.rateDetail = nutrition.amount + " / " + nutrition.amount;
+    	retDoc.rateDetail = nutrition.amount.toFixed(3) + " / " + nutrition.amount.toFixed(3);
     }
     return retDoc;
   };

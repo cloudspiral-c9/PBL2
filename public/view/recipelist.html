@@ -56,10 +56,8 @@
                 <span class="label">説明
                   <br>
                 </span>
-
-                <!-- ここは間違ってたので直した htmlではtype=textareaじゃなくてtextareaタグ -->
-                <!--<input  type="textarea" ng-model="formData.description">-->
                 <textarea ng-model="recipeListState.formData.description" id="modal-description-area" rows="3"></textarea>
+                <span class="label">人数の上限</span>
                 <input type="number" ng-model="recipeListState.formData.limit">
               </p>
               <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
@@ -74,18 +72,20 @@
       <div>
 
         <!-- 追記 -->
-        <div id="search-message">Search:
-          <input id="room-search-box" type="text" ng-model="query" placeholder="You can narrow.">
+        <div id="search-message">
+          <input id="room-search-box" type="text" ng-model="query" placeholder="You can narrow."><span>検索</span>
         </div>
         <ul id="recipe-list">
 
           <!--classを追記 -->
-          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" >
+          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" class="card">
             <a ng-href="#/recipe/{{recipe.rid}}">
               <h2 class="r-title">{{recipe.title}}</h2>
               <p class="r-description">{{recipe.description}}</p>
-              <p>{{recipe.userName}}</p>
-              <p>{{recipe.limit}}</p>
+              <div class="box">
+                <p>{{recipe.userName}}</p>
+                <p>People: {{recipe.members.length}}/{{recipe.limit}}</p>
+              </div>
               <!-- <div class="recipe-master></div>"-->
               <!-- <div class="recipe-number-person"></div>-->
             </a>
