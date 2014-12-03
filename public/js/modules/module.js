@@ -17,7 +17,8 @@
     'recipeers.recipe.ingredients',
     'recipeers.recipe.processes',
     'recipeers.recipe.chats',
-    'recipeers.recipe.chart'
+    'recipeers.recipe.chart',
+    'recipeers.header'
   ]);
 
   angular.module('recipeers.recipelist', [
@@ -62,5 +63,7 @@
     'recipeers.recipe',
     'csbind'
   ]);
+
+  angular.module('recipeers.header', ['ngCookies']);
 
 })();
