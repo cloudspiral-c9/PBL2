@@ -9,6 +9,7 @@ $twitter-icon-url: "../images/header/icons/twitter.png";
 $header-font-url: "../images/header/fonts/NexaRustSans-Black.otf";
 $header-triangle-url: "../images/header/icons/triangle.png";
 $header-height: 120px;
+$min-width: 1400px;
 
 
 @font-face {
@@ -19,17 +20,18 @@ $header-height: 120px;
 body {
 	margin: 0px;
 	padding: 0px;
-	overflow: hidden;
 	border: none;
 }
 
 div#header {
+	position: fixed;
 	width: 100%;
-	min-width: 1280px;
+	min-width: $min-width;
 	margin: 0px;
 	height: $header-height;
 	background-image: url($header-background-url);
 	background-size: 100% $header-height;
+	z-index: 5;
 			
 	#logo {
 		position: relative;
