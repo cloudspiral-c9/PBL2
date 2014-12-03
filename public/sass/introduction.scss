@@ -7,6 +7,8 @@ $pin-url: "../images/introduction/icons/pin-red.png";
 $animationsec: 0.6s;
 $introduction-width: 35%;
 $introduction-height: 700px;
+$min-width: 1400px;
+$height: 1100px;
 
 @font-face {
 	font-family: 'NexaRustSlabShadow';
@@ -14,12 +16,12 @@ $introduction-height: 700px;
 }
 
 
-
 #main {
+	top: 120px;
+	position: relative;
 	width: 100%;
 	height: 100%;
 	padding: 0px;
-	overflow: hidden;
 	border: none;
 	margin: 0px;
 
@@ -29,8 +31,8 @@ $introduction-height: 700px;
 		position: relative;
 		top: 0px;
 		width: 100%;
-		height: 900px;
-		min-width: 1500px;
+		height: 1000px;
+		min-width: $height;
 		margin: 0px;
 		border: none;
 		background-image: url($background-url);
@@ -56,7 +58,7 @@ $introduction-height: 700px;
 			width: $introduction-width;
 			height: 0px;
 			margin-right: 125px;
-			margin-top: -175px;
+			margin-top: -105px;
 			background: rgba(255, 255, 255, 0.6);
 			overflow: hidden;
 			padding: 0px 40px;
