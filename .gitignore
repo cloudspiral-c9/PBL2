@@ -4,6 +4,8 @@ node_modules/
 bower_components/
 view-min/
 js-min
+.sass-cache
+public/css/*.map
 tmp
 .DS_Store
 .idea

@@ -18,58 +18,58 @@ gulp.task('connectDev', function () {
 });
 
 gulp.task('reload',function() {
-  gulp.src('./app/view/*.html')
+  gulp.src('./public/view/*.html')
     .pipe(connect.reload());
 });
 
 gulp.task('html',function(){
-  gulp.src('./app/view/*.html')
+  gulp.src('./public/view/*.html')
     .pipe(minifyHTML())
-    .pipe(gulp.dest('./app/view-min'));
+    .pipe(gulp.dest('./public/view-min'));
 });
 
 gulp.task('sass', function () {
-  gulp.src('./app/sass/*.scss')
+  gulp.src('./public/sass/*.scss')
     .pipe(sass({
       style: 'compressed'
     }))
     .pipe(autoprefixer())
-    .pipe(gulp.dest('./app/css'));
+    .pipe(gulp.dest('./public/css'));
 });
 
 gulp.task('js',function(){
-  gulp.src('./app/js/*.js')
+  gulp.src('./public/js/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min'));
+    .pipe(gulp.dest('./public/js-min'));
 
-  gulp.src('./app/js/controllers/*.js')
+  gulp.src('./public/js/controllers/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min/controllers'));
+    .pipe(gulp.dest('./public/js-min/controllers'));
 
-    gulp.src('./app/js/derectives/*.js')
+    gulp.src('./public/js/derectives/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min/derectives'));
+    .pipe(gulp.dest('./public/js-min/derectives'));
 
-    gulp.src('./app/js/filters/*.js')
+    gulp.src('./public/js/filters/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min/filters'));
+    .pipe(gulp.dest('./public/js-min/filters'));
 
-    gulp.src('./app/js/services/*.js')
+    gulp.src('./public/js/services/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min/services'));
+    .pipe(gulp.dest('./public/js-min/services'));
 
-    gulp.src('./app/js/util/*.js')
+    gulp.src('./public/js/util/*.js')
     .pipe(uglify())
-    .pipe(gulp.dest('./app/js-min/util'));
+    .pipe(gulp.dest('./public/js-min/util'));
 });
 
 gulp.task('watch',function() {
-  gulp.watch(['./app/view/*.html'],['html']);
-  gulp.watch(['./app/sass/*.scss'],['sass']);
-  gulp.watch(['./app/js/*.js'],['js']);
-  gulp.watch(['./app/view/*.html'],['reload']);
-  gulp.watch(['./app/css/*.css'],['reload']);
-  gulp.watch(['./app/js/*.js'],['reload']);
+  gulp.watch(['./public/view/*.html'],['html']);
+  gulp.watch(['./public/sass/*.scss'],['sass']);
+  gulp.watch(['./public/js/*.js'],['js']);
+  gulp.watch(['./public/view/*.html'],['reload']);
+  gulp.watch(['./public/css/*.css'],['reload']);
+  gulp.watch(['./public/js/*.js'],['reload']);
 });
 
 gulp.task('default', ['watch','connectDev']);
