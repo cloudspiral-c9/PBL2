@@ -2,24 +2,25 @@
   <div ng-model='chatsState'>
   <section>
     <p id="chat-title">Chat</p>
-    <ol>
+    <ol id="chat-list">
       <li ng-repeat="chat in chatsState.chats | orderByTs: chat.timestamp">
         <div>
           <p class="chat-sender">{{chat.sender}}</p>
           <p class="chat-message">{{chat.message}}</p>
           <p class="chat-timestamp">{{toD(chat.timestamp) | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+          <hr width="100%">
         </div>
       </li>
     </ol>
-    <div>
+    <div id="message-form">
         <form accept-charset="utf-8">
           <p>
-            <input type="text" ng-model="chatsState.formData.message" placeholder="message...">
+            <input id="message-box" type="text" ng-model="chatsState.formData.message" placeholder="message...">
           </p>
           <div ng-hide="!chatsState.formData.message">
-            <input class="button-submit" type="submit" value="submit" ng-click="chatsState = submitChat(chatsState);">
+            <input id="message-button" class="button-submit" type="submit" value="submit" ng-click="chatsState = submitChat(chatsState);">
           </div>
-        </form>
+        </form>　
       </div>
     </div>
   </section>

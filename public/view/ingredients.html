@@ -2,7 +2,7 @@
     <div ng-model='ingredientsState'>
       <section>
         <p id="ingredient-title">Ingredients</p>
-        <ul>
+        <ul div id="ingredient-list">
           <li ng-repeat="ingredient in ingredientsState.ingredients" class="ingredient-entry">
             <div>
               <div ng-hide="ingredientsState.showEdit[$index] === 'show'">
@@ -50,7 +50,7 @@
                     <input class="button-submit" type="submit" value="submit" ng-click="ingredientsState = submitIngredient(ingredientsState, 'add');addShow = '';">
                   </div>
                 </form>
-                <input type="button" value="hide" ng-click="addShow = ''; ">
+                <input class="button-remove" type="button" value="hide" ng-click="addShow = ''; ">
               </div>
             </div>
           </li>

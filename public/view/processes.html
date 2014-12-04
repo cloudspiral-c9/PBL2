@@ -1,9 +1,10 @@
 <div id="process" ng-controller="ProcessesController">
   <div ng-model='processesState'>
     <section>
-      <p class="process-title">Recipe</p>
-      <ol>
-        <li ng-repeat="process in processesState.processes">
+      <p id="process-title">Recipe</p>
+      <ol id="process-list">
+        <li class="process-entry" ng-repeat="process in processesState.processes">
+        <hr width="100%">
           <div>
             <input class="button-insert" type="button" value="insert" ng-click="processesState = showForm(processesState, 'insert', $index);" ng-hide="processesState.show.insert[$index] === 'show'">
             <div ng-hide="processesState.show.insert[$index] !== 'show'">
@@ -18,10 +19,10 @@
           </div>
           <div>
             <div ng-hide="processesState.show.edit[$index] === 'show'">
-              <p>{{$index + 1}}</p>
-              <p>{{process.process}}</p>
-              <p>{{process.sender}}</p>
-              <p>{{toD(process.timestamp) | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
+              <p class="process-index">{{$index + 1}}</p>
+              <p class="process-description">{{process.process}}</p>
+              <p class="process-sender">{{process.sender}}</p>
+              <p class="process-timestamp">{{toD(process.timestamp) | date:'yyyy/MM/dd HH:mm:ss Z' }}</p>
               <input class="button-edit" type="button" value="edit" ng-click="processesState = showForm(processesState, 'edit', $index);">
               <input class="button-remove" type="button" value="remove" ng-click="processesState = submitProcess(processesState, 'remove',$index);">
             </div>
