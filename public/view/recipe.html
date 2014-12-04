@@ -1,9 +1,13 @@
-<div>
-  <div>
-    <a href="#/">Back</a>
-  </div>
-  <ng-include src="'/view/ingredients.html'"></ng-include>
-  <ng-include src="'/view/chart.html'"></ng-include>
-  <ng-include src="'/view/processes.html'"></ng-include>
-  <ng-include src="'/view/chats.html'"></ng-include>
+<div id="recipe-main">
+  	
+  	<div id="back-link">
+    		<a href="#/">Back</a>
+  	</div>
+  	
+  	<div id="board">
+	  	<ng-include src="'/view/ingredients.html'"></ng-include>
+	  	<ng-include src="'/view/chart.html'"></ng-include>
+	  	<ng-include src="'/view/processes.html'"></ng-include>
+	  	<ng-include src="'/view/chats.html'"></ng-include>
+	</div>
 </div>

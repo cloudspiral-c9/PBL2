@@ -12,6 +12,7 @@
 
 <link rel="stylesheet" href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/header-loggedin.css">
 <link rel="stylesheet" href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/recipe-list.css">
+<link rel="stylesheet" href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/css/room.css">
 
 
   <script src="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
@@ -29,23 +30,18 @@
     </a>
 
     <div id="menus">
-
-      <div class="menu-links">
-        <a href=".">WHAT'S RECIPEERS</a>
+      <div class="menu-links"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/introduction/login">WHAT'S RECIPEERS?</a>
       </div>
-        
-      <div class="menu-links">
-        <a href="/roomselect/login">SELECT ROOM</a>
+      <div class="menu-links"><a href="">SELECT ROOM</a>
       </div>
-
-    </div>  
+    </div>
 
     <div id="login-info">
       <div id="login-username" ng-bind="username"></div>
-      <div id="logout">
-        <a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout">Logout</a>
+      <div id="logout"><a href="http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com:8080/logout">Logout</a>
       </div>
     </div>
+
   </div>
 
   <ng-view></ng-view>
