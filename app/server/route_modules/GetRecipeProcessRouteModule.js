@@ -18,7 +18,7 @@ var GetRecipeProcessRouteModule = {
       return def;
     }
 
-    var rid = +queries.rid;
+    var rid = queries.rid;
     var userId = queries.userID;
 
     LoginMongoHelper.isLoggedIn(userId)
