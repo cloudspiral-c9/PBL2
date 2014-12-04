@@ -22,16 +22,22 @@
       <div id="modal-container">
         <div id="modal-window" ng-hide="addShow !== 'show'">
           <form accept-charset="utf-8">
-            <p>
-              <span id="modal-title">部屋作成</span>
+            <div>
+              <h3 id="modal-title">部屋作成</h3>
               <hr size="3">
-              <span class="label">タイトル</span>
-              <input id="modal-title-box" type="text" ng-model="recipeListState.formData.title">
-              <span class="label">説明</span>
-              <textarea ng-model="recipeListState.formData.description" id="modal-description-area" rows="3"></textarea>
-              <span class="label">人数の上限</span>
-              <input type="number" ng-model="recipeListState.formData.limit">
-            </p>
+              <p>
+                <span class="label">タイトル</span>
+                <input id="modal-title-box" type="text" ng-model="recipeListState.formData.title">
+              </p>
+              <p>
+                <span class="label">説明</span>
+                <textarea ng-model="recipeListState.formData.description" id="modal-description-area" rows="3"></textarea>
+              </p>
+              <p>
+                <span class="label">人数の上限</span>
+                <input type="number" ng-model="recipeListState.formData.limit">
+              </p>
+            </div>
             <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
               <input id="modal-send" type="submit" value="送信" ng-click="recipeListState = submitRecipelist(recipeListState);addShow = '';" class="modal-button">
             </div>

@@ -79,11 +79,8 @@ div#main {
 		margin: 0px auto;
 
 		#room-type {
-			position: absolute;
-			float: left;
-			width: 350px;
-			height: 60px;
-			margin: 10px 30px;
+			width: 28%;
+			padding: 1%;
 			text-align: left;
 			font-size: 3em;
 
@@ -111,9 +108,8 @@ div#main {
 		
 			
 		#button-container{
-			width: 150px;
-			margin: 0px auto;
-			text-align: center;
+			width: 20%;
+			margin: 20px 0 0 10%;
 			
 			input#room-create {
 				width: 140px;
@@ -132,6 +128,31 @@ div#main {
 					@include scale-change(0.95);
 					box-shadow: 0px 1px 1px rgba(0,0,0,0.4);
 				}
+			}
+
+		}
+
+		#search-message {
+			width: 40%;
+			height: 35px;
+			padding-top: 30px;
+			text-align: right;
+			font-size: 1.3em;
+
+
+			#room-search-box {
+				width: 200px;
+				height: 20px;
+				padding: 2px;
+				margin: -3px 0 0 5px;
+				line-height: 25px;
+				font-size: 1.05rem;
+			}
+
+			span {
+				background: #FF2A1F;
+				font: white;
+				padding: 7px 30px 7px 30px;
 			}
 
 		}
@@ -228,40 +249,20 @@ div#main {
 			}
 		}
 		
-		
-		
-		#search-message {
-			width: 295px;
-			height: 35px;
-			float: right;
-			margin-top: -85px;
-			font-size: 1.3em;
-
-
-			#room-search-box {
-				position: relative;
-				float: right;
-				width: 200px;
-				height: 20px;
-				padding: 2px;
-				margin-top: -3px;
-				line-height: 25px;
-				font-size: 1.05rem;
-			}
-
-		}
 
 		#recipe-list {
 			clear: both;
 			position: relative;
-			width: 100%;
 			margin: 30px auto;
 			list-style: none;
+
+			a {
+				text-decoration: none;
+			}
 
 			
 			.card {
 				width: 100%;
-				height: 130px;
 				margin: 20px 0px;
 				box-shadow: 0px 5px 5px rgba(0,0,0,0.4);
 				@include transition-push(0.1s);
@@ -274,18 +275,25 @@ div#main {
 
 
 				.r-title {
-					position: relative;
-					left: 30px;
-					top: 20px;
+					padding: 2% 0 0 5%;
 					font-size: 1.5em;
 				}
 
 				.r-description {
-					position: relative;
-					top: 30px;
-					left: 40px;
+					width: 85%;
+					border: 1px solid;
+					margin: 0 0 0 5%;
+					padding: 1% 2% 1% 2%;
 					font-size: 1.2em;
 					font-weight: bold;
+				}
+
+				p {
+					width: 40%;
+					text-align: right;
+					height: 50px;
+					padding: 20px 0 0 0;
+					margin : 0;
 				}
 			}
 
