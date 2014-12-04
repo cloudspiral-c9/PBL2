@@ -32,7 +32,7 @@
         chatsObs.set({
           values: [{
             message: chatsState.formData.message,
-            sender: AuthService.get().userID,
+            sender: AuthService.get().userName,
             timestamp: ''
           }],
           mode: 'add'
