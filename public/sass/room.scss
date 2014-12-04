@@ -21,7 +21,8 @@ $min-width: 1400px;
 	
 	#back-link {
 		position: relative;
-		left: 20px;
+		font-size: 2em;
+		right: 0px;
 	}
 
 	#board {
@@ -71,41 +72,53 @@ $min-width: 1400px;
 		#ingredient {
 			position: relative;
 			width: 46%;
+			height: 400px;
 			margin: 0px;
 			margin-bottom: 20px;
 			padding: 15px;
 			background-color: rgba(255, 255, 255, 1);
 			box-shadow: 4px 4px 4px 4px rgba(0,0,0,0.3);
+			left: 0px;
 			float: left;
+	
 
 			#ingredient-title {
 				text-align: center;
 				width: 100%;
-				font-size: 1.8em;
+				font-size: 2em;
 			}
+			
+			#ingredient-list {
 
-			.ingredient-entry {
-				margin-bottom: 15px;
+				overflow: auto;
+				height: 300px;
+				margin-top: -15px;
 
-				.ingredient-name {
+				.ingredient-entry {
 					
+					margin-bottom: 15px;
+
+					.ingredient-name {
+						font-size: 1.2em;
+					}
+
+					.ingredient-amout {
+
+					}
+
+					.ingredient-amout {
+
+					}
+
+					.ingredient-timestamp {
+
+					}
+
+					
+
 				}
-
-				.ingredient-amout {
-
-				}
-
-				.ingredient-amout {
-
-				}
-
-				.ingredient-timestamp {
-
-				}
-
-				
-
 			}
+			
 				
 		}
 		
@@ -113,6 +126,7 @@ $min-width: 1400px;
 			@extend #ingredient;
 			float: right;
 			min-height: 400px;
+			right: 0px;
 
 			#chart-image {
 				display: block;
@@ -123,16 +137,79 @@ $min-width: 1400px;
 		#process {
 			@extend #ingredient;
 			width: 100%;
+			height: 850px;
+			padding: 15px 0px;
+
+			#process-title {
+				font-size: 2em;
+				text-align: center;
+			}
+
+			#process-list {
+				height: 740px;
+				overflow: auto;
+
+				.process-entry {
+					margin-bottom: 15px;
+
+					.process-index {
+
+					}
+
+					.process-description {
+						font-size: 1.5em;
+					}
+
+					.process-sender {
+
+					}
+
+					.process-timestamp {
+
+					}
+				}
+			}
 		}
 
-
-
 		#chat {
+			@extend  #process;
+			clear: both;
+			position: relative;
 			width: 100%;
+			height: 550px;
+			min-height: 400px;
+			padding: 15px 0px;
+
+			#chat-title{
+				font-size: 2em;
+				text-align: center;
+			}
+
+			#chat-list {
+				height: 400px;
+				overflow: auto;
+			}
+
+			#message-form {
+				position: relative;
+				top: 60px;
+			}
+
+			#message-box {
+				width: 1270px;
+				height: 38px;
+				float: left;
+			}
+
+			#message-button{
+				float: right;
+			}
 		}
 	}
 
-	
+	.clearfix {
+		clear: both;
+	}
 }
 
 
