@@ -38,7 +38,7 @@
                 <input type="number" ng-model="recipeListState.formData.limit">
               </p>
             </div>
-            <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
+            <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.limit <= 0) ">
               <input id="modal-send" type="submit" value="送信" ng-click="recipeListState = submitRecipelist(recipeListState);addShow = '';" class="modal-button">
             </div>
             <input id="modal-cancel" type="button" value="キャンセル" ng-click="addShow = ''; " class="modal-button">

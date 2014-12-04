@@ -80,7 +80,7 @@ div#main {
 
 		#room-type {
 			width: 28%;
-			padding: 1%;
+			margin:  2% 1% 1% 1%;
 			text-align: left;
 			font-size: 3em;
 
@@ -109,7 +109,7 @@ div#main {
 			
 		#button-container{
 			width: 20%;
-			margin: 20px 0 0 10%;
+			margin: 1.5% 0 0 10%;
 			
 			input#room-create {
 				width: 140px;
@@ -135,7 +135,7 @@ div#main {
 		#search-message {
 			width: 40%;
 			height: 35px;
-			padding-top: 30px;
+			margin: 4% 0 0 0;
 			text-align: right;
 			font-size: 1.3em;
 
@@ -144,14 +144,14 @@ div#main {
 				width: 200px;
 				height: 20px;
 				padding: 2px;
-				margin: -3px 0 0 5px;
+				margin: -3px 20px 0 5px;
 				line-height: 25px;
 				font-size: 1.05rem;
 			}
 
 			span {
 				background: #FF2A1F;
-				font: white;
+				color: white;
 				padding: 7px 30px 7px 30px;
 			}
 
@@ -170,11 +170,20 @@ div#main {
 				right: 0px;
 				position: fixed;
 				width: 600px;
-				height: 500px;
 				margin: auto;
 				z-index: 2;
 				background:Snow;
 				text-align:center;
+
+				p {
+					width: 80%;
+					padding: 0 0 0 10%;
+					text-align: left;
+				}
+
+				span {
+					display: block;
+				}
 
 
 				#modal-title {
@@ -196,7 +205,7 @@ div#main {
 
 				#modal-title-box {
 					position: relative;
-					width: 70%;
+					width: 100%;
 					margin-top: 5px;
 					margin-bottom: 20px;
 				}
@@ -204,18 +213,17 @@ div#main {
 				#modal-description-area {
 					position: relative;
 					margin-top: 5px;
-					width: 70%
+					width: 100%
 				}
 				
 
 				.modal-button {
 					width: 120px;
 					height: 35px;
-					float: left;
 					background: Snow;
 					box-shadow: 0px 2px 2px rgba(0,0,0,0.4);
 					font-size: 1.1em;
-					margin: 45px 20px;
+					margin: 20px 0 0 10px;
 
 					@include transition-push(0.1s);
 					@include transition-shadow(0.08s);
@@ -227,7 +235,6 @@ div#main {
 				#modal-send{
 					color: $button-color;
 					border: 2px $button-color solid;
-					margin-left: 160px;
 					
 					&:hover {
 						background: LightBlue;
@@ -237,7 +244,6 @@ div#main {
 
 				#modal-cancel {
 					background-color: Snow;
-					margin-left: 20px;
 					border: 2px $color0 solid;
 					color: $color0;
 
@@ -258,6 +264,10 @@ div#main {
 
 			a {
 				text-decoration: none;
+			}
+
+			a:link {
+				color: #000000
 			}
 
 			
@@ -281,6 +291,7 @@ div#main {
 
 				.r-description {
 					width: 85%;
+					text-align: right;
 					border: 1px solid;
 					margin: 0 0 0 5%;
 					padding: 1% 2% 1% 2%;
@@ -288,7 +299,7 @@ div#main {
 					font-weight: bold;
 				}
 
-				p {
+				.box p {
 					width: 40%;
 					text-align: right;
 					height: 50px;
