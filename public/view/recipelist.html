@@ -1,77 +1,59 @@
-
 <div id="main" ng-controller="RecipeListController">
   <section>
 
-    <!-- 追記 -->
     <div id="container">
 
-      <p id="room-type">
-        <span class="font-red">H</span><span class="font-yellow">Y</span><span class="font-green">P</span><span class="font-lightblue">E</span><span class="font-blue">R</span>
-        <span class="font-red">E</span><span class="font-yellow">N</span><span class="font-green">J</span><span class="font-lightblue">O</span><span class="font-blue">Y</span>
-      </p>
+      <div class="box">
 
-      <div>
+        <p id="room-type">
+          <span class="font-red">H</span><span class="font-yellow">Y</span><span class="font-green">P</span><span class="font-lightblue">E</span><span class="font-blue">R</span>
+          <span class="font-red">E</span><span class="font-yellow">N</span><span class="font-green">J</span><span class="font-lightblue">O</span><span class="font-blue">Y</span>
+        </p>
 
-        <!--追記 -->
         <div id="button-container">
           <input id="room-create" type="button" value="部屋作成" ng-click="addShow = 'show';" ng-hide="addShow === 'show'">
-          <!--追記-->
         </div>
 
-        <!--  ここをモーダルウィンドウとして表示(divをちょいたした) -->
-        <div id="modal-container">
-          <div id="modal-window" ng-hide="addShow !== 'show'">
-            <form accept-charset="utf-8">
-              <p>
-                <!-- 追記 -->
-                <span id="modal-title">部屋作成</span>
-                <hr size="3">
-                <span class="label">タイトル</span>
-                <br>
-                <input id="modal-title-box" type="text" ng-model="recipeListState.formData.title">
-                <br>
-                <span class="label">説明
-                  <br>
-                </span>
-                <textarea ng-model="recipeListState.formData.description" id="modal-description-area" rows="3"></textarea>
-                <span class="label">人数の上限</span>
-                <input type="number" ng-model="recipeListState.formData.limit">
-              </p>
-              <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
-                <input id="modal-send" type="submit" value="送信" ng-click="recipeListState = submitRecipelist(recipeListState);addShow = '';" class="modal-button">
-              </div>
-            </form>
-            <input id="modal-cancel" type="button" value="キャンセル" ng-click="addShow = ''; " class="modal-button">
-          </div>
-        </div>
-
-      </div>
-      <div>
-
-        <!-- 追記 -->
         <div id="search-message">
           <input id="room-search-box" type="text" ng-model="query" placeholder="You can narrow."><span>検索</span>
         </div>
-        <ul id="recipe-list">
+      </div>
 
-          <!--classを追記 -->
-          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" class="card card{{recipe.rid % 5}}">
-            <a ng-href="#/recipe/{{recipe.rid}}">
+      <div id="modal-container">
+        <div id="modal-window" ng-hide="addShow !== 'show'">
+          <form accept-charset="utf-8">
+            <p>
+              <span id="modal-title">部屋作成</span>
+              <hr size="3">
+              <span class="label">タイトル</span>
+              <input id="modal-title-box" type="text" ng-model="recipeListState.formData.title">
+              <span class="label">説明</span>
+              <textarea ng-model="recipeListState.formData.description" id="modal-description-area" rows="3"></textarea>
+              <span class="label">人数の上限</span>
+              <input type="number" ng-model="recipeListState.formData.limit">
+            </p>
+            <div ng-hide=" (recipeListState.formData.title ==='') || (recipeListState.formData.description === '') || (recipeListState.formData.description < 0) ">
+              <input id="modal-send" type="submit" value="送信" ng-click="recipeListState = submitRecipelist(recipeListState);addShow = '';" class="modal-button">
+            </div>
+            <input id="modal-cancel" type="button" value="キャンセル" ng-click="addShow = ''; " class="modal-button">
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <ul id="recipe-list">
+          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" class="card card{{recipe.rid % 5}}" ng-href="#/recipe/{{recipe.rid}}">
               <h2 class="r-title">{{recipe.title}}</h2>
               <p class="r-description">{{recipe.description}}</p>
               <div class="box">
                 <p>{{recipe.userName}}</p>
                 <p>People: {{recipe.members.length}}/{{recipe.limit}}</p>
               </div>
-              <!-- <div class="recipe-master></div>"-->
-              <!-- <div class="recipe-number-person"></div>-->
-            </a>
           </li>
 
         </ul>
       </div>
 
-      <!--追記-->
     </div>
   </section>
 </div>
