@@ -42,13 +42,15 @@
 
       <div>
         <ul id="recipe-list">
-          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" class="card card{{recipe.rid % 5}}" ng-href="#/recipe/{{recipe.rid}}">
+          <li ng-repeat="(index, recipe) in recipeListState.recipelist | hasValue:query" class="card card{{recipe.rid % 5}}">
+            <a ng-href="#/recipe/{{recipe.rid}}">
               <h2 class="r-title">{{recipe.title}}</h2>
               <p class="r-description">{{recipe.description}}</p>
               <div class="box">
                 <p>{{recipe.userName}}</p>
                 <p>People: {{recipe.members.length}}/{{recipe.limit}}</p>
               </div>
+            </a>
           </li>
 
         </ul>
