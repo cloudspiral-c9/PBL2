@@ -7,7 +7,7 @@ var checkLoggedInToRoot = function(req, res, next) {
 
   if (!req.user) {
     console.log('not logged-in');
-    res.redirect('http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/');
+    res.redirect('http://ec2-52-68-129-148.ap-northeast-1.compute.amazonaws.com/recipeers/public/');
   } else {
     next();
   }
@@ -17,7 +17,7 @@ var checkLoggedInToIntro = function(req, res, next) {
 
   if (!req.user) {
     console.log('not logged-in');
-    res.redirect('http://ec2-54-64-199-130.ap-northeast-1.compute.amazonaws.com/recipeers/public/views/what-recipeers.html');
+    res.redirect('http://ec2-52-68-129-148.ap-northeast-1.compute.amazonaws.com/recipeers/public/views/what-recipeers.html');
   } else {
     next();
   }
